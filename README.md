@@ -68,4 +68,4 @@ Este projeto simula um analisador de IOCs (IP, URLs e Hashes maliciosos), permit
 | Aluno 2        | Backend / CRUD      |
 | Aluno 3        | Interface / Docs    |
 | Aluno 4        | Interface / Docs    |
-| Aluno 4        | Backend / CRUD      |
+| Aluno 5        | Backend / CRUD      |
