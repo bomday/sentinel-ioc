@@ -4,18 +4,17 @@
 #define INDICATOR_HPP
 #include <string>
 
-using namespace std;
 class Indicator {
     private:
         int indicatorId;
         int severity;
-        string type;
-        string description;
-        string origin;
-        string timestamp;
+        std::string type;
+        std::string description;
+        std::string origin;
+        std::string timestamp;
     
     public:
-        Indicator(int indicatorId, int severity, string type, string description, string origin, string timestamp);
+        Indicator(int indicatorId, int severity, std::string type, std::string description, std::string origin, std::string timestamp);
 };
 
 #endif
