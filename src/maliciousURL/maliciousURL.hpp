@@ -8,10 +8,12 @@
 
 class MaliciousURL : public Indicator {
     private:
+        // Atributes
         std::string url;
         std::string protocol;
 
     public:
+        // Constructor
         MaliciousURL(int indicatorId, int severity, std::string type, std::string description, std::string origin, std::string timestamp, std::string url, std::string protocol);
 };  
 

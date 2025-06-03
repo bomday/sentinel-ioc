@@ -8,11 +8,13 @@
 
 class MaliciousIP : public Indicator {
     private:
+        // Atributes
         std::string ip;
         std::string country;
         std::string isp;
         
     public:
+        // Constructor
         MaliciousIP(int indicatorId, int severity, std::string type, std::string description, std::string origin, std::string timestamp, std::string ip, std::string country, std::string isp);
 };
 

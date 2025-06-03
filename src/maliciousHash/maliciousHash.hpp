@@ -8,10 +8,12 @@
 
 class MaliciousHash : public Indicator {
     private:
+        // Atributes
         std::string hash;
         std::string algorithm;
 
     public:
+        // Constructor
         MaliciousHash(int indicatorId, int severity, std::string type, std::string description, std::string origin, std::string timestamp, std::string hash, std::string algorithm);
 };
 
