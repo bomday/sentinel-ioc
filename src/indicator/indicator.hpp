@@ -6,6 +6,7 @@
 
 class Indicator {
     private:
+        // Atributes
         int indicatorId;
         int severity;
         std::string type;
@@ -14,6 +15,7 @@ class Indicator {
         std::string timestamp;
     
     public:
+        // Constructor
         Indicator(int indicatorId, int severity, std::string type, std::string description, std::string origin, std::string timestamp);
 };
 
