@@ -6,15 +6,14 @@
 #include <string>
 #include "../indicator/indicator.hpp"
 
-using namespace std;
 class MaliciousIP : public Indicator {
     private:
-        string ip;
-        string country;
-        string isp;
+        std::string ip;
+        std::string country;
+        std::string isp;
         
     public:
-        MaliciousIP(int indicatorId, int severity, string type, string description, string origin, string timestamp, string ip, string country, string isp);
+        MaliciousIP(int indicatorId, int severity, std::string type, std::string description, std::string origin, std::string timestamp, std::string ip, std::string country, std::string isp);
 };
 
 #endif

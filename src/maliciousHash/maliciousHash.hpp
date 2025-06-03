@@ -6,15 +6,13 @@
 #include <string>
 #include "../indicator/indicator.hpp"
 
-using namespace std;
-
 class MaliciousHash : public Indicator {
     private:
-        string hash;
-        string algorithm;
+        std::string hash;
+        std::string algorithm;
 
     public:
-        MaliciousHash(int indicatorId, int severity, string type, string description, string origin, string timestamp, string hash, string algorithm);
+        MaliciousHash(int indicatorId, int severity, std::string type, std::string description, std::string origin, std::string timestamp, std::string hash, std::string algorithm);
 };
 
 #endif

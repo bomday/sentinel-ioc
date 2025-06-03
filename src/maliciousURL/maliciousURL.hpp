@@ -6,15 +6,13 @@
 #include <string>
 #include "../indicator/indicator.hpp"
 
-using namespace std;
-
 class MaliciousURL : public Indicator {
     private:
-        string url;
-        string protocol;
+        std::string url;
+        std::string protocol;
 
     public:
-        MaliciousURL(int indicatorId, int severity, string type, string description, string origin, string timestamp, string url, string protocol);
+        MaliciousURL(int indicatorId, int severity, std::string type, std::string description, std::string origin, std::string timestamp, std::string url, std::string protocol);
 };  
 
 #endif
