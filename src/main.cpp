@@ -10,39 +10,53 @@
 #include "maliciousURL.hpp"
 #include "utils.hpp"
 
-// Function to obtain the current timestamp in a formatted string
-std::string obterTimestamp() {
-    auto agora = std::chrono::system_clock::now(); // Get the current time point with system clock
-    std::time_t tempoAtual = std::chrono::system_clock::to_time_t(agora); // Convert to time_t for formatting
-    std::ostringstream oss; // Create an output string stream for formatting
-    oss << std::put_time(std::localtime(&tempoAtual), "%d-%m-%Y"); // Format: DD-MM-YYYY
-    return oss.str();
-}
-    
-int main() {
-    // Indicator creation
+// Indicator creation    
+Indicator createIndicator() {
     int id, severity; // ID and severity declarations
     std::string type, description, origin, timestamp; // Type, description, origin, and timestamp declarations
 
-    std::cout << "Digite o tipo do IOC: "; // Prompt for type
-    std::getline(std::cin, type); // Using getline to allow spaces in type input
+    std::cout << "Digite o tipo do IOC: ";
+    std::getline(std::cin, type); // Using getline to allow spaces in type input (get the entire input line)
 
-    std::cout << "Agora digite a severidade (Alta, Média ou Baixa): "; // Prompt for severity
+    std::cout << "Agora digite a severidade (1 - 5): ";
     std::cin >> severity;
-    std::cin.ignore(); // Ignore the newline to empty the enter buffer for getline
+    std::cin.ignore(); // Using ignore to empty the enter buffer for getline (delete the '/n ' left by std::cin)
 
-    /*std::cout << "Digite o ID do indicador: "; // Prompt for ID
+    /*std::cout << "Digite o ID do indicador: ";
     std::cin >> id;*/
 
-    std::cout << "Digite a origem: "; // Prompt for origin
+    std::cout << "Digite a origem: ";
     std::getline(std::cin, origin);
 
-    std::string timestamp = obterTimestamp(); // Get the date
+    timestamp = obterTimestamp(); // Get the date from the subfunction
 
-    std::cout << "Digite a descrição: "; // Prompt for description
+    std::cout << "Digite a descrição: ";
     std::getline(std::cin, description);
 
-    Indicator meuIndicador(id, severity, type, description, origin, timestamp);
+    Indicator newIndicator(id, severity, type, description, origin, timestamp); // Create the indicator object
 
+    /*
+    // Display the created indicator
+    std::cout << "\n[Resumo do Indicador Criado]" << std::endl;
+    std::cout << "Tipo: " << type << std::endl;
+    std::cout << "Severidade: " << severity << std::endl;
+    std::cout << "Origem: " << origin << std::endl;
+    std::cout << "Data: " << timestamp << std::endl;
+    std::cout << "Descrição: " << description << std::endl;*/
+
+    return newIndicator; // Return the created indicator
+}
+
+// Subfunction to obtain the current timestamp in a formatted string
+std::string obterTimestamp() {
+    auto agora = std::chrono::system_clock::now(); // Get the current time point with system clock from chrono
+    std::time_t tempoAtual = std::chrono::system_clock::to_time_t(agora); // Convert to time_t for formatting
+    std::ostringstream oss; // Create an output string stream for formatting
+    oss << std::put_time(std::localtime(&tempoAtual), "%d-%m-%Y"); // Format: DD-MM-YYYY in string type
+    return oss.str();
+}
+
+int main() {
+    Indicator newIndicator = createIndicator(); // Call the function newIndicator
     return 0;
 }
