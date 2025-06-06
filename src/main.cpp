@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 #include <chrono>
 #include <ctime>
 #include <iomanip>
@@ -9,6 +10,8 @@
 #include "maliciousIP.hpp"
 #include "maliciousURL.hpp"
 #include "utils.hpp"
+
+std::vector<Indicator*> indicators;
 
 // Indicator creation    
 Indicator createIndicator() {
@@ -28,31 +31,24 @@ Indicator createIndicator() {
     std::cout << "Digite a origem: ";
     std::getline(std::cin, origin);
 
-    timestamp = obterTimestamp(); // Get the date from the subfunction
+    timestamp = getTimestamp(); // Get the date from the subfunction
 
     std::cout << "Digite a descrição: ";
     std::getline(std::cin, description);
 
-    Indicator newIndicator(id, severity, type, description, origin, timestamp); // Create the indicator object
-
-    /*
-    // Display the created indicator
-    std::cout << "\n[Resumo do Indicador Criado]" << std::endl;
-    std::cout << "Tipo: " << type << std::endl;
-    std::cout << "Severidade: " << severity << std::endl;
-    std::cout << "Origem: " << origin << std::endl;
-    std::cout << "Data: " << timestamp << std::endl;
-    std::cout << "Descrição: " << description << std::endl;*/
-
-    return newIndicator; // Return the created indicator
+    // Mudar para logica de criação de URL, IP ou Hash malicioso
+    Indicator* ioc = new Indicator(id, severity, type, description, origin, timestamp); // Create the indicator object
+    
+    indicators.push_back(ioc); // Add the indicator to the vector
+    std::cout << "IOC criado com sucesso!\n";
 }
 
 // Subfunction to obtain the current timestamp in a formatted string
-std::string obterTimestamp() {
-    auto agora = std::chrono::system_clock::now(); // Get the current time point with system clock from chrono
-    std::time_t tempoAtual = std::chrono::system_clock::to_time_t(agora); // Convert to time_t for formatting
+std::string getTimestamp() {
+    auto nowTime = std::chrono::system_clock::now(); // Get the current time point with system clock from chrono
+    std::time_t todayTime = std::chrono::system_clock::to_time_t(nowTime); // Convert to time_t for formatting
     std::ostringstream oss; // Create an output string stream for formatting
-    oss << std::put_time(std::localtime(&tempoAtual), "%d-%m-%Y"); // Format: DD-MM-YYYY in string type
+    oss << std::put_time(std::localtime(&todayTime), "%d-%m-%Y"); // Format: DD-MM-YYYY in string type
     return oss.str();
 }
 
