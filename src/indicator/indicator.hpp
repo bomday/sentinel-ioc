@@ -22,6 +22,7 @@ public:
              std::string description);
     
     virtual ~Indicator() = default;
+    virtual void printInfo() const = 0;
 
     // Getters
     std::string getType() const { return type; }

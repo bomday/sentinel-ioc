@@ -1,20 +1,27 @@
-// Derivative class
+#ifndef MALICIOUSURL_HPP
+#define MALICIOUSURL_HPP
 
-#ifndef MALICIOUS_URL_HPP
-#define MALICIOUS_URL_HPP
-
+#include "indicator.hpp"
 #include <string>
-#include "../indicator/indicator.hpp"
 
 class MaliciousURL : public Indicator {
-    private:
-        // Atributes
-        std::string url;
-        std::string protocol;
+public:
+    MaliciousURL(std::string value,
+                 std::string severity,
+                 std::string origin,
+                 std::string timestamp,
+                 std::string description);
 
-    public:
-        // Constructor
-        MaliciousURL(int indicatorId, int severity, std::string type, std::string description, std::string origin, std::string timestamp, std::string url, std::string protocol);
-};  
+    std::string getURL() const { return url; }
+    std::string getProtocol() const { return protocol; }
 
-#endif
+    void setProtocol(const std::string& proto) { protocol = proto; }
+
+    void printInfo() const;
+
+private:
+    std::string url;
+    std::string protocol;
+};
+
+#endif // MALICIOUSURL_HPP

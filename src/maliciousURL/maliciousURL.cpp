@@ -1,17 +1,21 @@
-// Derivative class
 #include "maliciousURL.hpp"
 #include <iostream>
 
-// Constructor
-MaliciousURL::MaliciousURL(int indicatorId, 
-                           int severity, 
-                           std::string type, 
-                           std::string description, 
-                           std::string origin, 
-                           std::string timestamp, 
-                           std::string url, 
-                           std::string protocol)
-    : Indicator(indicatorId, severity, type, description, origin, timestamp),
-      url(url),
-      protocol(protocol) {}
+MaliciousURL::MaliciousURL(std::string value,
+                           std::string severity,
+                           std::string origin,
+                           std::string timestamp,
+                           std::string description)
+    : Indicator("URL", value, severity, origin, timestamp, description),
+      url(value),
+      protocol("Unknown") {}
 
+void MaliciousURL::printInfo() const {
+    std::cout << "[Malicious URL]\n"
+              << "  URL: " << url << "\n"
+              << "  Severity: " << getSeverity() << "\n"
+              << "  Origin: " << getOrigin() << "\n"
+              << "  Timestamp: " << getTimestamp() << "\n"
+              << "  Description: " << getDescription() << "\n"
+              << "  Protocol: " << protocol << "\n";
+}

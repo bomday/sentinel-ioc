@@ -1,4 +1,4 @@
-#include "Indicator.hpp"
+#include "indicator.hpp"
 #include "../maliciousIP/maliciousIP.hpp"
 #include "../maliciousURL/maliciousURL.hpp"
 #include "../maliciousHash/maliciousHash.hpp"
@@ -22,7 +22,6 @@ std::unique_ptr<Indicator> Indicator::fromLine(const std::string& line) {
     std::stringstream ss(line);
     std::string type, value, severity, origin, timestamp, description;
 
-    // Extract fields from semicolon-delimited line
     if (!std::getline(ss, type, ';') ||
         !std::getline(ss, value, ';') ||
         !std::getline(ss, severity, ';') ||
@@ -31,7 +30,7 @@ std::unique_ptr<Indicator> Indicator::fromLine(const std::string& line) {
         !std::getline(ss, description)) {
         std::cerr << "[Parse Error] Malformed line: " << line << "\n";
         return nullptr;
-    }
+        }
 
     try {
         if (type == "IP") {

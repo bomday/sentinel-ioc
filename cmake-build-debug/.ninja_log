@@ -1,0 +1,26 @@
+# ninja log v6
+25	1074	7711361633721886	CMakeFiles/sentinel_ioc.dir/src/indicator/indicator.cpp.obj	534c3803f83afdfb
+34	894	7711361633812803	CMakeFiles/sentinel_ioc.dir/src/maliciousHash/maliciousHash.cpp.obj	62d60943c108c0d1
+9	726	7711361633560862	CMakeFiles/sentinel_ioc.dir/src/analyzerIOC/analyzerIOC.cpp.obj	175fe76333e453e7
+79	1120	7711361634262644	CMakeFiles/sentinel_ioc.dir/src/main.cpp.obj	e99f8d9ce191fee8
+44	936	7711361633907850	CMakeFiles/sentinel_ioc.dir/src/maliciousIP/maliciousIP.cpp.obj	24eeabe3e89641ce
+54	930	7711361634012003	CMakeFiles/sentinel_ioc.dir/src/maliciousURL/maliciousURL.cpp.obj	2716e01d4b95c497
+69	764	7711361634167425	CMakeFiles/sentinel_ioc.dir/src/utils/utils.cpp.obj	3fb6a0ae157b5466
+18	1086	7711361633652663	CMakeFiles/sentinel_ioc.dir/src/fileManager/FileManager.cpp.obj	1f7555bbc4cc608a
+1120	1326	7711361644664364	sentinel_ioc.exe	33c9c09ce49a4220
+6	27	7711361630463608	clean	78b189df0fa52169
+4	303	7711364078858904	build.ninja	38e3232a553da9b4
+6	654	7711364079338667	CMakeFiles/sentinel_ioc.dir/src/analyzerIOC/analyzerIOC.cpp.obj	b32982ed5f37b556
+26	824	7711364079543890	CMakeFiles/sentinel_ioc.dir/src/maliciousHash/maliciousHash.cpp.obj	a2ec863716df82
+36	829	7711364079646053	CMakeFiles/sentinel_ioc.dir/src/maliciousIP/maliciousIP.cpp.obj	5cb8e6736a3d64f1
+46	845	7711364079736885	CMakeFiles/sentinel_ioc.dir/src/maliciousURL/maliciousURL.cpp.obj	4459359742ad7574
+65	1016	7711364079941714	CMakeFiles/sentinel_ioc.dir/src/main.cpp.obj	e06572eb6402565e
+19	1016	7711364079465850	CMakeFiles/sentinel_ioc.dir/src/indicator/indicator.cpp.obj	c1a3de67ac954bd8
+12	1025	7711364079404345	CMakeFiles/sentinel_ioc.dir/src/fileManager/FileManager.cpp.obj	4d0aa963420ed2d6
+55	1143	7711364079831367	CMakeFiles/sentinel_ioc.dir/src/utils/utils.cpp.obj	ff546965ab3b7ba3
+1143	1355	7711364090712432	sentinel_ioc.exe	33c9c09ce49a4220
+7	103	7711365182360856	CMakeFiles/sentinel_ioc.dir/src/utils/utils.cpp.obj	ff546965ab3b7ba3
+103	325	7711365183329922	sentinel_ioc.exe	33c9c09ce49a4220
+7	528	7711366083138485	CMakeFiles/sentinel_ioc.dir/src/utils/utils.cpp.obj	ff546965ab3b7ba3
+7	658	7711366655073413	CMakeFiles/sentinel_ioc.dir/src/main.cpp.obj	e06572eb6402565e
+659	856	7711366661582644	sentinel_ioc.exe	33c9c09ce49a4220

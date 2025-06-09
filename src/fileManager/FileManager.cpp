@@ -1,7 +1,10 @@
+#include <vector>
 #include "FileManager.hpp"
 #include <fstream>
 #include <sstream>
 #include <iostream>
+
+using namespace std;
 
 bool FileManager::saveIOCs(const std::vector<std::unique_ptr<Indicator>>& list, const std::string& filename) {
     std::ofstream file(filename);

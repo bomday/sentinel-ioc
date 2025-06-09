@@ -1,19 +1,21 @@
-// Derivative class
 #include "maliciousHash.hpp"
 #include <iostream>
 
-// Constructor
-MaliciousHash::MaliciousHash(int indicatorId, 
-                             int severity, 
-                             std::string type, 
-                             std::string description, 
-                             std::string origin, 
-                             std::string timestamp, 
-                             std::string hash, 
-                             std::string algorithm)
-    : Indicator(indicatorId, severity, type, description, origin, timestamp),
-      hash(hash),
-      algorithm(algorithm) {}
+MaliciousHash::MaliciousHash(std::string value,
+                             std::string severity,
+                             std::string origin,
+                             std::string timestamp,
+                             std::string description)
+    : Indicator("Hash", value, severity, origin, timestamp, description),
+      hash(value),
+      algorithm("Unknown") {}
 
-
-
+void MaliciousHash::printInfo() const {
+    std::cout << "[Malicious Hash]\n"
+              << "  Hash: " << hash << "\n"
+              << "  Severity: " << getSeverity() << "\n"
+              << "  Origin: " << getOrigin() << "\n"
+              << "  Timestamp: " << getTimestamp() << "\n"
+              << "  Description: " << getDescription() << "\n"
+              << "  Algorithm: " << algorithm << "\n";
+}
