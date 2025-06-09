@@ -105,6 +105,13 @@ build CMakeFiles/sentinel_ioc.dir/src/main.cpp.obj: CXX_COMPILER__sentinel_ioc_u
   OBJECT_DIR = CMakeFiles\sentinel_ioc.dir
   OBJECT_FILE_DIR = CMakeFiles\sentinel_ioc.dir\src
 
+build CMakeFiles/sentinel_ioc.dir/src/system/System.cpp.obj: CXX_COMPILER__sentinel_ioc_unscanned_Debug C$:/Users/Rafael/Desktop/rrft/sentinel-ioc/src/system/System.cpp || cmake_object_order_depends_target_sentinel_ioc
+  DEP_FILE = CMakeFiles\sentinel_ioc.dir\src\system\System.cpp.obj.d
+  FLAGS = -g -std=gnu++17 -fdiagnostics-color=always
+  INCLUDES = -IC:/Users/Rafael/Desktop/rrft/sentinel-ioc/src/analyzerIOC -IC:/Users/Rafael/Desktop/rrft/sentinel-ioc/src/fileManager -IC:/Users/Rafael/Desktop/rrft/sentinel-ioc/src/indicator -IC:/Users/Rafael/Desktop/rrft/sentinel-ioc/src/maliciousHash -IC:/Users/Rafael/Desktop/rrft/sentinel-ioc/src/maliciousIP -IC:/Users/Rafael/Desktop/rrft/sentinel-ioc/src/maliciousURL -IC:/Users/Rafael/Desktop/rrft/sentinel-ioc/src/utils
+  OBJECT_DIR = CMakeFiles\sentinel_ioc.dir
+  OBJECT_FILE_DIR = CMakeFiles\sentinel_ioc.dir\src\system
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target sentinel_ioc
@@ -113,7 +120,7 @@ build CMakeFiles/sentinel_ioc.dir/src/main.cpp.obj: CXX_COMPILER__sentinel_ioc_u
 #############################################
 # Link the executable sentinel_ioc.exe
 
-build sentinel_ioc.exe: CXX_EXECUTABLE_LINKER__sentinel_ioc_Debug CMakeFiles/sentinel_ioc.dir/src/analyzerIOC/analyzerIOC.cpp.obj CMakeFiles/sentinel_ioc.dir/src/fileManager/FileManager.cpp.obj CMakeFiles/sentinel_ioc.dir/src/indicator/indicator.cpp.obj CMakeFiles/sentinel_ioc.dir/src/maliciousHash/maliciousHash.cpp.obj CMakeFiles/sentinel_ioc.dir/src/maliciousIP/maliciousIP.cpp.obj CMakeFiles/sentinel_ioc.dir/src/maliciousURL/maliciousURL.cpp.obj CMakeFiles/sentinel_ioc.dir/src/utils/utils.cpp.obj CMakeFiles/sentinel_ioc.dir/src/main.cpp.obj
+build sentinel_ioc.exe: CXX_EXECUTABLE_LINKER__sentinel_ioc_Debug CMakeFiles/sentinel_ioc.dir/src/analyzerIOC/analyzerIOC.cpp.obj CMakeFiles/sentinel_ioc.dir/src/fileManager/FileManager.cpp.obj CMakeFiles/sentinel_ioc.dir/src/indicator/indicator.cpp.obj CMakeFiles/sentinel_ioc.dir/src/maliciousHash/maliciousHash.cpp.obj CMakeFiles/sentinel_ioc.dir/src/maliciousIP/maliciousIP.cpp.obj CMakeFiles/sentinel_ioc.dir/src/maliciousURL/maliciousURL.cpp.obj CMakeFiles/sentinel_ioc.dir/src/utils/utils.cpp.obj CMakeFiles/sentinel_ioc.dir/src/main.cpp.obj CMakeFiles/sentinel_ioc.dir/src/system/System.cpp.obj
   FLAGS = -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\sentinel_ioc.dir

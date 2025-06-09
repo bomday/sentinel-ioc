@@ -1,32 +1,41 @@
-#include "utils.hpp"
-#include "FileManager.hpp"
+#include "../System/System.hpp"
 #include <iostream>
-#include <memory>
-#include "maliciousIP.hpp"
+#include <limits>
 
 int main() {
-    const std::string path = "data/iocs.txt";
+    System system;
+    system.loadIOCsFromFile("src/data/iocs.txt");
 
-    ensureFileAndDirectoryExist(path);
+    int option;
+    do {
+        std::cout << "\n===  MAIN MENU ===\n";
+        std::cout << "1.  List IOCs\n";
+        // std::cout << "2. Edit IOC\n";
+        // std::cout << "3.  Remove IOC\n";
+        std::cout << "0.  Exit\n";
+        std::cout << "Choice: ";
+        std::cin >> option;
 
-    std::vector<std::unique_ptr<Indicator>> iocs = FileManager::loadIOCs(path);
+        switch (option) {
+            case 1:
+                system.listIOCs();
+            std::cout << "\nPress Enter to continue...";
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cin.get();
+            break;
 
-    std::cout << "\nLoaded " << iocs.size() << " IOCs:\n";
-    for (const auto& ioc : iocs) {
-        ioc->printInfo();
-        std::cout << "------------------------\n";
-    }
+            // case 2: system.editIOC(); break;
+            // case 3: system.removeIOC(); break;
 
-    std::cout << "\nAdding test IOC...\n";
-    iocs.push_back(std::make_unique<MaliciousIP>(
-        "8.8.4.4", "Low", "USA", "2025-06-08 23:30", "Test DNS IP"
-    ));
+            case 0:
+                std::cout << "Exiting...\n";
+            break;
 
-    if (FileManager::saveIOCs(iocs, path)) {
-        std::cout << "Saved IOCs back to file successfully.\n";
-    } else {
-        std::cout << "Failed to save IOCs.\n";
-    }
+            default:
+                std::cout << " Invalid option. Try again.\n";
+        }
+
+    } while (option != 0);
 
     return 0;
 }

@@ -28,4 +28,6 @@ add_executable(sentinel_ioc
     src/maliciousURL/maliciousURL.hpp
     src/utils/utils.cpp
     src/utils/utils.hpp
-    src/main.cpp)
+    src/main.cpp
+        src/system/System.cpp
+        src/system/System.hpp)
