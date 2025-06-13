@@ -14,7 +14,7 @@ void showMenu() {
     std::cout << "3 - Atualizar IOC\n";
     std::cout << "4 - Remover IOC\n";
     std::cout << "0 - Sair\n";
-    std::cout << "Escolha uma opção: ";
+    std::cout << "\nEscolha uma opção: ";
 }
 
 // Subfunction to obtain the current timestamp in a formatted string

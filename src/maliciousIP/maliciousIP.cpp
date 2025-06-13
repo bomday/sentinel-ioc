@@ -18,16 +18,16 @@ MaliciousIP::MaliciousIP(int indicatorId,
       isp(isp) {}
 
 // Static method to create a MaliciousIP object
-Indicator* MaliciousIP::createIP(int indicatorId, int severity, const std::string& type, const std::string& description, const std::string& origin, const std::string& timestamp) {     
+Indicator* MaliciousIP::createMaliciousIP(int indicatorId, int severity, const std::string& type, const std::string& description, const std::string& origin, const std::string& timestamp) {     
   std::string ip, country, isp;
 
-  std::cout << "Informe o endereço IP: ";
+  std::cout << "\nInforme o endereço IP: ";
   std::getline(std::cin, ip);
 
-  std::cout << "Informe o país: ";
+  std::cout << "\nInforme o país: ";
   std::getline(std::cin, country);
 
-  std::cout << "Informe o ISP: ";
+  std::cout << "\nInforme o ISP: ";
   std::getline(std::cin, isp);
   std::cout << "\nIndicador IP criado com sucesso!\n";
 

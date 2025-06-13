@@ -15,7 +15,7 @@ MaliciousHash::MaliciousHash(int indicatorId,
       hash(hash),
       algorithm(algorithm) {}
 
-Indicator* MaliciousHash::createHash(int indicatorId, 
+Indicator* MaliciousHash::createMaliciousHash(int indicatorId, 
                                         int severity, 
                                         std::string type, 
                                         std::string description, 
@@ -23,10 +23,10 @@ Indicator* MaliciousHash::createHash(int indicatorId,
                                         std::string timestamp) {
     std::string hash, algorithm;
 
-    std::cout << "Informe o endereço IP: ";
+    std::cout << "\nInforme o endereço IP: ";
     std::getline(std::cin, hash);
 
-    std::cout << "Informe o algoritmo: ";
+    std::cout << "\nInforme o algoritmo: ";
     std::getline(std::cin, algorithm);
 
     std::cout << "\nIndicador Hash criado com sucesso!\n";

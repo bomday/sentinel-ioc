@@ -30,26 +30,46 @@ Indicator* createIndicator() {
   int severity; // ID and severity declarations
   std::string type, description, origin, timestamp; // Type, description, origin, and timestamp declarations
 
-  std::cout << "Digite o tipo do IOC (IP, URL ou Hash): ";
-  std::getline(std::cin, type); // Using getline to allow spaces in type input (get the entire input line)
+  // Prompt the user for the type of IOC
+  while (true) {
+    std::cout << "\nDigite o tipo do IOC (IP, URL ou Hash): ";
+    std::getline(std::cin, type);
 
-  std::cout << "Agora digite a severidade (1 - 3): ";
-  std::cin >> severity;
-  std::cin.ignore(); // Using ignore to empty the enter buffer for getline (delete the '/n ' left by std::cin)
+    if (type == "IP" || type == "URL" || type == "Hash") {
+      break; // Exit the loop if the type is valid
+    } else {
+      std::cout << "\nTipo inválido. Por favor, digite IP, URL ou Hash.";
+    }
+  } 
+  
+  while(true){
+    std::cout << "\nAgora digite a severidade (1 - 5): ";
+    std::cin >> severity;
+    if (severity < 1 || severity > 5) {
+      std::cout << "\nSeveridade inválida. Por favor, digite um valor entre 1 e 5.\n";
+      std::cin.clear(); // Clear the error flag on cin
+      std::cin.ignore(); // Ignore the invalid input in the buffer
+    }
+    
+    else{
+      std::cin.ignore(); // Clear the input buffer to avoid issues with getline
+      break; // Exit the loop if the severity is valid
+    }
+  }
 
-  std::cout << "Digite a origem: ";
+  std::cout << "\nDigite a origem: ";
   std::getline(std::cin, origin);
 
   timestamp = getTimestamp(); // Get the date from the subfunction
 
-  std::cout << "Digite a descrição: ";
+  std::cout << "\nDigite a descrição: ";
   std::getline(std::cin, description);
 
   int indicatorId = generateUniqueId(); // Get a unique ID for the indicator
 
   // Create a MaliciousIP object if the type is IP
   if (type == "IP") { 
-    Indicator* newIP = MaliciousIP::createIP(indicatorId, severity, type, description, origin, timestamp);
+    Indicator* newIP = MaliciousIP::createMaliciousIP(indicatorId, severity, type, description, origin, timestamp);
     indicators.push_back(newIP);
     return newIP;
   }
@@ -57,7 +77,7 @@ Indicator* createIndicator() {
   // Create a MaliciousURL object if the type is URL
   else if (type == "URL") { 
 
-    Indicator* newIP = MaliciousURL::createURL(indicatorId, severity, type, description, origin, timestamp);
+    Indicator* newIP = MaliciousURL::createMaliciousURL(indicatorId, severity, type, description, origin, timestamp);
     indicators.push_back(newIP);
     return newIP;
   }
@@ -65,12 +85,11 @@ Indicator* createIndicator() {
   // Create a MaliciousHash object if the type is Hash
   else if (type == "Hash") { 
 
-    Indicator* newIP = MaliciousHash::createHash(indicatorId, severity, type, description, origin, timestamp);
+    Indicator* newIP = MaliciousHash::createMaliciousHash(indicatorId, severity, type, description, origin, timestamp);
     indicators.push_back(newIP);
     return newIP;
   }
+  
+  return nullptr; // Return nullptr if the type is not recognized
 
-  // If the type is not recognized, print an error message
-  std::cout << "\nTipo de IOC inválido!\n";
-  return nullptr;
 }

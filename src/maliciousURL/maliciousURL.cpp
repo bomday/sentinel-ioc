@@ -16,7 +16,7 @@ MaliciousURL::MaliciousURL(int indicatorId,
       protocol(protocol) {}
 
 // Static method to create a MaliciousURL object
-Indicator* MaliciousURL::createURL(int indicatorId, 
+Indicator* MaliciousURL::createMaliciousURL(int indicatorId, 
                                        int severity, 
                                        std::string type, 
                                        std::string description, 
@@ -24,10 +24,10 @@ Indicator* MaliciousURL::createURL(int indicatorId,
                                        std::string timestamp) {
     std::string url, protocol;
 
-    std::cout << "Informe o endereço url: ";
+    std::cout << "\nInforme o endereço url: ";
     std::getline(std::cin, url);
 
-    std::cout << "Informe o protocolo: ";
+    std::cout << "\nInforme o protocolo: ";
     std::getline(std::cin, protocol);
     
     std::cout << "\nIndicador URL criado com sucesso!\n";
