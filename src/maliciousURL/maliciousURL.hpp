@@ -15,6 +15,8 @@ class MaliciousURL : public Indicator {
     public:
         // Constructor
         MaliciousURL(int indicatorId, int severity, std::string type, std::string description, std::string origin, std::string timestamp, std::string url, std::string protocol);
+
+    static Indicator* createMaliciousURL(int indicatorId, int severity, std::string type, std::string description, std::string origin, std::string timestamp);
 };  
 
 #endif

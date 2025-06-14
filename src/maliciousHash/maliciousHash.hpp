@@ -15,6 +15,8 @@ class MaliciousHash : public Indicator {
     public:
         // Constructor
         MaliciousHash(int indicatorId, int severity, std::string type, std::string description, std::string origin, std::string timestamp, std::string hash, std::string algorithm);
+
+    static Indicator* createMaliciousHash(int indicatorId, int severity, std::string type, std::string description, std::string origin, std::string timestamp);
 };
 
 #endif
