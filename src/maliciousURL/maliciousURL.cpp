@@ -1,8 +1,6 @@
-// Derivative class
 #include "maliciousURL.hpp"
 #include <iostream>
 
-// Constructor
 MaliciousURL::MaliciousURL(int indicatorId, 
                            int severity, 
                            std::string type, 
@@ -15,16 +13,29 @@ MaliciousURL::MaliciousURL(int indicatorId,
       url(url),
       protocol(protocol) {}
 
-// Static method to create a MaliciousURL object
+void MaliciousURL::displayInfo() const {
+    std::cout << "ID: " << indicatorId << "\n";
+    std::cout << "Tipo: " << type << "\n";
+    std::cout << "Severidade: " << severity << "\n";
+    std::cout << "Origem: " << origin << "\n";
+    std::cout << "Data: " << timestamp << "\n";
+    std::cout << "Descrição: " << description << "\n";
+    std::cout << "URL: " << url << "\n";
+    std::cout << "Protocolo: " << protocol << "\n";
+}
+
+std::string MaliciousURL::getValue() const { return url; }
+
+  
 Indicator* MaliciousURL::createMaliciousURL(int indicatorId, 
-                                       int severity, 
-                                       std::string type, 
-                                       std::string description, 
-                                       std::string origin, 
-                                       std::string timestamp) {
+                                            int severity, 
+                                            std::string type, 
+                                            std::string description, 
+                                            std::string origin, 
+                                            std::string timestamp) {
     std::string url, protocol;
 
-    std::cout << "\nInforme o endereço url: ";
+    std::cout << "\nInforme o endereço URL: ";
     std::getline(std::cin, url);
 
     std::cout << "\nInforme o protocolo: ";
@@ -34,4 +45,3 @@ Indicator* MaliciousURL::createMaliciousURL(int indicatorId,
 
     return new MaliciousURL(indicatorId, severity, type, description, origin, timestamp, url, protocol);
 }
-

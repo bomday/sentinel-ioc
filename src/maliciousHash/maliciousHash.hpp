@@ -4,7 +4,7 @@
 #define MALICIOUS_HASH_HPP
 
 #include <string>
-#include "../indicator/indicator.hpp"
+#include "indicator/indicator.hpp"
 
 class MaliciousHash : public Indicator {
     private:
@@ -25,6 +25,10 @@ class MaliciousHash : public Indicator {
         // Getters
         std::string getHash() const { return hash; }
         std::string getAlgorithm() const { return algorithm; }
+        std::string getValue() const override; // Override to return the hash as the value
+
+        void displayInfo() const override;
+        
         
         // Setters
         void setHash(const std::string& hashValue) { hash = hashValue; }
