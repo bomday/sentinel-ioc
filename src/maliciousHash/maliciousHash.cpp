@@ -23,7 +23,7 @@ Indicator* MaliciousHash::createMaliciousHash(int indicatorId,
                                         std::string timestamp) {
     std::string hash, algorithm;
 
-    std::cout << "\nInforme o endereço IP: ";
+    std::cout << "\nInforme o hash: ";
     std::getline(std::cin, hash);
 
     std::cout << "\nInforme o algoritmo: ";

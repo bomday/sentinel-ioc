@@ -17,8 +17,22 @@ class MaliciousIP : public Indicator {
         // Constructor
         MaliciousIP(int indicatorId, int severity, std::string type, std::string description, std::string origin, std::string timestamp, std::string ip, std::string country, std::string isp);
 
-        // Static method to create a MaliciousIP object
+        // Function to create an indicator of type MaliciousIP
         static Indicator* createMaliciousIP(int indicatorId, int severity, const std::string& type, const std::string& description, const std::string& origin, const std::string& timestamp);
+
+        // Virtual destructor
+        virtual ~MaliciousIP() = default;
+        
+        // Getters
+        std::string getIP() const { return ip; }
+        std::string getCountry() const { return country; }
+        std::string getISP() const { return isp; }
+
+        // Setters
+        void setIP(const std::string& ipAddress) { ip = ipAddress; }
+        void setCountry(const std::string& countryName) { country = countryName; }
+        void setISP(const std::string& ispName) { isp = ispName; }
+
 };
 
 #endif

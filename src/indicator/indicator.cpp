@@ -23,7 +23,7 @@ Indicator::Indicator(int indicatorId,
 }
 
 
-std::vector<Indicator*> indicators; // Create a vector to store the indicators
+std::vector<std::unique_ptr<Indicator>>& indicators; // Create a vector to store the indicators
 
 // Indicator creation    
 Indicator* createIndicator() {
@@ -69,27 +69,72 @@ Indicator* createIndicator() {
 
   // Create a MaliciousIP object if the type is IP
   if (type == "IP") { 
-    Indicator* newIP = MaliciousIP::createMaliciousIP(indicatorId, severity, type, description, origin, timestamp);
-    indicators.push_back(newIP);
-    return newIP;
+    Indicator* newMaliciousIP = MaliciousIP::createMaliciousIP(indicatorId, severity, type, description, origin, timestamp);
+    indicators.push_back(std::unique_ptr<Indicator>(newMaliciousIP));
+    return newMaliciousIP;
   }
 
   // Create a MaliciousURL object if the type is URL
   else if (type == "URL") { 
 
-    Indicator* newIP = MaliciousURL::createMaliciousURL(indicatorId, severity, type, description, origin, timestamp);
-    indicators.push_back(newIP);
-    return newIP;
+    Indicator* newMaliciousURL = MaliciousURL::createMaliciousURL(indicatorId, severity, type, description, origin, timestamp);
+    indicators.push_back(std::unique_ptr<Indicator>(newMaliciousURL));
+    return newMaliciousURL;
   }
 
   // Create a MaliciousHash object if the type is Hash
   else if (type == "Hash") { 
 
-    Indicator* newIP = MaliciousHash::createMaliciousHash(indicatorId, severity, type, description, origin, timestamp);
-    indicators.push_back(newIP);
-    return newIP;
+    Indicator* newMaliciousHash = MaliciousHash::createMaliciousHash(indicatorId, severity, type, description, origin, timestamp);
+    indicators.push_back(std::unique_ptr<Indicator>(newMaliciousHash));
+    return newMaliciousHash;
   }
   
   return nullptr; // Return nullptr if the type is not recognized
 
+}
+
+// Getters
+int Indicator::getIndicatorId() const { 
+  return indicatorId; 
+}
+
+int Indicator::getSeverity() const { 
+  return severity; 
+}
+std::string Indicator::getType() const { 
+  return type; 
+}
+
+std::string Indicator::getDescription() const { 
+  return description; 
+}
+
+std::string Indicator::getOrigin() const { 
+  return origin; 
+}
+
+std::string Indicator::getTimestamp() const { 
+  return timestamp; 
+}
+
+// Setters
+void Indicator::setSeverity(int sev) { 
+  severity = sev; 
+}
+
+void Indicator::setType(const std::string& t) { 
+  type = t; 
+}
+
+void Indicator::setDescription(const std::string& desc) { 
+  description = desc; 
+}
+
+void Indicator::setOrigin(const std::string& orig) { 
+  origin = orig; 
+}
+
+void Indicator::setTimestamp(const std::string& ts) { 
+  timestamp = ts; 
 }
