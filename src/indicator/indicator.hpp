@@ -3,33 +3,39 @@
 #define INDICATOR_HPP
 
 #include <string>
+#include <vector>
 
 class Indicator {
-private:
-    // Attributes
-    int indicatorId;
-    int severity;
-    std::string type;
-    std::string description;
-    std::string origin;
-    std::string timestamp;
+    private:
+        // Atributes
+        int indicatorId;
+        int severity;
+        std::string type;
+        std::string description;
+        std::string origin;
+        std::string timestamp;
+    
+    public:
+        // Constructor
+        Indicator(int indicatorId, int severity, std::string type, std::string description, std::string origin, std::string timestamp);
+        
+        // Virtual destructor
+        virtual ~Indicator() = default;
 
-public:
-    // Constructor
-    Indicator(int indicatorId, int severity, std::string type, std::string description, std::string origin, std::string timestamp);
+        // Getters
+        int getIndicatorId() const { return indicatorId; }
+        int getSeverity() const { return severity; }
+        std::string getType() const { return type; }
+        std::string getDescription() const { return description; }
+        std::string getOrigin() const { return origin; }
+        std::string getTimestamp() const { return timestamp; }
 
-    // Getters (Virtual Pure Methods to make the class Abstract)
-    // These methods must be implemented by concrete derived classes.
-    virtual int getIndicatorId() const = 0;
-    virtual int getSeverity() const = 0;
-    virtual std::string getType() const = 0;
-    virtual std::string getDescription() const = 0;
-    virtual std::string getOrigin() const = 0;
-    virtual std::string getTimestamp() const = 0;
-
-    // Virtual Destructor: Important for proper memory deallocation
-    // when deleting derived class objects through a base class pointer.
-    virtual ~Indicator() = default;
+        // Setters
+        void setSeverity(int sev) { severity = sev; }    
+        void setType(const std::string& t) { type = t; }
+        void setDescription(const std::string& desc) { description = desc; }
+        void setOrigin(const std::string& orig) { origin = orig; }
+        void setTimestamp(const std::string& ts) { timestamp = ts; }
 };
 
 #endif // INDICATOR_HPP
