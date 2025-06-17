@@ -1,7 +1,7 @@
 // Base abstract class
-
 #ifndef INDICATOR_HPP
 #define INDICATOR_HPP
+
 #include <string>
 #include <vector>
 
@@ -36,7 +36,6 @@ class Indicator {
         void setDescription(const std::string& desc) { description = desc; }
         void setOrigin(const std::string& orig) { origin = orig; }
         void setTimestamp(const std::string& ts) { timestamp = ts; }
-        
 };
 
-#endif
+#endif // INDICATOR_HPP
