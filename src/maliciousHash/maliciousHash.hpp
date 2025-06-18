@@ -23,12 +23,12 @@ class MaliciousHash : public Indicator {
         virtual ~MaliciousHash() = default;
 
         // Getters
-        std::string getHash() const { return hash; }
-        std::string getAlgorithm() const { return algorithm; }
+        std::string getHash() const;
+        std::string getAlgorithm() const;
         
         // Setters
-        void setHash(const std::string& hashValue) { hash = hashValue; }
-        void setAlgorithm(const std::string& algorithmName) { algorithm = algorithmName; }
+        void setHash(const std::string& hashValue);
+        void setAlgorithm(const std::string& algorithmName);
 };
 
 #endif

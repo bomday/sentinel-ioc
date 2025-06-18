@@ -15,6 +15,22 @@ MaliciousHash::MaliciousHash(int indicatorId,
       hash(hash),
       algorithm(algorithm) {}
 
+// Getters
+std::string MaliciousHash::getHash() const { 
+  return hash; 
+}
+std::string MaliciousHash::getAlgorithm() const { 
+  return algorithm; 
+}
+
+// Setters
+void MaliciousHash::setHash(const std::string& hashValue) { 
+  hash = hashValue; 
+}
+void MaliciousHash::setAlgorithm(const std::string& algorithmValue) { 
+  algorithm = algorithmValue; 
+}
+
 Indicator* MaliciousHash::createMaliciousHash(int indicatorId, 
                                         int severity, 
                                         std::string type, 
@@ -23,13 +39,13 @@ Indicator* MaliciousHash::createMaliciousHash(int indicatorId,
                                         std::string timestamp) {
     std::string hash, algorithm;
 
-    std::cout << "\nInforme o hash: ";
+    std::cout << "\nEnter the hash: ";
     std::getline(std::cin, hash);
 
-    std::cout << "\nInforme o algoritmo: ";
+    std::cout << "\nEnter the algorithm: ";
     std::getline(std::cin, algorithm);
 
-    std::cout << "\nIndicador Hash criado com sucesso!\n";
+    std::cout << "\nHash indicator created successfully!\n";
 
     return new MaliciousHash(indicatorId, severity, type, description, origin, timestamp, hash, algorithm);
 }

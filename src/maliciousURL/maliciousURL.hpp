@@ -23,12 +23,12 @@ class MaliciousURL : public Indicator {
         virtual ~MaliciousURL() = default;
 
         // Getters
-        std::string getURL() const { return url; }
-        std::string getProtocol() const { return protocol; }
+        std::string getURL() const;
+        std::string getProtocol() const;
 
         // Setters
-        void setURL(const std::string& urlAddress) { url = urlAddress; }
-        void setProtocol(const std::string& protocolName) { protocol = protocolName; }
+        void setURL(const std::string& urlAddress);
+        void setProtocol(const std::string& protocolName);
         
 };  
 
