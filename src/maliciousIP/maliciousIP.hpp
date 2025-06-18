@@ -24,14 +24,14 @@ class MaliciousIP : public Indicator {
         virtual ~MaliciousIP() = default;
         
         // Getters
-        std::string getIP() const { return ip; }
-        std::string getCountry() const { return country; }
-        std::string getISP() const { return isp; }
+        std::string getIP() const;
+        std::string getCountry() const;
+        std::string getISP() const;
 
         // Setters
-        void setIP(const std::string& ipAddress) { ip = ipAddress; }
-        void setCountry(const std::string& countryName) { country = countryName; }
-        void setISP(const std::string& ispName) { isp = ispName; }
+        void setIP(const std::string& ipAddress);
+        void setCountry(const std::string& countryName);
+        void setISP(const std::string& ispName);
 
 };
 

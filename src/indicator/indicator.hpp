@@ -23,19 +23,22 @@ class Indicator {
         virtual ~Indicator() = default;
 
         // Getters
-        int getIndicatorId() const { return indicatorId; }
-        int getSeverity() const { return severity; }
-        std::string getType() const { return type; }
-        std::string getDescription() const { return description; }
-        std::string getOrigin() const { return origin; }
-        std::string getTimestamp() const { return timestamp; }
+        int getIndicatorId() const;
+        int getSeverity() const;
+        std::string getType() const;
+        std::string getDescription() const;
+        std::string getOrigin() const;
+        std::string getTimestamp() const;
 
         // Setters
-        void setSeverity(int sev) { severity = sev; }    
-        void setType(const std::string& t) { type = t; }
-        void setDescription(const std::string& desc) { description = desc; }
-        void setOrigin(const std::string& orig) { origin = orig; }
-        void setTimestamp(const std::string& ts) { timestamp = ts; }
+        void setSeverity(int sev);   
+        void setType(const std::string& t);
+        void setDescription(const std::string& desc);
+        void setOrigin(const std::string& orig);
+        void setTimestamp(const std::string& ts);
+
+        // Static method to create an Indicator object
+        static Indicator* createIndicator();
 };
 
 #endif // INDICATOR_HPP
