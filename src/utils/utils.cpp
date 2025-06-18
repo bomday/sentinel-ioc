@@ -128,3 +128,33 @@ void listIndicators()  {
     std::cout << "\n✅ IOC listing complete.\n";
     std::cout << "-------------------------------------------\n";
 }
+
+// Method to remove an indicator by its ID
+void removeIndicatorById(int id) {
+    if (indicators.empty()) {
+        std::cout << "\nNo IOCs to remove. The list is empty.\n";
+        return;
+    }
+
+    //verify if want to remove an indicator
+    std::cout << "\nAre you sure you want to remove the indicator with ID " << id << "? (y/n): ";
+    char confirmation;
+    std::cin >> confirmation;
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+    if (confirmation != 'y' && confirmation != 'Y') {
+        std::cout << "\nRemoval cancelled.\n";
+        return; 
+    }
+
+    auto it = std::remove_if(indicators.begin(), indicators.end(),
+                                [id](const std::unique_ptr<Indicator>& indicator) {
+                                    return indicator->getIndicatorId() == id;
+                                });
+    if (it != indicators.end()) {
+        indicators.erase(it, indicators.end());
+        std::cout << "\nIndicator with ID " << id << " has been removed successfully.\n";
+    } else {
+        std::cout << "\nNo indicator found with ID " << id << ".\n";
+    }
+}

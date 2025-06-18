@@ -23,9 +23,8 @@ int main() {
 
         switch (optionNumber) {
             case 1:
-                { 
-                    Indicator* newIoc = createIndicator(); // Call the function to create an indicator
-                }
+                // Create a new IOC
+                Indicator* newIoc = createIndicator(); // Call the function to create an indicator
                 break;
             case 2:
                 // Implement Listing IOCs here
@@ -37,7 +36,12 @@ int main() {
                 break;
             case 4:
                 // Remove IOC (placeholder)
-                std::cout << "\nRemove IOC functionality not yet implemented.\n";
+                int idToRemove;
+                std::cout << "\nEnter the ID of the IOC to remove: ";
+                std::cin >> idToRemove;
+
+                removeIndicatorById(idToRemove);
+
                 break;
             case 0:
                 std::cout << "\nExiting the Sentinel IOC Management System. Goodbye!\n";

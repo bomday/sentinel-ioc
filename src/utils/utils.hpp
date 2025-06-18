@@ -9,5 +9,6 @@ std::string getTimestamp();
 void showMenu();
 int generateUniqueId();
 void listIndicators();
+void removeIndicatorById(int id);
 
 #endif

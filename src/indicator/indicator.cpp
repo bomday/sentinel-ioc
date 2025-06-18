@@ -127,7 +127,6 @@ Indicator* createIndicator() {
 
   // Create a MaliciousHash object if the type is Hash
   else if (type == "Hash") {
-      // Assume que MaliciousHash::createMaliciousHash é um método estático que retorna um Indicator*
       Indicator* newMaliciousHash = MaliciousHash::createMaliciousHash(indicatorId, severity, type, description, origin, timestamp);
       indicators.push_back(std::unique_ptr<Indicator>(newMaliciousHash));
       return newMaliciousHash;
