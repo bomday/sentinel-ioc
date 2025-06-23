@@ -6,7 +6,11 @@
 #include <iostream>
 #include <limits> 
 #include <memory>
+#include <iomanip>
+#include <string>
+#include <sstream>
 #include <vector>
+#include <algorithm>
 
 // Constructor
 Indicator::Indicator(int indicatorId,
@@ -22,8 +26,6 @@ Indicator::Indicator(int indicatorId,
       origin(origin),
       timestamp(timestamp) {
 }
-
-extern std::vector<std::unique_ptr<Indicator>> indicators; // Call the global vector of unique pointers
 
 // Getters
 int Indicator::getIndicatorId() const { 
@@ -68,70 +70,4 @@ void Indicator::setOrigin(const std::string& orig) {
 
 void Indicator::setTimestamp(const std::string& ts) { 
   timestamp = ts; 
-}
-
-// Indicator creation    
-Indicator* createIndicator() {
-  int severity; 
-  std::string type, description, origin, timestamp; 
-
-  while (true) {
-      std::cout << "\nEnter the type of IOC (IP, URL or Hash): ";
-      std::getline(std::cin, type);
-
-      if (type == "IP" || type == "URL" || type == "Hash") {
-          break;
-      } else {
-          std::cout << "\nInvalid type. Please enter IP, URL or Hash.";
-      }
-  }
-
-  while (true) {
-      std::cout << "\nNow enter the severity (1 - 5): ";
-      std::cin >> severity;
-
-      if (std::cin.fail() || severity < 1 || severity > 5) {
-          std::cout << "\nInvalid severity. Please enter a value between 1 and 5.\n";
-          std::cin.clear(); 
-
-          std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-      } else {
-          std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-          break; 
-      }
-  }
-
-  std::cout << "\nEnter the origin: ";
-  std::getline(std::cin, origin);
-
-  timestamp = getTimestamp();
-  
-  std::cout << "\nEnter the description: ";
-  std::getline(std::cin, description);
-
-  int indicatorId = generateUniqueId();
-
-  // Create a MaliciousIP object if the type is IP
-  if (type == "IP") { 
-      Indicator* newMaliciousIP = MaliciousIP::createMaliciousIP(indicatorId, severity, type, description, origin, timestamp);
-      indicators.push_back(std::unique_ptr<Indicator>(newMaliciousIP));
-      return newMaliciousIP;
-  }
-  
-  // Create a MaliciousURL object if the type is URL
-  else if (type == "URL") {
-      Indicator* newMaliciousURL = MaliciousURL::createMaliciousURL(indicatorId, severity, type, description, origin, timestamp);
-      indicators.push_back(std::unique_ptr<Indicator>(newMaliciousURL));
-      return newMaliciousURL;
-  }
-
-  // Create a MaliciousHash object if the type is Hash
-  else if (type == "Hash") {
-      Indicator* newMaliciousHash = MaliciousHash::createMaliciousHash(indicatorId, severity, type, description, origin, timestamp);
-      indicators.push_back(std::unique_ptr<Indicator>(newMaliciousHash));
-      return newMaliciousHash;
-  }
-
-  return nullptr; // Return nullptr if the type is not recognized
-
 }

@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 
+// represents an indicator
 class Indicator {
     private:
         // Atributes
@@ -36,9 +37,6 @@ class Indicator {
         void setDescription(const std::string& desc);
         void setOrigin(const std::string& orig);
         void setTimestamp(const std::string& ts);
-
-        // Static method to create an Indicator object
-        static Indicator* createIndicator();
 };
 
 #endif // INDICATOR_HPP

@@ -1,16 +1,17 @@
 #include <iostream>  
 #include <vector>   
+#include <limits>  
+
+#include "indicatorManager.hpp"
 #include "indicator.hpp"      
 #include "maliciousHash.hpp"   
 #include "maliciousIP.hpp"
 #include "maliciousURL.hpp"
 #include "utils.hpp"
-#include <limits>  
-
-Indicator* createIndicator(); 
 
 int main() {
     int optionNumber; // Variable to store the user's menu option
+    IndicatorManager manager; // Create an instance of IndicatorManager to manage IOCs
 
     std::cout << "--- Welcome to the Sentinel IOC Management System ---\n";
 
@@ -24,12 +25,12 @@ int main() {
         switch (optionNumber) {
             case 1: {
                 // Create a new IOC
-                Indicator* newIoc = createIndicator(); // Call the function to create an indicator
+                manager.createIndicator(); // Call the function to create an indicator
                 break;
             }
             case 2: {
                 // Implement Listing IOCs here
-                listIndicators(); 
+                manager.listIndicators(); 
                 break;
             }
             case 3: {
@@ -43,7 +44,7 @@ int main() {
                 std::cout << "\nEnter the ID of the IOC to remove: ";
                 std::cin >> idToRemove;
 
-                removeIndicatorById(idToRemove);
+                manager.removeIndicatorById(idToRemove);
 
                 break;
             }

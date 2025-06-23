@@ -6,6 +6,8 @@
 #include <string>
 #include "../indicator/indicator.hpp"
 
+// Derivative class for Malicious Hash Indicators
+// This class inherits from the Indicator class and represents a specific type of indicator that contains a hash and its algorithm
 class MaliciousHash : public Indicator {
     private:
         // Atributes

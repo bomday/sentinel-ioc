@@ -6,6 +6,8 @@
 #include <string>
 #include "../indicator/indicator.hpp"
 
+// Derivative class for Malicious URL Indicators
+// This class inherits from the Indicator class and represents a specific type of indicator that contains a URL and its protocol
 class MaliciousURL : public Indicator {
     private:
         // Atributes
