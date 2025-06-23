@@ -29,28 +29,43 @@ Este projeto simula um analisador de IOCs (IP, URLs e Hashes maliciosos), permit
 ```
 📁 sentinel-ioc/
  ┣ 📁 src/
- ┃ ┣ 📄 main.cpp
- ┃ ┣ 📄 Indicador.hpp / Indicador.cpp         (Classe abstrata base)
- ┃ ┣ 📄 IPMalicioso.hpp / IPMalicioso.cpp     (Classe derivada)
- ┃ ┣ 📄 URLMaliciosa.hpp / URLMaliciosa.cpp   (Classe derivada)
- ┃ ┣ 📄 HashMalicioso.hpp / HashMalicioso.cpp (Classe derivada)
- ┃ ┣ 📄 AnalisadorIOC.hpp / AnalisadorIOC.cpp (Classe que contém CRUD e análise)
- ┃ ┣ 📄 utils.hpp / utils.cpp                 (Funções auxiliares)
- ┃ ┗ 📁 data/
- ┃   ┗ 📄 iocs.csv                            (Arquivo simulando o banco de dados)
- ┣ 📁 public/
- ┃ ┣ 📄 roteiro-video.txt 
- ┃ ┣ 📄 relatorio.pdf
+ ┃ ┣ 📁 data/
+ ┃ ┃ ┗ 📄 iocs.csv                  >> Simulação de "banco de dados"
+ ┃ ┣ 📁 indicator                 
+ ┃ ┃ ┣ 📄 indicator.hpp             >> Classe base abstrata
+ ┃ ┃ ┗ 📄 indicator.cpp             
+ ┃ ┣ 📁 indicatorManager
+ ┃ ┃ ┣ 📄 indicatorManager.hpp      >> Gerencia o CRUD de IOCs
+ ┃ ┃ ┗ 📄 indicatorManager.cpp
+ ┃ ┣ 📁 maliciousHash
+ ┃ ┃ ┣ 📄 maliciousHash.hpp         >> Classe derivada: Hash malicioso
+ ┃ ┃ ┗ 📄 maliciousHash.cpp
+ ┃ ┣ 📁 maliciousIP
+ ┃ ┃ ┣ 📄 maliciousIP.hpp           >> Classe derivada: IP malicioso
+ ┃ ┃ ┗ 📄 maliciousIP.cpp
+ ┃ ┣ 📁 maliciousURL
+ ┃ ┃ ┣ 📄 maliciousURL.hpp          >> Classe derivada: URL maliciosa
+ ┃ ┃ ┗ 📄 maliciousURL.cpp
+ ┃ ┣ 📁 utils
+ ┃ ┃ ┣ 📄 utils.hpp                 >> Funções auxiliares (ex: timestamp, menu)
+ ┃ ┃ ┗ 📄 utils.cpp
+ ┃ ┗ 📄 main.cpp                    >> Ponto de entrada do programa
+ ┣ 📁 public/                       
+ ┃ ┣ 📄 roteiro-video.pdf           
+ ┃ ┣ 📄 relatorio.pdf               
+ ┣ 📄 .gitignore
+ ┣ 📄 main.exe                      >> Executável (gerado)
+ ┣ 📄 main                          >> Executável (gerado)
  ┗ 📄 README.md
 ```
 
 ## Conceitos POO Utilizados
 
-- Classes e Objetos
-- Herança (classe base `Indicador`)
-- Polimorfismo (métodos sobrescritos)
+- Classes e Objetos: São os blocos de construção fundamentais. As classes (`Indicator`, `MaliciousIP`, `MaliciousURL`, `MaliciousHash`, `IndicatorManager`) definem a estrutura e o comportamento dos objetos, enquanto os objetos são instâncias concretas dessas classes;
+- Herança: Permite que classes (`MaliciousIP`, `MaliciousURL`, `MaliciousHash`) herdem características (atributos e métodos) da classe base (`Indicator`). Isso promove o reuso de código e estabelece uma relação de "é um" entre as classes derivadas e a base;
+- Polimorfismo: A capacidade de objetos de diferentes classes responderem de forma específica à mesma chamada de método. No exemplo, embora não haja métodos virtuais puros na classe base, o conceito de criar diferentes tipos de indicadores (`IP`, `URL`, `Hash`) e tratá-los de forma genérica através da classe `Indicator` demonstra o princípio do polimorfismo.
 - Encapsulamento (acesso com `private`, `protected`, `public`)
-- Uso de ponteiros e referências
+- Abstração: A classe `Indicator` pode ser considerada uma classe abstrata (embora não use a palavra-chave virtual para métodos puros), pois define uma interface comum para diferentes tipos de indicadores, sem se preocupar com os detalhes específicos de cada um. As classes derivadas implementam os detalhes específicos.
 
 ## 📹 Vídeo
 

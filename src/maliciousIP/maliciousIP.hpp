@@ -6,6 +6,8 @@
 #include <string>
 #include "../indicator/indicator.hpp"
 
+// Derivative class for Malicious IP Indicators
+// This class inherits from the Indicator class and represents a specific type of indicator that contains an IP address, country, and ISP info
 class MaliciousIP : public Indicator {
     private:
         // Atributes

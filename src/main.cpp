@@ -1,16 +1,17 @@
 #include <iostream>  
 #include <vector>   
+#include <limits>  
+
+#include "indicatorManager.hpp"
 #include "indicator.hpp"      
 #include "maliciousHash.hpp"   
 #include "maliciousIP.hpp"
 #include "maliciousURL.hpp"
 #include "utils.hpp"
-#include <limits>  
-
-Indicator* createIndicator(); 
 
 int main() {
     int optionNumber; // Variable to store the user's menu option
+    IndicatorManager manager; // Create an instance of IndicatorManager to manage IOCs
 
     std::cout << "--- Welcome to the Sentinel IOC Management System ---\n";
 
@@ -22,28 +23,41 @@ int main() {
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
         switch (optionNumber) {
-            case 1:
-                { 
-                    Indicator* newIoc = createIndicator(); // Call the function to create an indicator
-                }
+            case 1: {
+                // Create a new IOC
+                manager.createIndicator(); // Call the function to create an indicator
                 break;
-            case 2:
+            }
+            case 2: {
                 // Implement Listing IOCs here
-                listIndicators(); 
+                manager.listIndicators(); 
                 break;
-            case 3:
+            }
+            case 3: {
                 // Edit IOC (placeholder)
                 std::cout << "\nEdit IOC functionality not yet implemented.\n";
                 break;
-            case 4:
+            }
+            case 4: {
                 // Remove IOC (placeholder)
-                std::cout << "\nRemove IOC functionality not yet implemented.\n";
+                int idToRemove;
+                std::cout << "\nEnter the ID of the IOC to remove: ";
+                std::cin >> idToRemove;
+
+                manager.removeIndicatorById(idToRemove);
+
                 break;
-            case 0:
+            }
+            case 0: {
+                // Exit the program
                 std::cout << "\nExiting the Sentinel IOC Management System. Goodbye!\n";
                 break;
-            default:
+            }
+            default: {
+                // Handle invalid option
+                std::cin.clear(); // Clear any error flags
                 std::cout << "\nInvalid option. Please try again.\n";
+            }
         }
         std::cout << "\n"; // Add a newline for better spacing after each operation
     } while (optionNumber != 0);
