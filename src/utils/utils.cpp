@@ -12,6 +12,8 @@
 #include <sstream>
 #include <vector>
 #include <memory>
+#include <algorithm>
+#include <limits>
 
 // Definition of the global indicators vector
 std::vector<std::unique_ptr<Indicator>> indicators; 
@@ -104,7 +106,7 @@ void listIndicators()  {
               << std::setw(51) << "URL"
               << std::setw(10) << "Protocol"
               << std::endl;
-    std::cout << std::string(294, '-') << std::endl; // Separator line for the header
+    std::cout << std::string(150, '-') << std::endl; // Separator line for the header
 
     // Iterate over pointers in the vector
     for (const auto& ioc : indicators) { // Display properties in a formatted, tabular way
@@ -122,10 +124,10 @@ void listIndicators()  {
         std::cout << std::endl;
 
         // Visually separate each IOC with a line.
-        std::cout << std::string(294, '-') << std::endl;
+        std::cout << std::string(150, '-') << std::endl;
     }
 
-    std::cout << "\n✅ IOC listing complete.\n";
+    std::cout << "\nIOC listing complete.\n";
     std::cout << "-------------------------------------------\n";
 }
 
@@ -147,12 +149,12 @@ void removeIndicatorById(int id) {
         return; 
     }
 
-    auto it = std::remove_if(indicators.begin(), indicators.end(),
+    auto indicatorToRemove = std::remove_if(indicators.begin(), indicators.end(),
                                 [id](const std::unique_ptr<Indicator>& indicator) {
                                     return indicator->getIndicatorId() == id;
                                 });
-    if (it != indicators.end()) {
-        indicators.erase(it, indicators.end());
+    if (indicatorToRemove != indicators.end()) {
+        indicators.erase(indicatorToRemove, indicators.end());
         std::cout << "\nIndicator with ID " << id << " has been removed successfully.\n";
     } else {
         std::cout << "\nNo indicator found with ID " << id << ".\n";

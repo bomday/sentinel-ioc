@@ -22,19 +22,22 @@ int main() {
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
         switch (optionNumber) {
-            case 1:
+            case 1: {
                 // Create a new IOC
                 Indicator* newIoc = createIndicator(); // Call the function to create an indicator
                 break;
-            case 2:
+            }
+            case 2: {
                 // Implement Listing IOCs here
                 listIndicators(); 
                 break;
-            case 3:
+            }
+            case 3: {
                 // Edit IOC (placeholder)
                 std::cout << "\nEdit IOC functionality not yet implemented.\n";
                 break;
-            case 4:
+            }
+            case 4: {
                 // Remove IOC (placeholder)
                 int idToRemove;
                 std::cout << "\nEnter the ID of the IOC to remove: ";
@@ -43,11 +46,17 @@ int main() {
                 removeIndicatorById(idToRemove);
 
                 break;
-            case 0:
+            }
+            case 0: {
+                // Exit the program
                 std::cout << "\nExiting the Sentinel IOC Management System. Goodbye!\n";
                 break;
-            default:
+            }
+            default: {
+                // Handle invalid option
+                std::cin.clear(); // Clear any error flags
                 std::cout << "\nInvalid option. Please try again.\n";
+            }
         }
         std::cout << "\n"; // Add a newline for better spacing after each operation
     } while (optionNumber != 0);
