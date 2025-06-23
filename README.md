@@ -2,11 +2,11 @@
 
 > Projeto de Análise de Indicadores de Comprometimento (IOCs) em C++ utilizando Programação Orientada a Objetos.
 
-## 📌 Descrição
+## Descrição
 
 Este projeto simula um analisador de IOCs (IP, URLs e Hashes maliciosos), permitindo o cadastro, consulta, edição e exclusão dessas informações. É uma introdução prática à Programação Orientada a Objetos em C++.
 
-## 👨‍💻 Tecnologias Utilizadas
+## Tecnologias Utilizadas
 
 - Linguagem: C++
 - POO: Herança, Polimorfismo, Encapsulamento
@@ -15,42 +15,68 @@ Este projeto simula um analisador de IOCs (IP, URLs e Hashes maliciosos), permit
 - GitHub Pages (documentação)
 - Ponteiros e Referências
 
-## 🚀 Funcionalidades
+## Funcionalidades
 
-- [ ] Cadastro de IOCs (IP, URL, Hash)
-- [ ] Consulta e listagem de IOCs
-- [ ] Atualização e exclusão de IOCs
+- [X] Cadastro de IOCs (IP, URL, Hash)
+- [X] Consulta e listagem de IOCs
+- [X] Atualização e exclusão de IOCs
 - [ ] Simulação de análise
 - [ ] Interface em linha de comando
 - [ ] GUI com biblioteca gráfica (opcional)
 
-## 🏗️ Organização do Código
+## Organização do Código
 
 ```
 📁 sentinel-ioc/
  ┣ 📁 src/
- ┃ ┣ 📄 main.cpp
- ┃ ┣ 📄 Indicador.hpp / Indicador.cpp         (Classe abstrata base)
- ┃ ┣ 📄 IPMalicioso.hpp / IPMalicioso.cpp     (Classe derivada)
- ┃ ┣ 📄 URLMaliciosa.hpp / URLMaliciosa.cpp   (Classe derivada)
- ┃ ┣ 📄 HashMalicioso.hpp / HashMalicioso.cpp (Classe derivada)
- ┃ ┣ 📄 AnalisadorIOC.hpp / AnalisadorIOC.cpp (Classe que contém CRUD e análise)
- ┃ ┣ 📄 utils.hpp / utils.cpp                 (Funções auxiliares)
- ┃ ┗ 📁 data/
- ┃   ┗ 📄 iocs.txt                            (Arquivo simulando o banco de dados)
- ┣ 📁 public/
- ┃ ┣ 📄 roteiro-video.txt 
- ┃ ┣ 📄 relatorio.pdf
+ ┃ ┣ 📁 data/
+ ┃ ┃ ┗ 📄 iocs.csv                  >> Simulação de "banco de dados"
+ ┃ ┣ 📁 indicator                 
+ ┃ ┃ ┣ 📄 indicator.hpp             >> Classe base abstrata
+ ┃ ┃ ┗ 📄 indicator.cpp             
+ ┃ ┣ 📁 indicatorManager
+ ┃ ┃ ┣ 📄 indicatorManager.hpp      >> Gerencia o CRUD de IOCs
+ ┃ ┃ ┗ 📄 indicatorManager.cpp
+ ┃ ┣ 📁 maliciousHash
+ ┃ ┃ ┣ 📄 maliciousHash.hpp         >> Classe derivada: Hash malicioso
+ ┃ ┃ ┗ 📄 maliciousHash.cpp
+ ┃ ┣ 📁 maliciousIP
+ ┃ ┃ ┣ 📄 maliciousIP.hpp           >> Classe derivada: IP malicioso
+ ┃ ┃ ┗ 📄 maliciousIP.cpp
+ ┃ ┣ 📁 maliciousURL
+ ┃ ┃ ┣ 📄 maliciousURL.hpp          >> Classe derivada: URL maliciosa
+ ┃ ┃ ┗ 📄 maliciousURL.cpp
+ ┃ ┣ 📁 utils
+ ┃ ┃ ┣ 📄 utils.hpp                 >> Funções auxiliares (ex: timestamp, menu)
+ ┃ ┃ ┗ 📄 utils.cpp
+ ┃ ┗ 📄 main.cpp                    >> Ponto de entrada do programa
+ ┣ 📁 public/                       
+ ┃ ┣ 📄 roteiro-video.pdf           
+ ┃ ┣ 📄 relatorio.pdf               
+ ┣ 📄 .gitignore
+ ┣ 📄 main.exe                      >> Executável (gerado)
+ ┣ 📄 main                          >> Executável (gerado)
  ┗ 📄 README.md
 ```
 
-## 🧠 Conceitos POO Utilizados
+## Conceitos POO Utilizados
 
-- Classes e Objetos
-- Herança (classe base `Indicador`)
-- Polimorfismo (métodos sobrescritos)
+- Classes e Objetos: São os blocos de construção fundamentais. As classes (`Indicator`, `MaliciousIP`, `MaliciousURL`, `MaliciousHash`, `IndicatorManager`) definem a estrutura e o comportamento dos objetos, enquanto os objetos são instâncias concretas dessas classes;
+- Herança: Permite que classes (`MaliciousIP`, `MaliciousURL`, `MaliciousHash`) herdem características (atributos e métodos) da classe base (`Indicator`). Isso promove o reuso de código e estabelece uma relação de "é um" entre as classes derivadas e a base;
+- Polimorfismo: A capacidade de objetos de diferentes classes responderem de forma específica à mesma chamada de método. No exemplo, embora não haja métodos virtuais puros na classe base, o conceito de criar diferentes tipos de indicadores (`IP`, `URL`, `Hash`) e tratá-los de forma genérica através da classe `Indicator` demonstra o princípio do polimorfismo.
 - Encapsulamento (acesso com `private`, `protected`, `public`)
-- Uso de ponteiros e referências
+- Abstração: A classe `Indicator` pode ser considerada uma classe abstrata (embora não use a palavra-chave virtual para métodos puros), pois define uma interface comum para diferentes tipos de indicadores, sem se preocupar com os detalhes específicos de cada um. As classes derivadas implementam os detalhes específicos.
+
+## Rodando o Programa
+
+#### Compile o programa (se necessário)
+```bash
+g++ -std=c++17 src/main.cpp src/indicator/indicator.cpp src/maliciousHash/maliciousHash.cpp src/maliciousIP/maliciousIP.cpp src/maliciousURL/maliciousURL.cpp src/utils/utils.cpp src/indicatorManager/indicatorManager.cpp -Isrc/indicator -Isrc/maliciousHash -Isrc/maliciousIP -Isrc/maliciousURL -Isrc/utils -Isrc/indicatorManager -o main
+```
+#### Execute o programa
+```bash
+./main
+```
 
 ## 📹 Vídeo
 

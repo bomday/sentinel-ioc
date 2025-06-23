@@ -1,0 +1,51 @@
+indicatorId,severity,type,description,origin,timestamp,hash,algorithm,ip,country,isp,url,protocol
+101,3,MaliciousHash,Malware sample SHA256,ThreatFeedX,2025-06-01T10:15:00Z,e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855,SHA256,,,,,
+102,4,MaliciousHash,Ransomware file MD5,SOCAlert,2025-06-01T11:20:00Z,44d88612fea8a8f36de82e1278abb02f,MD5,,,,,
+103,2,MaliciousHash,Suspicious file hash,ExternalReport,2025-06-01T12:30:00Z,d41d8cd98f00b204e9800998ecf8427e,SHA1,,,,,
+104,3,MaliciousHash,Trojan dropper SHA256,ThreatIntelAPI,2025-06-01T13:45:00Z,5f4dcc3b5aa765d61d8327deb882cf99,SHA256,,,,,
+105,5,MaliciousHash,Exploit kit hash,InternalScan,2025-06-01T14:10:00Z,6a5ed36d3e0e4a2f8b3c4d8e9f2b0c1d,SHA256,,,,,
+106,4,MaliciousHash,Adware sample MD5,UserReport,2025-06-01T15:00:00Z,098f6bcd4621d373cade4e832627b4f6,MD5,,,,,
+107,2,MaliciousHash,Suspicious script hash,PhishTank,2025-06-01T16:15:00Z,4a8b6f3c9e2d7a1b0c4e8f6a2d3b1c5e,SHA1,,,,,
+108,3,MaliciousHash,Backdoor SHA256,ThreatFeedY,2025-06-01T17:30:00Z,7c4e5d2a1b9f8e3c6d0a4b2e7f9c1d3a,SHA256,,,,,
+109,4,MaliciousHash,Cryptojacker MD5,SOCAlert,2025-06-01T18:45:00Z,5e8d3c1b2a9f7e4d0c6a3b1e9f2c7d4a,MD5,,,,,
+110,5,MaliciousHash,Rootkit hash,ExternalReport,2025-06-01T19:00:00Z,8f9e4c3a2b1d7f6e0c5a4b3e2d1c9f7a,SHA256,,,,,
+111,3,MaliciousHash,Malware dropper SHA1,ThreatIntelAPI,2025-06-01T20:15:00Z,9a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d,SHA1,,,,,
+112,4,MaliciousHash,Spyware sample MD5,InternalScan,2025-06-01T21:30:00Z,3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f,MD5,,,,,
+113,2,MaliciousHash,Keylogger hash,UserReport,2025-06-01T22:45:00Z,2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a,SHA256,,,,,
+114,3,MaliciousHash,Worm SHA256,PhishTank,2025-06-01T23:00:00Z,1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b,SHA256,,,,,
+115,5,MaliciousHash,RAT sample MD5,ThreatFeedX,2025-06-02T00:15:00Z,0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c,MD5,,,,,
+116,4,MaliciousHash,Exploit payload SHA1,SOCAlert,2025-06-02T01:30:00Z,4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e,SHA1,,,,,
+117,3,MaliciousHash,Adware dropper SHA256,ExternalReport,2025-06-02T02:45:00Z,5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d,SHA256,,,,,
+201,4,MaliciousIP,Known C2 server,ThreatIntelAPI,2025-06-01T13:00:00Z,,,185.234.219.120,Russia,DigitalOcean,,
+202,3,MaliciousIP,Phishing campaign IP,ISPReport,2025-06-01T13:30:00Z,,,45.77.65.32,USA,Linode,,
+203,5,MaliciousIP,APT Group Infrastructure,InternalScan,2025-06-01T14:00:00Z,,,103.251.44.15,Vietnam,VNPT Corp,,
+204,2,MaliciousIP,Botnet controller,ThreatFeedY,2025-06-01T15:15:00Z,,,192.168.1.100,China,China Telecom,,
+205,4,MaliciousIP,Malware distribution IP,UserReport,2025-06-01T16:30:00Z,,,89.45.67.23,Germany,Hetzner,,
+206,3,MaliciousIP,Spam server,SOCAlert,2025-06-01T17:45:00Z,,,172.16.254.1,USA,Cloudflare,,
+207,5,MaliciousIP,Exploit kit hosting,ExternalReport,2025-06-01T18:00:00Z,,,203.0.113.10,Brazil,GloboTech,,
+208,4,MaliciousIP,Cryptojacker C2,ThreatIntelAPI,2025-06-01T19:15:00Z,,,104.244.42.129,USA,Twitter,,
+209,3,MaliciousIP,Phishing redirector,ISPReport,2025-06-01T20:30:00Z,,,198.51.100.50,India,Reliance Jio,,
+210,2,MaliciousIP,Suspicious proxy,InternalScan,2025-06-01T21:45:00Z,,,93.184.216.34,UK,BT Group,,
+211,4,MaliciousIP,Malware C2 server,ThreatFeedX,2025-06-01T22:00:00Z,,,185.199.108.153,Germany,GitHub,,
+212,5,MaliciousIP,APT command server,UserReport,2025-06-01T23:15:00Z,,,45.32.123.45,Japan,Vultr,,
+213,3,MaliciousIP,Brute force attack source,SOCAlert,2025-06-02T00:30:00Z,,,103.45.67.89,Singapore,Amazon AWS,,
+214,4,MaliciousIP,Malware relay,ExternalReport,2025-06-02T01:45:00Z,,,192.0.2.15,USA,Google Cloud,,
+215,2,MaliciousIP,Scanning bot,ThreatIntelAPI,2025-06-02T02:00:00Z,,,203.0.113.75,Canada,Ottawa ISP,,
+301,4,MaliciousURL,Drive-by download,UserReport,2025-06-01T15:10:00Z,,,,,,http://malicious.example.com/download,HTTP
+302,3,MaliciousURL,Fake login page,PhishTank,2025-06-01T15:45:00Z,,,,,,https://login.fakebank.com/signin,HTTPS
+303,5,MaliciousURL,Zero-day exploit delivery,GovAlert,2025-06-01T16:20:00Z,,,,,,https://exploit.example.com/exe,HTTPS
+304,2,MaliciousURL,Phishing redirector,ThreatFeedY,2025-06-01T17:35:00Z,,,,,,http://redirect.badactor.com/click,HTTP
+305,4,MaliciousURL,Malware download link,SOCAlert,2025-06-01T18:50:00Z,,,,,,https://dl.malware.com/file.exe,HTTPS
+306,3,MaliciousURL,Fake software update,InternalScan,2025-06-01T19:05:00Z,,,,,,http://update.software.com/patch,HTTP
+307,5,MaliciousURL,Exploit kit delivery,ExternalReport,2025-06-01T20:20:00Z,,,,,,https://kit.exploit.com/driveby,HTTPS
+308,4,MaliciousURL,Cryptojacker script,ThreatIntelAPI,2025-06-01T21:35:00Z,,,,,,http://miner.badactor.com/js,HTTP
+309,3,MaliciousURL,Phishing login page,UserReport,2025-06-01T22:50:00Z,,,,,,https://secure.fakeapp.com/login,HTTPS
+310,2,MaliciousURL,Suspicious redirect,PhishTank,2025-06-01T23:05:00Z,,,,,,http://go.shorturl.com/abc,HTTP
+311,4,MaliciousURL,Malware campaign link,GovAlert,2025-06-02T00:20:00Z,,,,,,https://campaign.badactor.com/dl,HTTPS
+312,5,MaliciousURL,Exploit payload delivery,ThreatFeedX,2025-06-02T01:35:00Z,,,,,,https://payload.exploit.com/file,HTTPS
+313,3,MaliciousURL,Fake banking portal,SOCAlert,2025-06-02T02:50:00Z,,,,,,https://banking.fake.com/login,HTTPS
+314,4,MaliciousURL,Drive-by exploit,InternalScan,2025-06-02T03:05:00Z,,,,,,http://exploit.driveby.com/js,HTTP
+315,2,MaliciousURL,Adware redirect,ExternalReport,2025-06-02T04:20:00Z,,,,,,http://ads.badactor.com/click,HTTP
+316,3,MaliciousURL,Phishing campaign link,ThreatIntelAPI,2025-06-02T05:35:00Z,,,,,,https://phish.example.com/signin,HTTPS
+317,4,MaliciousURL,Malware dropper URL,UserReport,2025-06-02T06:50:00Z,,,,,,https://dropper.malware.com/exe,HTTPS
+318,5,MaliciousURL,Zero-day delivery,PhishTank,2025-06-02T07:05:00Z,,,,,,https://zeroday.exploit.com/file,HTTPS
