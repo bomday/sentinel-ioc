@@ -71,7 +71,7 @@ void IndicatorManager::createIndicator() {
 
     indicators.push_back(std::unique_ptr<Indicator>(newIndicator));
     
-    std::cout << "\nIndicator created successfully with ID: " << indicatorId << "\n";
+    std::cout << "\nIndicator created successfully with ID: " << indicatorId << std::endl;
     std::cout << "-------------------------------------------\n";
 }
 
@@ -160,6 +160,178 @@ void IndicatorManager::listIndicators() const {
 
     std::cout << "\nIOC listing complete.\n";
     std::cout << "-------------------------------------------\n";
+}
+
+// Method to edit an indicator by its ID
+void IndicatorManager::editIndicatorById(int id) {
+    if (indicators.empty()) {
+        std::cout << "\nNo IOCs to edit. The list is empty.\n";
+        return; 
+    }
+
+    // Find the indicator with the given ID
+    auto indicatorToEdit = std::find_if(indicators.begin(), indicators.end(),
+                                [id](const std::unique_ptr<Indicator>& indicator) {
+                                    return indicator->getIndicatorId() == id;
+                                });
+
+    if (indicatorToEdit == indicators.end()) {
+        std::cout << "\nNo indicator found with ID " << id << ".\n";
+        return; 
+    }
+
+    Indicator* iocToEdit = indicatorToEdit->get();
+    int option;
+    bool wasEdited = false;
+
+    do {
+        std::cout << "\n--- Editing IOC ID: " << iocToEdit->getIndicatorId() << " (" << iocToEdit->getType() << ") ---\n";
+        std::cout << "Current Description: " << iocToEdit->getDescription() << std::endl;
+        std::cout << "-------------------------------------------\n";
+        std::cout << "1. Edit Severity\n";
+        std::cout << "2. Edit Description\n";
+        std::cout << "3. Edit Origin\n";
+
+        // Type-specific options using dynamic_cast
+        if (MaliciousIP* ip = dynamic_cast<MaliciousIP*>(iocToEdit)) {
+            std::cout << "4. Edit IP Address\n";
+            std::cout << "5. Edit Country\n";
+            std::cout << "6. Edit ISP\n";
+        } else if (MaliciousURL* url = dynamic_cast<MaliciousURL*>(iocToEdit)) {
+            std::cout << "4. Edit URL\n";
+            std::cout << "5. Edit Protocol\n";
+        } else if (MaliciousHash* hash = dynamic_cast<MaliciousHash*>(iocToEdit)) {
+            std::cout << "4. Edit Hash\n";
+            std::cout << "5. Edit Algorithm\n";
+        }
+
+        std::cout << "Enter 0 to Finish Editing\n";
+        std::cout << "-------------------------------------------\n";
+        std::cout << "Choose an option: ";
+
+        std::cin >> option;
+        if (std::cin.fail()) {
+            std::cout << "Invalid input. Please enter a number.\n";
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            continue;
+        }
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+        std::string newValue;
+
+        switch (option) {
+            case 1: {
+                int newSeverity;
+                while (true) {
+                    std::cout << "Current severity: " << iocToEdit->getSeverity() << std::endl;
+                    std::cout << "Enter new severity (1-5): ";
+                    std::cin >> newSeverity;
+
+                    if (!std::cin.fail() && newSeverity >= 1 && newSeverity <= 5) {
+                        iocToEdit->setSeverity(newSeverity);
+                        std::cout << "\nField updated!\n";
+                        wasEdited = true;
+                        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                        break;
+                    } else {
+                        std::cout << "Invalid severity.\n";
+                        std::cin.clear();
+                        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                    }
+                }
+                break;
+            }
+            case 2:
+                std::cout << "Current description: " << iocToEdit->getDescription() << std::endl;
+                std::cout << "Enter new description: ";
+                std::getline(std::cin, newValue);
+                iocToEdit->setDescription(newValue);
+                std::cout << "\nField updated!\n";
+                wasEdited = true; 
+                break;
+            case 3:
+                std::cout << "Current origin: " << iocToEdit->getOrigin() << std::endl;
+                std::cout << "Enter new origin: ";
+                std::getline(std::cin, newValue);
+                iocToEdit->setOrigin(newValue);
+                std::cout << "\nField updated!\n";
+                wasEdited = true;
+                break;
+            case 4: // Type-specific
+                if (MaliciousIP* ip = dynamic_cast<MaliciousIP*>(iocToEdit)) {
+                    std::cout << "Current IP Address: " << ip->getIP() << std::endl;
+                    std::cout << "Enter new IP Address: "; 
+                    std::getline(std::cin, newValue); 
+                    ip->setIP(newValue);
+                    std::cout << "\nField updated!\n"; // Confirmation message just if the dynamic_cast is successful
+                    wasEdited = true;
+                } else if (MaliciousURL* url = dynamic_cast<MaliciousURL*>(iocToEdit)) {
+                    std::cout << "Current URL: " << url->getURL() << std::endl;
+                    std::cout << "Enter new URL: "; 
+                    std::getline(std::cin, newValue); 
+                    url->setURL(newValue);
+                    std::cout << "\nField updated!\n"; // Confirmation message just if the dynamic_cast is successful
+                    wasEdited = true;
+                } else if (MaliciousHash* hash = dynamic_cast<MaliciousHash*>(iocToEdit)) {
+                    std::cout << "Current Hash: " << hash->getHash() << std::endl;
+                    std::cout << "Enter new Hash: "; 
+                    std::getline(std::cin, newValue); 
+                    hash->setHash(newValue);
+                    std::cout << "\nField updated!\n"; // Confirmation message just if the dynamic_cast is successful
+                    wasEdited = true;
+                }
+                break;
+            case 5: // Type-specific
+                if (MaliciousIP* ip = dynamic_cast<MaliciousIP*>(iocToEdit)) {
+                    std::cout << "Current Country: " << ip->getCountry() << std::endl;
+                    std::cout << "Enter new Country: "; 
+                    std::getline(std::cin, newValue); 
+                    ip->setCountry(newValue);
+                    std::cout << "\nField updated!\n"; // Confirmation message just if the dynamic_cast is successful
+                    wasEdited = true;
+                } else if (MaliciousURL* url = dynamic_cast<MaliciousURL*>(iocToEdit)) {
+                    std::cout << "Current Protocol: " << url->getProtocol() << std::endl;
+                    std::cout << "Enter new Protocol: "; 
+                    std::getline(std::cin, newValue); 
+                    url->setProtocol(newValue);
+                    std::cout << "\nField updated!\n"; // Confirmation message just if the dynamic_cast is successful
+                    wasEdited = true;
+                } else if (MaliciousHash* hash = dynamic_cast<MaliciousHash*>(iocToEdit)) {
+                    std::cout << "Current Algorithm: " << hash->getAlgorithm() << std::endl;
+                    std::cout << "Enter new Algorithm: "; 
+                    std::getline(std::cin, newValue); 
+                    hash->setAlgorithm(newValue);
+                    std::cout << "\nField updated!\n"; // Confirmation message just if the dynamic_cast is successful
+                    wasEdited = true;   
+                }
+                break;
+            case 6: // IP-specific
+                if (MaliciousIP* ip = dynamic_cast<MaliciousIP*>(iocToEdit)) {
+                    std::cout << "Current ISP: " << ip->getISP() << std::endl;
+                    std::cout << "Enter new ISP: "; 
+                    std::getline(std::cin, newValue); 
+                    ip->setISP(newValue);
+                    std::cout << "\nField updated!\n";
+                    wasEdited = true;
+                }
+                break;
+            case 0:
+                std::cout << "Finished editing IOC ID: " << id << std::endl;
+                break;
+            default:
+                std::cout << "Invalid option. Please try again.\n";
+                break;
+        }
+    } while (option != 0);
+
+    if (!wasEdited) {
+        std::cout << "No changes were made to the IOC.\n";
+        return; 
+    }
+    // If any field was edited, update the timestamp
+    std::string timeEdited = getTimestamp();
+    iocToEdit->setTimestamp(timeEdited);
 }
 
 // Method to remove an indicator by its ID

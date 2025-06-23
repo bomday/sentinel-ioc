@@ -17,9 +17,9 @@ Este projeto simula um analisador de IOCs (IP, URLs e Hashes maliciosos), permit
 
 ## Funcionalidades
 
-- [ ] Cadastro de IOCs (IP, URL, Hash)
-- [ ] Consulta e listagem de IOCs
-- [ ] Atualização e exclusão de IOCs
+- [X] Cadastro de IOCs (IP, URL, Hash)
+- [X] Consulta e listagem de IOCs
+- [X] Atualização e exclusão de IOCs
 - [ ] Simulação de análise
 - [ ] Interface em linha de comando
 - [ ] GUI com biblioteca gráfica (opcional)
@@ -66,6 +66,17 @@ Este projeto simula um analisador de IOCs (IP, URLs e Hashes maliciosos), permit
 - Polimorfismo: A capacidade de objetos de diferentes classes responderem de forma específica à mesma chamada de método. No exemplo, embora não haja métodos virtuais puros na classe base, o conceito de criar diferentes tipos de indicadores (`IP`, `URL`, `Hash`) e tratá-los de forma genérica através da classe `Indicator` demonstra o princípio do polimorfismo.
 - Encapsulamento (acesso com `private`, `protected`, `public`)
 - Abstração: A classe `Indicator` pode ser considerada uma classe abstrata (embora não use a palavra-chave virtual para métodos puros), pois define uma interface comum para diferentes tipos de indicadores, sem se preocupar com os detalhes específicos de cada um. As classes derivadas implementam os detalhes específicos.
+
+## Rodando o Programa
+
+#### Compile o programa (se necessário)
+```bash
+g++ -std=c++17 src/main.cpp src/indicator/indicator.cpp src/maliciousHash/maliciousHash.cpp src/maliciousIP/maliciousIP.cpp src/maliciousURL/maliciousURL.cpp src/utils/utils.cpp src/indicatorManager/indicatorManager.cpp -Isrc/indicator -Isrc/maliciousHash -Isrc/maliciousIP -Isrc/maliciousURL -Isrc/utils -Isrc/indicatorManager -o main
+```
+#### Execute o programa
+```bash
+./main
+```
 
 ## 📹 Vídeo
 
