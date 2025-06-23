@@ -17,6 +17,7 @@ class IndicatorManager {
         // Methods to manage indicators
         void createIndicator();
         void listIndicators() const;
+        void editIndicatorById(int id);
         void removeIndicatorById(int id);
 };
 

@@ -35,7 +35,10 @@ int main() {
             }
             case 3: {
                 // Edit IOC (placeholder)
-                std::cout << "\nEdit IOC functionality not yet implemented.\n";
+                int idToEdit;
+                std::cout << "\nEnter the ID of the IOC to edit: ";
+                std::cin >> idToEdit;
+                manager.editIndicatorById(idToEdit);
                 break;
             }
             case 4: {
