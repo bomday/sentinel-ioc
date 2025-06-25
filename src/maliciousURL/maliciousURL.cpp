@@ -53,3 +53,17 @@ Indicator* MaliciousURL::createMaliciousURL(int indicatorId,
     return new MaliciousURL(indicatorId, severity, type, description, origin, timestamp, url, protocol);
 }
 
+std::string MaliciousURL::toCSV() const {
+    return std::to_string(getIndicatorId()) + "," +
+           std::to_string(getSeverity()) + "," +
+           getType() + "," +
+           getDescription() + "," +
+           getOrigin() + "," +
+           getTimestamp() + "," +
+           "" + "," + "" + "," + // hash, algorithm
+           "" + "," + "" + "," + "" + "," + // ip, country, isp
+           url + "," + protocol; // url and protocol filled
+}
+
+
+

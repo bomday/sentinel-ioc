@@ -49,3 +49,16 @@ Indicator* MaliciousHash::createMaliciousHash(int indicatorId,
 
     return new MaliciousHash(indicatorId, severity, type, description, origin, timestamp, hash, algorithm);
 }
+
+std::string MaliciousHash::toCSV() const {
+    return std::to_string(getIndicatorId()) + "," +
+           std::to_string(getSeverity()) + "," +
+           getType() + "," +
+           getDescription() + "," +
+           getOrigin() + "," +
+           getTimestamp() + "," +
+           hash + "," + algorithm + "," +
+           "" + "," + "" + "," + "" + "," + "" + "," + "";
+}
+
+

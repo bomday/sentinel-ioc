@@ -60,3 +60,15 @@ Indicator* MaliciousIP::createMaliciousIP(int indicatorId, int severity, const s
   return new MaliciousIP(indicatorId, severity, type, description, origin, timestamp, ip, country, isp);
 }
 
+std::string MaliciousIP::toCSV() const {
+    return std::to_string(getIndicatorId()) + "," +
+           std::to_string(getSeverity()) + "," +
+           getType() + "," +
+           getDescription() + "," +
+           getOrigin() + "," +
+           getTimestamp() + "," +
+           "" + "," + "" + "," + // hash, algorithm
+           ip + "," + country + "," + isp + "," + "" + "," + ""; // + empty url/protocol
+}
+
+
