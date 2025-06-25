@@ -19,6 +19,9 @@ class IndicatorManager {
         void listIndicators() const;
         void editIndicatorById(int id);
         void removeIndicatorById(int id);
+        void searchIndicator() const;
+        void printIOC(const Indicator* ioc, int index) const;
+
 };
 
 #endif
