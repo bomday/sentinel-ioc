@@ -63,15 +63,13 @@ std::vector<std::unique_ptr<Indicator>> FileManager::loadData(const std::string&
             std::string origin = tokens[4];
             std::string timestamp = tokens[5];
 
-            // Normalize CSV type to internal values
+            // Normalize type
             std::string normalizedType;
-            if (type == "MaliciousHash") {
-                normalizedType = "Hash";
-            } else if (type == "MaliciousIP") {
-                normalizedType = "IP";
-            } else if (type == "MaliciousURL") {
-                normalizedType = "URL";
-            } else {
+            if (type == "MaliciousHash") normalizedType = "Hash";
+            else if (type == "MaliciousIP") normalizedType = "IP";
+            else if (type == "MaliciousURL") normalizedType = "URL";
+            else if (type == "Hash" || type == "IP" || type == "URL") normalizedType = type;
+            else {
                 std::cerr << "[WARN] Unknown IOC type: " << type << ". Skipping line: " << line << "\n";
                 continue;
             }
