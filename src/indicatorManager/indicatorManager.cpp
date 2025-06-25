@@ -7,11 +7,13 @@
 #include <ctime>   
  
 #include "indicatorManager.hpp"
-#include "indicator.hpp"
-#include "maliciousIP.hpp"
-#include "maliciousURL.hpp"
-#include "maliciousHash.hpp"
-#include "utils.hpp"
+#include "indicator/indicator.hpp"
+#include "maliciousIP/maliciousIP.hpp"
+#include "maliciousURL/maliciousURL.hpp"
+#include "maliciousHash/maliciousHash.hpp"
+#include "utils/utils.hpp"
+#include "fileManager/fileManager.hpp"
+
 
 // Indicator creation
 void IndicatorManager::createIndicator() {
@@ -497,4 +499,16 @@ void IndicatorManager::printIOC(const Indicator* ioc, int index) const {
     std::cout << "Origin     : " << ioc->getOrigin() << "\n";
     std::cout << "Date       : " << ioc->getTimestamp() << "\n";
     std::cout << "Description: " << ioc->getDescription() << "\n";
+// Method to save all indicators to a file
+void IndicatorManager::saveIndicatorsToFile(const std::string& filename) {
+    if (FileManager::saveData(filename, indicators)) {
+        std::cout << "\nIOCs saved to \"" << filename << "\" successfully.\n";
+    } else {
+        std::cout << "\nFailed to save IOCs to file.\n";
+    }
+}
+// Method to load indicators from a file
+void IndicatorManager::loadIndicatorsFromFile(const std::string& filename) {
+    indicators = FileManager::loadData(filename);
+    std::cout << "\nLoaded " << indicators.size() << " IOCs from \"" << filename << "\".\n";
 }

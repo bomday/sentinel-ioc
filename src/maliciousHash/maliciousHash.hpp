@@ -31,6 +31,9 @@ class MaliciousHash : public Indicator {
         // Setters
         void setHash(const std::string& hashValue);
         void setAlgorithm(const std::string& algorithmName);
+
+        std::string toCSV() const override;
+        // Function to convert the indicator to a string representation
 };
 
 #endif

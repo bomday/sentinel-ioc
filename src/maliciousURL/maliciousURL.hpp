@@ -31,6 +31,10 @@ class MaliciousURL : public Indicator {
         // Setters
         void setURL(const std::string& urlAddress);
         void setProtocol(const std::string& protocolName);
+
+        std::string toCSV() const override;
+        // Convert the MaliciousURL indicator to a CSV format
+
         
 };  
 
