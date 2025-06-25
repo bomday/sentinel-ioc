@@ -34,6 +34,11 @@ int main() {
                 break;
             }
             case 3: {
+                // Implement Listing IOCs here
+                manager.searchIndicator(); 
+                break;
+            }
+            case 4: {
                 // Edit IOC (placeholder)
                 int idToEdit;
                 std::cout << "\nEnter the ID of the IOC to edit: ";
@@ -41,7 +46,7 @@ int main() {
                 manager.editIndicatorById(idToEdit);
                 break;
             }
-            case 4: {
+            case 5: {
                 // Remove IOC (placeholder)
                 int idToRemove;
                 std::cout << "\nEnter the ID of the IOC to remove: ";
