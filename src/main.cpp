@@ -43,7 +43,7 @@ int main() {
                 break;
             }
             case 4: {
-                // Edit IOC (placeholder)
+                // Edit IOC
                 int idToEdit;
                 std::cout << "\nEnter the ID of the IOC to edit: ";
                 std::cin >> idToEdit;
@@ -53,8 +53,7 @@ int main() {
                 break;
             }
             case 5: {
-                // Remove IOC (placeholder)
-            case 4: {
+                // Remove IOC
                 int idToRemove;
                 std::cout << "\nEnter the ID of the IOC to remove: ";
                 std::cin >> idToRemove;
