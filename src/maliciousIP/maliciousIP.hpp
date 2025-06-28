@@ -35,6 +35,9 @@ class MaliciousIP : public Indicator {
         void setCountry(const std::string& countryName);
         void setISP(const std::string& ispName);
 
+        std::string toCSV() const override; // Convert the MaliciousIP indicator to a CSV format
+
+
 };
 
 #endif
