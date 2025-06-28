@@ -3,6 +3,7 @@
 
 // Update the include path if the file is in a different location, for example:
 #include "../indicator/indicator.hpp"
+#include "indicator.hpp"
 #include <vector>
 #include <memory>
 
@@ -24,6 +25,7 @@ class IndicatorManager {
         void printIOC(const Indicator* ioc, int index) const;
         void saveIndicatorsToFile(const std::string& filename);
         void loadIndicatorsFromFile(const std::string& filename);
+        void generateStatistics() const;
 
 };
 
