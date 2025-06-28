@@ -5,6 +5,7 @@
 #include <iomanip>
 #include <algorithm>
 #include <ctime>   
+#include <map>
  
 #include "indicatorManager.hpp"
 #include "indicator/indicator.hpp"
@@ -512,4 +513,40 @@ void IndicatorManager::saveIndicatorsToFile(const std::string& filename) {
 void IndicatorManager::loadIndicatorsFromFile(const std::string& filename) {
     indicators = FileManager::loadData(filename);
     std::cout << "\nLoaded " << indicators.size() << " IOCs from \"" << filename << "\".\n";
+}
+
+// Function to generate statistics about the indicators
+void IndicatorManager::generateStatistics() const {
+    std::map<std::string, int> forType;
+    std::map<int, int> forSeverity;
+    int last30Days = 0;
+    int thisMonth = 0;
+
+    for (const auto& ioc : indicators) {
+        forType[ioc->getType()]++;
+        forSeverity[ioc->getSeverity()]++;
+
+        if (registerLastMonth(ioc->getTimestamp())) {
+            last30Days++;
+        }
+        if (isCurrentMonth(ioc->getTimestamp())) {
+            thisMonth++;
+        }
+    }
+
+    std::cout << "\n=========== IOCs Statistics ===========\n\n";
+    std::cout << "Total: " << indicators.size() << " IOCs\n\n";
+
+    std::cout << "Distribution for Type:\n";
+    for (const auto& [type, quantity] : forType)
+        std::cout << " - " << type << ": " << quantity << " IOCs\n\n";
+
+    std::cout << "\nDistribution for Severity:\n";
+    for (const auto& [sev, quantity] : forSeverity)
+        std::cout << " - Severity " << sev << ": " << quantity << " IOCs\n\n";
+
+    std::cout << "\nIOCs registered on last month: " << last30Days << "\n";
+    std::cout << "\nIOCs registered in the current month: " << thisMonth << "\n";
+
+    std::cout << "\n===========================================\n";
 }
