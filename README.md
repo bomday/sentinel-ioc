@@ -20,8 +20,8 @@ Este projeto simula um analisador de IOCs (IP, URLs e Hashes maliciosos), permit
 - [X] Cadastro de IOCs (IP, URL, Hash)
 - [X] Consulta e listagem de IOCs
 - [X] Atualização e exclusão de IOCs
-- [ ] Simulação de análise
-- [ ] Interface em linha de comando
+- [X] Simulação de análise
+- [X] Interface em linha de comando
 - [ ] GUI com biblioteca gráfica (opcional)
 
 ## Organização do Código
