@@ -88,10 +88,10 @@ g++ -std=c++17 src/main.cpp src/indicator/indicator.cpp src/maliciousHash/malici
 
 ## 👥 Equipe
 
-| Nome           | Função              |
+| Nome           | Curso              |
 |--------------|---------------------|
-| Aluno 1         | Arquitetura / Dev   |
-| Aluno 2        | Backend / CRUD      |
-| Aluno 3        | Interface / Docs    |
-| Aluno 4        | Interface / Docs    |
-| Aluno 5        | Backend / CRUD      |
+| Beatriz Helena | Sistemas de Informação |
+| Dayane Lima | Sistemas de Informação |
+| Maria Antônia | Sistemas de Informação |
+| Rafael Theles | Sistemas de Informação |
+| Williams Andrade | Sistemas de Informação |
