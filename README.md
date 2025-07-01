@@ -69,8 +69,8 @@ Este projeto simula um analisador de IOCs (IP, URLs e Hashes maliciosos), permit
 - Encapsulamento (acesso com `private`, `protected`, `public`)
 - Abstração: A classe `Indicator` pode ser considerada uma classe abstrata (embora não use a palavra-chave virtual para métodos puros), pois define uma interface comum para diferentes tipos de indicadores, sem se preocupar com os detalhes específicos de cada um. As classes derivadas implementam os detalhes específicos.
 
-## Rodando o Programa (Dentro do /src)
-
+## Rodando o Programa 
+> Dentro do /src
 #### Compile o programa (se necessário)
 ```bash
 g++ -std=c++17 -o sentinel.exe     main.cpp     utils/utils.cpp     indicator/indicator.cpp     maliciousIP/maliciousIP.cpp     maliciousURL/maliciousURL.cpp     maliciousHash/maliciousHash.cpp     indicatorManager/indicatorManager.cpp     fileManager/fileManager.cpp     -I.     -Iindicator     -Iutils     -ImaliciousIP     -ImaliciousURL     -ImaliciousHash     -IindicatorManager     -IfileManager
