@@ -71,7 +71,7 @@ Este projeto simula um analisador de IOCs (IP, URLs e Hashes maliciosos), permit
 
 #### Compile o programa (se necessário)
 ```bash
-g++ -std=c++17 src/main.cpp src/indicator/indicator.cpp src/maliciousHash/maliciousHash.cpp src/maliciousIP/maliciousIP.cpp src/maliciousURL/maliciousURL.cpp src/utils/utils.cpp src/indicatorManager/indicatorManager.cpp -Isrc/indicator -Isrc/maliciousHash -Isrc/maliciousIP -Isrc/maliciousURL -Isrc/utils -Isrc/indicatorManager -o main
+g++ -std=c++17 -o sentinel.exe     main.cpp     utils/utils.cpp     indicator/indicator.cpp     maliciousIP/maliciousIP.cpp     maliciousURL/maliciousURL.cpp     maliciousHash/maliciousHash.cpp     indicatorManager/indicatorManager.cpp     fileManager/fileManager.cpp     -I.     -Iindicator     -Iutils     -ImaliciousIP     -ImaliciousURL     -ImaliciousHash     -IindicatorManager     -IfileManager
 ```
 #### Execute o programa
 ```bash
