@@ -31,9 +31,12 @@ Este projeto simula um analisador de IOCs (IP, URLs e Hashes maliciosos), permit
  ┣ 📁 src/
  ┃ ┣ 📁 data/
  ┃ ┃ ┗ 📄 iocs.csv                  >> Simulação de "banco de dados"
+ ┃ ┣ 📁 fileManager                 
+ ┃ ┃ ┣ 📄 fileManager.hpp             >> Classe de persistência de dados
+ ┃ ┃ ┗ 📄 fileManager.cpp
  ┃ ┣ 📁 indicator                 
  ┃ ┃ ┣ 📄 indicator.hpp             >> Classe base abstrata
- ┃ ┃ ┗ 📄 indicator.cpp             
+ ┃ ┃ ┗ 📄 indicator.cpp              
  ┃ ┣ 📁 indicatorManager
  ┃ ┃ ┣ 📄 indicatorManager.hpp      >> Gerencia o CRUD de IOCs
  ┃ ┃ ┗ 📄 indicatorManager.cpp
@@ -49,13 +52,12 @@ Este projeto simula um analisador de IOCs (IP, URLs e Hashes maliciosos), permit
  ┃ ┣ 📁 utils
  ┃ ┃ ┣ 📄 utils.hpp                 >> Funções auxiliares (ex: timestamp, menu)
  ┃ ┃ ┗ 📄 utils.cpp
+ ┃ ┣ 📄 sentinel.exe                >> Executável (gerado)  
  ┃ ┗ 📄 main.cpp                    >> Ponto de entrada do programa
  ┣ 📁 public/                       
  ┃ ┣ 📄 roteiro-video.pdf           
- ┃ ┣ 📄 relatorio.pdf               
+ ┃ ┣ 📄 relatorio.pdf             
  ┣ 📄 .gitignore
- ┣ 📄 main.exe                      >> Executável (gerado)
- ┣ 📄 main                          >> Executável (gerado)
  ┗ 📄 README.md
 ```
 
@@ -75,7 +77,7 @@ g++ -std=c++17 -o sentinel.exe     main.cpp     utils/utils.cpp     indicator/in
 ```
 #### Execute o programa
 ```bash
-./main
+./sentinel.exe
 ```
 
 ## 📹 Vídeo
