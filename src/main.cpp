@@ -2,16 +2,21 @@
 #include <vector>   
 #include <limits>  
 
-#include "indicatorManager.hpp"
-#include "indicator.hpp"      
-#include "maliciousHash.hpp"   
-#include "maliciousIP.hpp"
-#include "maliciousURL.hpp"
-#include "utils.hpp"
+#include "fileManager/fileManager.hpp"
+#include "indicatorManager/indicatorManager.hpp"
+#include "indicator/indicator.hpp"
+#include "maliciousHash/maliciousHash.hpp"
+#include "maliciousIP/maliciousIP.hpp"
+#include "maliciousURL/maliciousURL.hpp"
+#include "utils/utils.hpp"
 
 int main() {
     int optionNumber; // Variable to store the user's menu option
+    bool wasModified = false; // Flag to track if the data was changed
     IndicatorManager manager; // Create an instance of IndicatorManager to manage IOCs
+
+    manager.loadIndicatorsFromFile("data/ioc.csv");
+    std::cout << "[DEBUG] Load Complete.\n"; // Debug message to confirm loading of IOCs
 
     std::cout << "--- Welcome to the Sentinel IOC Management System ---\n";
 
@@ -24,46 +29,64 @@ int main() {
 
         switch (optionNumber) {
             case 1: {
-                // Create a new IOC
-                manager.createIndicator(); // Call the function to create an indicator
+                manager.createIndicator(); // Create a new IOC
+                wasModified = true;
                 break;
             }
             case 2: {
-                // Implement Listing IOCs here
-                manager.listIndicators(); 
+                manager.listIndicators(); // List all IOCs
                 break;
             }
             case 3: {
-                // Edit IOC (placeholder)
-                int idToEdit;
-                std::cout << "\nEnter the ID of the IOC to edit: ";
-                std::cin >> idToEdit;
-                manager.editIndicatorById(idToEdit);
+                // Implement Listing IOCs here
+                manager.searchIndicator(); 
                 break;
             }
             case 4: {
-                // Remove IOC (placeholder)
+                // Edit IOC
+                int idToEdit;
+                std::cout << "\nEnter the ID of the IOC to edit: ";
+                std::cin >> idToEdit;
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                manager.editIndicatorById(idToEdit);
+                wasModified = true;
+                break;
+            }
+            case 5: {
+                // Remove IOC
                 int idToRemove;
                 std::cout << "\nEnter the ID of the IOC to remove: ";
                 std::cin >> idToRemove;
-
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 manager.removeIndicatorById(idToRemove);
-
+                wasModified = true;
+                break;
+            }
+            case 6: {
+                // Generate statistics
+                manager.generateStatistics();
+                //std::cout << "\nGenerate statistics\n";
                 break;
             }
             case 0: {
-                // Exit the program
                 std::cout << "\nExiting the Sentinel IOC Management System. Goodbye!\n";
                 break;
             }
             default: {
-                // Handle invalid option
                 std::cin.clear(); // Clear any error flags
                 std::cout << "\nInvalid option. Please try again.\n";
             }
         }
-        std::cout << "\n"; // Add a newline for better spacing after each operation
+
+        std::cout << "\n"; // Add spacing after each operation
     } while (optionNumber != 0);
+
+    if (wasModified) {
+        manager.saveIndicatorsToFile("data/ioc.csv");
+        std::cout << "[DEBUG] Save complete.\n";
+    } else {
+        std::cout << "[DEBUG] No changes made. Skipping save.\n";
+    }
 
     return 0;
 }

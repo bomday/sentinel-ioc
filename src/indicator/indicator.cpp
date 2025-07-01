@@ -1,8 +1,8 @@
 #include "indicator.hpp"
-#include "utils.hpp"
-#include "maliciousIP.hpp" 
-#include "maliciousURL.hpp"
-#include "maliciousHash.hpp" 
+#include "utils/utils.hpp"
+#include "maliciousIP/maliciousIP.hpp" 
+#include "maliciousURL/maliciousURL.hpp"
+#include "maliciousHash/maliciousHash.hpp" 
 #include <iostream>
 #include <limits> 
 #include <memory>
