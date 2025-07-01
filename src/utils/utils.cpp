@@ -25,6 +25,7 @@ void showMenu() {
     std::cout << "3. Search IOC\n";
     std::cout << "4. Edit IOC\n";
     std::cout << "5. Remove IOC\n";
+    std::cout << "6. Acess statistics\n";
     std::cout << "0. Exit\n";
     std::cout << "-----------------\n\n";
 }
@@ -36,6 +37,50 @@ std::string getTimestamp() {
     std::ostringstream oss; // Create an output string stream for formatting
     oss << std::put_time(std::localtime(&todayTime), "%d-%m-%Y"); // Format: DD-MM-YYYY in string type
     return oss.str();
+}
+
+// Function to convert timestamp (string) to time_t
+std::time_t stringToTimeT(const std::string& timestamp) {   // Gets a timestamp in string format
+    std::tm tm = {};
+    std::istringstream ss(timestamp); // Read the string as a file with istringstream
+    ss >> std::get_time(&tm, "%Y-%m-%d %H:%M:%S");  // Save the parsed time into the tm structure
+    return mktime(&tm); // Convert the tm structure to time_t, which represents seconds since epoch (1970-01-01 00:00:00 UTC)
+}
+
+// Function to check if the IOC was registered in the current month
+bool isCurrentMonth(const std::string& timestamp) {
+    std::time_t iocTime = stringToTimeT(timestamp);
+    std::time_t now = std::time(nullptr);
+
+    std::tm* nowTm = std::localtime(&now); // Get the current time as a tm structure
+    std::tm* iocTm = std::localtime(&iocTime); // Convert the IOC time to a tm structure
+
+    return (iocTm->tm_year == nowTm->tm_year && iocTm->tm_mon == nowTm->tm_mon);
+}
+
+// Function to get the time_t value for one month ago
+std::time_t lastMonth() {
+    std::time_t now = std::time(nullptr);
+    std::tm tm = *std::localtime(&now);
+
+    // Subtract one month from the current time
+    tm.tm_mon -= 1;
+
+    // Handle year change if necessary (if month -1 so it's December of the previous year)
+    if (tm.tm_mon < 0) {
+        tm.tm_mon += 12;
+        tm.tm_year -= 1;
+    }
+
+    // Adjust the day to the last day of the previous month if necessary
+    return std::mktime(&tm);
+}
+
+// Function to check if an IOC was registered in the last month
+bool registerLastMonth(const std::string& timestamp) {
+    std::time_t dataIOC = stringToTimeT(timestamp);
+    std::time_t limite = lastMonth();
+    return dataIOC >= limite; // Returns true if the IOC was registered within the last month
 }
 
 // Generate a unique ID for each indicator

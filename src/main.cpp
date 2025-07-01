@@ -62,6 +62,12 @@ int main() {
                 wasModified = true;
                 break;
             }
+            case 6: {
+                // Generate statistics
+                manager.generateStatistics();
+                //std::cout << "\nGenerate statistics\n";
+                break;
+            }
             case 0: {
                 std::cout << "\nExiting the Sentinel IOC Management System. Goodbye!\n";
                 break;
