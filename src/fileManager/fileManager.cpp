@@ -42,12 +42,23 @@ std::vector<std::unique_ptr<Indicator>> FileManager::loadData(const std::string&
             continue;
         }
 
-        std::stringstream ss(line);
+        // Improved CSV parsing to handle trailing empty fields and empty lines
+        if (line.empty()) {
+            continue;  // Skip empty lines
+        }
+
         std::vector<std::string> tokens;
         std::string token;
-
+        std::istringstream ss(line);
+        
+        // Parse CSV with proper handling of trailing commas
         while (std::getline(ss, token, ',')) {
             tokens.push_back(token);
+        }
+        
+        // If line ends with comma, add empty token for the trailing field
+        if (!line.empty() && line.back() == ',') {
+            tokens.push_back("");
         }
 
         try {

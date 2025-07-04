@@ -24,7 +24,7 @@ build_project() {
     echo "Building Sentinel IOC Management System..."
     
     # Compile all source files with g++
-    g++ -std=c++17 -Wall -Wextra -g -I. -static -o sentinel-ioc \
+    g++ -std=c++17 -Wall -Wextra -g -I. -static -o sentinel-ioc.exe \
         main.cpp \
         fileManager/fileManager.cpp \
         indicator/indicator.cpp \
@@ -33,7 +33,7 @@ build_project() {
         maliciousIP/maliciousIP.cpp \
         maliciousURL/maliciousURL.cpp \
         utils/utils.cpp \
-        cli/cli.cpp
+        CLI/cli.cpp
 
     if [ $? -eq 0 ]; then
         echo "Build successful! Executable created: sentinel-ioc.exe"

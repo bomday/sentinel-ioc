@@ -111,7 +111,7 @@ void IndicatorManager::listIndicators() const {
         std::cout << std::string(294, '-') << std::endl;
     }
 
-    std::cout << "\n✅ IOC listing complete.\n";
+    std::cout << "\n IOC listing complete.\n";
     std::cout << "-------------------------------------------\n";
 }
 
