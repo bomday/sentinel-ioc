@@ -486,3 +486,13 @@ void IndicatorManager::generateStatistics() const {
 
     std::cout << "\n===========================================\n";
 }
+
+int IndicatorManager::getIOCsRegisteredLastMonth() const {
+    int lastMonth = 0;
+    for (const auto& ioc : indicators) {
+        if (registerLastMonth(ioc->getTimestamp())) {
+            lastMonth++;
+        }
+    }
+    return lastMonth;
+}

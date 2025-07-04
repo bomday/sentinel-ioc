@@ -33,6 +33,7 @@ class MaliciousHash : public Indicator {
         void setAlgorithm(const std::string& algorithmName);
 
         std::string toCSV() const override;
+        std::string getValue() const override { return getHash(); }
         // Function to convert the indicator to a string representation
 };
 
