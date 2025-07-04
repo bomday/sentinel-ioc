@@ -49,3 +49,17 @@ indicatorId,severity,type,description,origin,timestamp,hash,algorithm,ip,country
 316,3,URL,Phishing campaign link,ThreatIntelAPI,2025-06-02T05:35:00Z,,,,,,https://phish.example.com/signin,HTTPS
 317,4,URL,Malware dropper URL,UserReport,2025-06-02T06:50:00Z,,,,,,https://dropper.malware.com/exe,HTTPS
 318,5,URL,Zero-day delivery,PhishTank,2025-06-02T07:05:00Z,,,,,,https://zeroday.exploit.com/file,HTTPS
+319,2,URL,Fake software site,GovAlert,2025-06-02T08:20:00Z,,,,,,http://fake.software.com/download,HTTP
+320,3,URL,Malware C2 link,ThreatFeedX,2025-06-02T09:35:00Z,,,,,,https://c2.malware.com/command,HTTPS
+321,4,URL,Phishing redirect link,SOCAlert,2025-06-02T10:50:00Z,,,,,,http://redirect.phish.com/click,HTTP
+322,5,URL,Exploit kit link,ExternalReport,2025-06-02T11:05:00Z,,,,,,https://kit.exploit.com/download,HTTPS
+323,2,URL,Adware campaign link,ThreatIntelAPI,2025-06-02T12:20:00Z,,,,,,http://adware.badactor.com/click,HTTP
+324,3,URL,Malware distribution link,UserReport,2025-06-02T13:35:00Z,,,,,,https://dist.malware.com/file.exe,HTTPS
+325,4,URL,Phishing site,PhishTank,2025-06-02T14:50:00Z,,,,,,http://phish.fake.com/login,HTTP
+326,5,URL,Drive-by malware,ThreatFeedX,2025-06-02T15:05:00Z,,,,,,https://driveby.malware.com/js,HTTPS
+327,2,URL,Exploit delivery link,GovAlert,2025-06-02T16:20:00Z,,,,,,http://exploit.delivery.com/file,HTTP
+328,3,URL,Fake login redirect,SOCAlert,2025-06-02T17:35:00Z,,,,,,https://login.fakeapp.com/redirect,HTTPS
+329,4,URL,Malware campaign URL,ExternalReport,2025-06-02T18:50:00Z,,,,,,http://campaign.malware.com/dl,HTTP
+330,5,URL,Phishing payload link,ThreatIntelAPI,2025-06-02T20:05:00Z,,,,,,https://payload.phish.com/file,HTTPS
+331,2,URL,Adware delivery link,UserReport,2025-06-02T21:20:00Z,,,,,,http://adware.delivery.com/click,HTTP
+332,3,URL,Malware C2 URL,PhishTank,2025-06-02T22:35:00Z,,,,,,https://c2.malware.com/command,HTTPS

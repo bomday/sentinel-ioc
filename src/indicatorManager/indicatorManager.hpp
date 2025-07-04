@@ -1,7 +1,6 @@
 #ifndef INDICATOR_MANAGER_HPP
 #define INDICATOR_MANAGER_HPP
 
-// Update the include path if the file is in a different location, for example:
 #include "../indicator/indicator.hpp"
 #include <vector>
 #include <memory>
@@ -15,17 +14,51 @@ class IndicatorManager {
         // Virtual destructor
         virtual ~IndicatorManager() = default;
         
-        // Methods to manage indicators
-        void createIndicator();
+        // Core CRUD operations (no UI logic)
+        void addMaliciousIP(int id, int severity, const std::string& type, const std::string& description, 
+                           const std::string& origin, const std::string& timestamp, const std::string& ip, 
+                           const std::string& country, const std::string& isp);
+        void addMaliciousURL(int id, int severity, const std::string& type, const std::string& description, 
+                            const std::string& origin, const std::string& timestamp, const std::string& url, 
+                            const std::string& protocol);
+        void addMaliciousHash(int id, int severity, const std::string& type, const std::string& description, 
+                             const std::string& origin, const std::string& timestamp, const std::string& hash, 
+                             const std::string& algorithm);
+        
+        // Read operations
         void listIndicators() const;
-        void editIndicatorById(int id);
-        void removeIndicatorById(int id);
-        void searchIndicator() const;
+        Indicator* findIndicatorById(int id) const;
+        bool isEmpty() const;
+        
+        // Update operations
+        bool updateIndicatorSeverity(int id, int severity);
+        bool updateIndicatorDescription(int id, const std::string& description);
+        bool updateIndicatorOrigin(int id, const std::string& origin);
+        bool updateIndicatorTimestamp(int id, const std::string& timestamp);
+        bool updateMaliciousIPAddress(int id, const std::string& ip);
+        bool updateMaliciousIPCountry(int id, const std::string& country);
+        bool updateMaliciousIPISP(int id, const std::string& isp);
+        bool updateMaliciousURL(int id, const std::string& url);
+        bool updateMaliciousURLProtocol(int id, const std::string& protocol);
+        bool updateMaliciousHash(int id, const std::string& hash);
+        bool updateMaliciousHashAlgorithm(int id, const std::string& algorithm);
+        
+        // Delete operations
+        bool removeIndicatorById(int id);
+        
+        // Search operations
+        void searchByValue(const std::string& value) const;
+        void searchByType(const std::string& type) const;
+        void searchBySeverity(int severity) const;
+        void searchByOrigin(const std::string& origin) const;
+        void searchByDate(const std::string& date) const;
+        void searchByDescription(const std::string& description) const;
+        
+        // Utility methods
         void printIOC(const Indicator* ioc, int index) const;
         void saveIndicatorsToFile(const std::string& filename);
         void loadIndicatorsFromFile(const std::string& filename);
         void generateStatistics() const;
-
 };
 
 #endif
