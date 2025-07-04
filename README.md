@@ -87,6 +87,10 @@ g++ -g -std=c++17 -o sentinel.exe main.cpp cli/cli.cpp utils/utils.cpp indicator
 ./sentinel.exe
 ```
 
+#### Rodar Testes
+
+[Link](#) para readme de testes do projeto
+
 ## Depuração
 
 [Link](#) para readme de depuração do projeto
