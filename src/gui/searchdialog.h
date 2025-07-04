@@ -18,6 +18,7 @@
 #include <QSplitter>
 #include <QTextEdit>
 #include "../indicatorManager/indicatorManager.hpp"
+#include "../indicator/indicator.hpp"
 
 class SearchDialog : public QDialog
 {
@@ -40,7 +41,7 @@ private:
     void createSearchControls();
     void createResultsArea();
     void updateResultsTable();
-    void populateSearchResults(const std::vector<std::unique_ptr<Indicator>>& results);
+    void populateSearchResults(const std::vector<const Indicator*>& results);
 
     IndicatorManager *manager;
     

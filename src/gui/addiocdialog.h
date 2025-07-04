@@ -14,6 +14,9 @@
 #include <QGroupBox>
 #include <QStackedWidget>
 #include "../indicatorManager/indicatorManager.hpp"
+#include "../maliciousHash/maliciousHash.hpp"
+#include "../maliciousIP/maliciousIP.hpp"
+#include "../maliciousURL/maliciousURL.hpp"
 
 class AddIOCDialog : public QDialog
 {
@@ -21,6 +24,14 @@ class AddIOCDialog : public QDialog
 
 public:
     explicit AddIOCDialog(IndicatorManager *manager, QWidget *parent = nullptr);
+    
+    // Edit mode functionality
+    void setEditMode(bool editMode, const Indicator* ioc = nullptr);
+    bool isEditMode() const { return editingMode; }
+    int getEditingIOCId() const { return editingIOCId; }
+
+signals:
+    void iocAdded(const QString &logMessage);
 
 private slots:
     void onTypeChanged();
@@ -35,6 +46,10 @@ private:
     bool validateInput();
 
     IndicatorManager *manager;
+    
+    // Edit mode tracking
+    bool editingMode;
+    int editingIOCId;
     
     // Main layout
     QVBoxLayout *mainLayout;

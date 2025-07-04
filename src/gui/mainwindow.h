@@ -25,8 +25,8 @@ class MatrixWidget;
 class IOCTableWidget;
 class HackerTerminal;
 class AddIOCDialog;
-// class SearchDialog;
-// class StatisticsDialog;
+class SearchDialog;
+class StatisticsDialog;
 
 class MainWindow : public QMainWindow
 {
@@ -49,12 +49,13 @@ private slots:
     void showAbout();
     void toggleMatrixBackground();
     void updateSystemStatus();
+    void onIOCAdded(const QString &logMessage);
 
 private:
     void setupUI();
     void setupMenuBar();
     void setupStatusBar();
-    void applyMatrixTheme();
+    void applyTerminalTheme();
     void createCentralWidget();
     void createControlPanel();
     void createMainContent();
@@ -99,10 +100,9 @@ private:
     QTimer* statusTimer;
     
     // Dialogs
-    // Dialogs
     AddIOCDialog* addDialog;
-    // SearchDialog* searchDialog;
-    // StatisticsDialog* statsDialog;
+    SearchDialog* searchDialog;
+    StatisticsDialog* statsDialog;
     
     // System tray
     QSystemTrayIcon* trayIcon;
