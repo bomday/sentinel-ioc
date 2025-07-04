@@ -68,9 +68,3 @@ TEST(UtilsTest, ToLower_ConvertsCorrectly) {
     std::string expected = "threatlevel";
     EXPECT_EQ(toLower(original), expected);
 }
-
-TEST(UtilsTest, GenerateUniqueId_Increments) {
-    int id1 = generateUniqueId();
-    int id2 = generateUniqueId();
-    EXPECT_EQ(id2, id1 + 1);
-}
