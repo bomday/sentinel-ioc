@@ -74,7 +74,12 @@ Este projeto simula um analisador de IOCs (IP, URLs e Hashes maliciosos), permit
 
 ## Rodando o Programa 
 
-#### Exigências
+### Clone o projeto 
+```bash
+git clone https://github.com/bomday/sentinel-ioc.git
+```
+
+### Exigências
 1. Rodar dentro da pasta /src
 2. Ter uma versão g++ 7.0 ou superior no Windows
 
@@ -86,6 +91,10 @@ g++ -g -std=c++17 -o sentinel.exe main.cpp cli/cli.cpp utils/utils.cpp indicator
 ```bash
 ./sentinel.exe
 ```
+
+#### Rodar Testes
+
+[Link](#) para readme de testes do projeto
 
 ## Depuração
 
