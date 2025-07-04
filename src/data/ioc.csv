@@ -95,6 +95,3 @@ indicatorId,severity,type,description,origin,timestamp,hash,algorithm,ip,country
 1007,1,Hash,Test file signature,SecurityTest,2025-05-15T08:45:00Z,c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3,SHA256,,,,,
 1008,1,IP,Benign probe,NetworkScan,2025-04-28T12:30:00Z,,,172.16.1.100,Local,Test Network,,
 1009,1,URL,Suspicious redirect,BrowserGuard,2025-04-10T15:20:00Z,,,,,,http://click.tracker.com/link,HTTP
-
-
-

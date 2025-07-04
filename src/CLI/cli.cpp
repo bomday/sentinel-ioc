@@ -96,7 +96,6 @@ void CLI::handleAdd() {
     
     // Generate timestamp and ID
     std::string timestamp = getTimestamp();
-    int indicatorId = generateUniqueId();
     
     // Create type-specific IOC
     if (type == "IP") {
@@ -104,21 +103,20 @@ void CLI::handleAdd() {
         std::string country = getStringInput("Enter the country: ");
         std::string isp = getStringInput("Enter the ISP: ");
         
-        manager.addMaliciousIP(indicatorId, severity, type, description, origin, timestamp, ip, country, isp);
+        manager.addMaliciousIP(severity, type, description, origin, timestamp, ip, country, isp);
     } else if (type == "URL") {
         std::string url = getStringInput("Enter the URL: ");
         std::string protocol = getStringInput("Enter the protocol (HTTP/HTTPS): ");
         
-        manager.addMaliciousURL(indicatorId, severity, type, description, origin, timestamp, url, protocol);
+        manager.addMaliciousURL(severity, type, description, origin, timestamp, url, protocol);
     } else if (type == "Hash") {
         std::string hash = getStringInput("Enter the hash value: ");
         std::string algorithm = getStringInput("Enter the algorithm (MD5/SHA1/SHA256): ");
         
-        manager.addMaliciousHash(indicatorId, severity, type, description, origin, timestamp, hash, algorithm);
+        manager.addMaliciousHash(severity, type, description, origin, timestamp, hash, algorithm);
     }
-    
-    std::cout << "\nIndicator created successfully with ID: " << indicatorId << std::endl;
-    std::cout << "-------------------------------------------\n";
+
+    std::cout << "IOC created successfully!\n";
 }
 
 void CLI::handleList() {

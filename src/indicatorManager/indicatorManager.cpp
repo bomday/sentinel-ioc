@@ -15,25 +15,36 @@
 #include "utils/utils.hpp"
 #include "fileManager/fileManager.hpp"
 
+// Getter for the next available ID
+int IndicatorManager::getNextId() {
+    return this->nextIndicatorId++;
+}
+
 // Add operations
-void IndicatorManager::addMaliciousIP(int id, int severity, const std::string& type, const std::string& description, 
+void IndicatorManager::addMaliciousIP(int severity, const std::string& type, const std::string& description, 
                                      const std::string& origin, const std::string& timestamp, const std::string& ip, 
                                      const std::string& country, const std::string& isp) {
-    auto newIndicator = std::make_unique<MaliciousIP>(id, severity, type, description, origin, timestamp, ip, country, isp);
+    int newId = getNextId(); // Get the next available ID for the new indicator
+    // Create a new MaliciousIP object
+    auto newIndicator = std::make_unique<MaliciousIP>(newId, severity, type, description, origin, timestamp, ip, country, isp);
     indicators.push_back(std::move(newIndicator));
 }
 
-void IndicatorManager::addMaliciousURL(int id, int severity, const std::string& type, const std::string& description, 
+void IndicatorManager::addMaliciousURL(int severity, const std::string& type, const std::string& description, 
                                       const std::string& origin, const std::string& timestamp, const std::string& url, 
                                       const std::string& protocol) {
-    auto newIndicator = std::make_unique<MaliciousURL>(id, severity, type, description, origin, timestamp, url, protocol);
+    int newId = getNextId(); // Get the next available ID for the new indicator
+    // Create a new MaliciousURL object
+    auto newIndicator = std::make_unique<MaliciousURL>(newId, severity, type, description, origin, timestamp, url, protocol);
     indicators.push_back(std::move(newIndicator));
 }
 
-void IndicatorManager::addMaliciousHash(int id, int severity, const std::string& type, const std::string& description, 
+void IndicatorManager::addMaliciousHash(int severity, const std::string& type, const std::string& description, 
                                        const std::string& origin, const std::string& timestamp, const std::string& hash, 
                                        const std::string& algorithm) {
-    auto newIndicator = std::make_unique<MaliciousHash>(id, severity, type, description, origin, timestamp, hash, algorithm);
+    int newId = getNextId(); // Get the next available ID for the new indicator
+    // Create a new MaliciousHash object
+    auto newIndicator = std::make_unique<MaliciousHash>(newId, severity, type, description, origin, timestamp, hash, algorithm);
     indicators.push_back(std::move(newIndicator));
 }
 
@@ -405,7 +416,9 @@ void IndicatorManager::updateNextId() {
     if (!indicators.empty()) {
         // Assumes the last element has the highest ID
         this->nextIndicatorId = indicators.back()->getIndicatorId() + 1;
-    }      
+    } else {
+        this->nextIndicatorId = 1; // Reset to 1 if no indicators exist
+    }
 }
 
 void IndicatorManager::generateStatistics() const {

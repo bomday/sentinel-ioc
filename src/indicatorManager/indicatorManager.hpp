@@ -12,18 +12,19 @@ class IndicatorManager {
         int nextIndicatorId = 1; 
 
         void updateNextId(); // Updates the next available ID based on existing indicators
+        int getNextId(); // Returns the next available ID for a new indicator
     public:
         // Virtual destructor
         virtual ~IndicatorManager() = default;
         
         // Core CRUD operations (no UI logic)
-        void addMaliciousIP(int id, int severity, const std::string& type, const std::string& description, 
+        void addMaliciousIP(int severity, const std::string& type, const std::string& description, 
                            const std::string& origin, const std::string& timestamp, const std::string& ip, 
                            const std::string& country, const std::string& isp);
-        void addMaliciousURL(int id, int severity, const std::string& type, const std::string& description, 
+        void addMaliciousURL(int severity, const std::string& type, const std::string& description, 
                             const std::string& origin, const std::string& timestamp, const std::string& url, 
                             const std::string& protocol);
-        void addMaliciousHash(int id, int severity, const std::string& type, const std::string& description, 
+        void addMaliciousHash(int severity, const std::string& type, const std::string& description, 
                              const std::string& origin, const std::string& timestamp, const std::string& hash, 
                              const std::string& algorithm);
         

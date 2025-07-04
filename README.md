@@ -29,6 +29,9 @@ Este projeto simula um analisador de IOCs (IP, URLs e Hashes maliciosos), permit
 ```
 📁 sentinel-ioc/
  ┣ 📁 src/
+ ┃ ┣ 📁 CLI                 
+ ┃ ┃ ┣ 📄 cli.hpp             >> Classe de interface em linha de comando
+ ┃ ┃ ┗ 📄 cli.cpp
  ┃ ┣ 📁 data/
  ┃ ┃ ┗ 📄 iocs.csv                  >> Simulação de "banco de dados"
  ┃ ┣ 📁 fileManager                 
@@ -77,7 +80,7 @@ Este projeto simula um analisador de IOCs (IP, URLs e Hashes maliciosos), permit
 
 #### Compile o programa (se necessário)
 ```bash
-g++ -g -std=c++17 -o sentinel.exe     main.cpp     utils/utils.cpp     indicator/indicator.cpp     maliciousIP/maliciousIP.cpp     maliciousURL/maliciousURL.cpp     maliciousHash/maliciousHash.cpp     indicatorManager/indicatorManager.cpp     fileManager/fileManager.cpp     -I.     -Iindicator     -Iutils     -ImaliciousIP     -ImaliciousURL     -ImaliciousHash     -IindicatorManager     -IfileManager
+g++ -g -std=c++17 -o sentinel.exe main.cpp cli/cli.cpp utils/utils.cpp indicator/indicator.cpp maliciousIP/maliciousIP.cpp maliciousURL/maliciousURL.cpp maliciousHash/maliciousHash.cpp indicatorManager/indicatorManager.cpp fileManager/fileManager.cpp -I. -Icli -Iutils -Iindicator -ImaliciousIP -ImaliciousURL -ImaliciousHash -IindicatorManager -IfileManager
 ```
 #### Execute o programa
 ```bash
