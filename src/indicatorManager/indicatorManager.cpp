@@ -397,6 +397,15 @@ void IndicatorManager::saveIndicatorsToFile(const std::string& filename) {
 void IndicatorManager::loadIndicatorsFromFile(const std::string& filename) {
     indicators = FileManager::loadData(filename);
     std::cout << "\nLoaded " << indicators.size() << " IOCs from \"" << filename << "\".\n";
+    updateNextId(); // Update the next available ID based on loaded indicators
+}
+
+// Function to update the next available ID based on existing indicators
+void IndicatorManager::updateNextId() {
+    if (!indicators.empty()) {
+        // Assumes the last element has the highest ID
+        this->nextIndicatorId = indicators.back()->getIndicatorId() + 1;
+    }      
 }
 
 void IndicatorManager::generateStatistics() const {

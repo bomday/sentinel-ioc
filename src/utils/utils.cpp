@@ -83,12 +83,6 @@ bool registerLastMonth(const std::string& timestamp) {
     return (iocTm.tm_year == lastYear && iocTm.tm_mon == lastMonth);
 }
 
-// Generate a unique ID for each indicator
-int generateUniqueId() {
-    static int currentId = 1;
-    return currentId++;
-}
-
 // Function for case-insensitive string comparison
 bool icontains(const std::string& str, const std::string& substr) {
     auto it = std::search(
