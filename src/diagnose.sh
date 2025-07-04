@@ -107,6 +107,6 @@ fi
 
 echo ""
 echo "=================================="
-echo " All checks passed!"
+echo "All checks passed!"
 echo "You can now run: ./build.sh"
 echo "=================================="

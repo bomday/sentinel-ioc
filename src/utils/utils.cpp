@@ -52,35 +52,35 @@ bool isCurrentMonth(const std::string& timestamp) {
     std::time_t iocTime = stringToTimeT(timestamp);
     std::time_t now = std::time(nullptr);
 
-    std::tm* nowTm = std::localtime(&now); // Get the current time as a tm structure
-    std::tm* iocTm = std::localtime(&iocTime); // Convert the IOC time to a tm structure
+    // Copy the structures instead of using pointers to avoid static buffer issues
+    std::tm nowTm = *std::localtime(&now); // Copy the current time structure
+    std::tm iocTm = *std::localtime(&iocTime); // Copy the IOC time structure
 
-    return (iocTm->tm_year == nowTm->tm_year && iocTm->tm_mon == nowTm->tm_mon);
+    return (iocTm.tm_year == nowTm.tm_year && iocTm.tm_mon == nowTm.tm_mon);
 }
 
-// Function to get the time_t value for one month ago
-std::time_t lastMonth() {
-    std::time_t now = std::time(nullptr);
-    std::tm tm = *std::localtime(&now);
-
-    // Subtract one month from the current time
-    tm.tm_mon -= 1;
-
-    // Handle year change if necessary (if month -1 so it's December of the previous year)
-    if (tm.tm_mon < 0) {
-        tm.tm_mon += 12;
-        tm.tm_year -= 1;
-    }
-
-    // Adjust the day to the last day of the previous month if necessary
-    return std::mktime(&tm);
-}
 
 // Function to check if an IOC was registered in the last month
 bool registerLastMonth(const std::string& timestamp) {
-    std::time_t dataIOC = stringToTimeT(timestamp);
-    std::time_t limite = lastMonth();
-    return dataIOC >= limite; // Returns true if the IOC was registered within the last month
+    std::time_t iocTime = stringToTimeT(timestamp);
+    std::time_t now = std::time(nullptr);
+
+    // Copy the structures instead of using pointers to avoid static buffer issues
+    std::tm nowTm = *std::localtime(&now); // Copy the current time structure
+    std::tm iocTm = *std::localtime(&iocTime); // Copy the IOC time structure
+
+    // Calculate the previous month and year
+    int lastMonth = nowTm.tm_mon - 1;
+    int lastYear = nowTm.tm_year;
+    
+    // Handle year change if necessary (if month -1 so it's December of the previous year)
+    if (lastMonth < 0) {
+        lastMonth = 11; // December
+        lastYear -= 1;
+    }
+
+    // Check if the IOC was registered specifically in the last month
+    return (iocTm.tm_year == lastYear && iocTm.tm_mon == lastMonth);
 }
 
 // Generate a unique ID for each indicator

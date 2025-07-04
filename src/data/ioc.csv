@@ -63,4 +63,38 @@ indicatorId,severity,type,description,origin,timestamp,hash,algorithm,ip,country
 330,5,URL,Phishing payload link,ThreatIntelAPI,2025-06-02T20:05:00Z,,,,,,https://payload.phish.com/file,HTTPS
 331,2,URL,Adware delivery link,UserReport,2025-06-02T21:20:00Z,,,,,,http://adware.delivery.com/click,HTTP
 332,3,URL,Malware C2 URL,PhishTank,2025-06-02T22:35:00Z,,,,,,https://c2.malware.com/command,HTTPS
+401,4,Hash,Banking trojan SHA256,ThreatFeedX,2025-05-15T10:30:00Z,a1b2c3d4e5f6789abcdef0123456789abcdef0123456789abcdef0123456789a,SHA256,,,,,
+402,3,IP,Malware C2 server,SOCAlert,2025-05-20T14:45:00Z,,,10.0.0.1,USA,Amazon AWS,,
+403,5,URL,Zero-day exploit,GovAlert,2025-05-25T16:20:00Z,,,,,,https://exploit.zeroday.com/payload,HTTPS
+404,2,Hash,Suspicious file,UserReport,2025-05-10T08:15:00Z,9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08,SHA256,,,,,
+405,4,IP,Botnet controller,ThreatIntelAPI,2025-05-18T12:30:00Z,,,172.217.14.78,Netherlands,Google,,
+406,3,URL,Phishing campaign,PhishTank,2025-05-28T19:45:00Z,,,,,,http://phish.campaign.com/login,HTTP
+501,5,Hash,APT malware sample,ThreatFeedY,2025-07-01T09:15:00Z,b2c3d4e5f6789abcdef0123456789abcdef0123456789abcdef0123456789ab2,SHA256,,,,,
+502,4,IP,Command server,ExternalReport,2025-07-02T11:30:00Z,,,198.51.100.42,Germany,Hetzner,,
+503,3,URL,Malware distribution,InternalScan,2025-07-03T13:45:00Z,,,,,,https://malware.dist.com/download,HTTPS
+504,2,Hash,Adware sample,SOCAlert,2025-07-04T15:00:00Z,c3d4e5f6789abcdef0123456789abcdef0123456789abcdef0123456789abc3,SHA256,,,,,
+601,3,Hash,Ransomware sample,ThreatFeedX,2025-04-12T10:20:00Z,d4e5f6789abcdef0123456789abcdef0123456789abcdef0123456789abcd4,SHA256,,,,,
+602,4,IP,Exploit kit server,UserReport,2025-04-15T14:35:00Z,,,203.0.113.25,Japan,NTT,,
+603,5,URL,Drive-by download,PhishTank,2025-04-20T16:50:00Z,,,,,,https://driveby.exploit.com/malware,HTTPS
+701,2,Hash,Spyware MD5,SOCAlert,2025-03-08T08:45:00Z,e5f6789abcdef0123456789abcdef01,MD5,,,,,
+702,3,IP,Scanning bot,ThreatIntelAPI,2025-03-12T12:00:00Z,,,192.0.2.100,Canada,Rogers,,
+703,4,URL,Fake update site,ExternalReport,2025-03-18T18:15:00Z,,,,,,http://update.fake.com/download,HTTP
+801,5,Hash,Backdoor SHA256,GovAlert,2025-02-05T07:30:00Z,f6789abcdef0123456789abcdef0123456789abcdef0123456789abcdef67,SHA256,,,,,
+802,3,IP,Proxy server,InternalScan,2025-02-10T11:45:00Z,,,104.16.249.249,USA,Cloudflare,,
+803,4,URL,Phishing portal,UserReport,2025-02-15T15:20:00Z,,,,,,https://banking.phish.com/secure,HTTPS
+901,4,Hash,Current month malware,ThreatFeedX,2025-07-01T10:00:00Z,1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef,SHA256,,,,,
+902,3,IP,July C2 server,SOCAlert,2025-07-02T14:30:00Z,,,8.8.8.8,USA,Google,,
+903,5,URL,July exploit kit,GovAlert,2025-07-03T16:45:00Z,,,,,,https://july.exploit.com/kit,HTTPS
+904,2,Hash,July sample,UserReport,2025-07-04T08:15:00Z,abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890,SHA256,,,,,
+1001,1,Hash,Low risk sample,AutoScan,2025-06-05T09:30:00Z,a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1,SHA256,,,,,
+1002,1,IP,Suspicious scanner,NetworkMon,2025-06-12T14:20:00Z,,,192.168.100.50,Local,Internal Network,,
+1003,1,URL,Potentially unwanted software,UserReport,2025-06-18T16:45:00Z,,,,,,http://download.suspicious.com/software,HTTP
+1004,1,Hash,Tracking cookie hash,WebFilter,2025-07-01T11:15:00Z,b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2,MD5,,,,,
+1005,1,IP,Port scanner activity,FirewallLog,2025-07-02T13:25:00Z,,,10.0.1.25,Local,Internal Network,,
+1006,1,URL,Ad redirect link,AdBlocker,2025-05-22T10:10:00Z,,,,,,https://ads.tracker.com/redirect,HTTPS
+1007,1,Hash,Test file signature,SecurityTest,2025-05-15T08:45:00Z,c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3,SHA256,,,,,
+1008,1,IP,Benign probe,NetworkScan,2025-04-28T12:30:00Z,,,172.16.1.100,Local,Test Network,,
+1009,1,URL,Suspicious redirect,BrowserGuard,2025-04-10T15:20:00Z,,,,,,http://click.tracker.com/link,HTTP
+
+
 
