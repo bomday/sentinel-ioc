@@ -49,5 +49,3 @@ indicatorId,severity,type,description,origin,timestamp,hash,algorithm,ip,country
 316,3,URL,Phishing campaign link,ThreatIntelAPI,2025-06-02T05:35:00Z,,,,,,https://phish.example.com/signin,HTTPS
 317,4,URL,Malware dropper URL,UserReport,2025-06-02T06:50:00Z,,,,,,https://dropper.malware.com/exe,HTTPS
 318,5,URL,Zero-day delivery,PhishTank,2025-06-02T07:05:00Z,,,,,,https://zeroday.exploit.com/file,HTTPS
-1,1,Hash,ok,ok,25-06-2025,ok,ok,,,,,
-1,1,Hash,teste,teste,28-06-2025,teste,teste,,,,,

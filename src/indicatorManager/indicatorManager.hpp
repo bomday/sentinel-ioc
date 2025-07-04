@@ -3,7 +3,6 @@
 
 // Update the include path if the file is in a different location, for example:
 #include "../indicator/indicator.hpp"
-#include "indicator.hpp"
 #include <vector>
 #include <memory>
 

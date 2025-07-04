@@ -35,7 +35,7 @@ std::string getTimestamp() {
     auto nowTime = std::chrono::system_clock::now(); // Get the current time point with system clock from chrono
     std::time_t todayTime = std::chrono::system_clock::to_time_t(nowTime); // Convert to time_t for formatting
     std::ostringstream oss; // Create an output string stream for formatting
-    oss << std::put_time(std::localtime(&todayTime), "%d-%m-%Y"); // Format: DD-MM-YYYY in string type
+    oss << std::put_time(std::localtime(&todayTime), "%Y-%m-%dT%H:%M:%SZ"); // Format: YYYY-MM-DDTH:M:SZ in string type
     return oss.str();
 }
 
@@ -43,7 +43,7 @@ std::string getTimestamp() {
 std::time_t stringToTimeT(const std::string& timestamp) {   // Gets a timestamp in string format
     std::tm tm = {};
     std::istringstream ss(timestamp); // Read the string as a file with istringstream
-    ss >> std::get_time(&tm, "%Y-%m-%d %H:%M:%S");  // Save the parsed time into the tm structure
+    ss >> std::get_time(&tm, "%Y-%m-%dT%H:%M:%SZ");  // Save the parsed time into the tm structure
     return mktime(&tm); // Convert the tm structure to time_t, which represents seconds since epoch (1970-01-01 00:00:00 UTC)
 }
 

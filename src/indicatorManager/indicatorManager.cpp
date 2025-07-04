@@ -537,13 +537,15 @@ void IndicatorManager::generateStatistics() const {
     std::cout << "\n=========== IOCs Statistics ===========\n\n";
     std::cout << "Total: " << indicators.size() << " IOCs\n\n";
 
-    std::cout << "Distribution for Type:\n";
-    for (const auto& [type, quantity] : forType)
+    std::cout << "Distribution by Type:\n";
+    for (const auto& [type, quantity]  : forType) {
         std::cout << " - " << type << ": " << quantity << " IOCs\n\n";
+    }
 
-    std::cout << "\nDistribution for Severity:\n";
-    for (const auto& [sev, quantity] : forSeverity)
+    std::cout << "\nDistribution by Severity:\n";
+    for (const auto& [sev, quantity] : forSeverity) {
         std::cout << " - Severity " << sev << ": " << quantity << " IOCs\n\n";
+    }
 
     std::cout << "\nIOCs registered on last month: " << last30Days << "\n";
     std::cout << "\nIOCs registered in the current month: " << thisMonth << "\n";
