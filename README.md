@@ -28,35 +28,37 @@ Este projeto simula um analisador de IOCs (IP, URLs e Hashes maliciosos), permit
 
 ```
 📁 sentinel-ioc/
+ ┣ 📁 googletest                   >> Testes unitários 
  ┣ 📁 src/
  ┃ ┣ 📁 CLI                 
- ┃ ┃ ┣ 📄 cli.hpp             >> Classe de interface em linha de comando
+ ┃ ┃ ┣ 📄 cli.hpp                  >> Classe de interface em linha de comando
  ┃ ┃ ┗ 📄 cli.cpp
  ┃ ┣ 📁 data/
- ┃ ┃ ┗ 📄 iocs.csv                  >> Simulação de "banco de dados"
+ ┃ ┃ ┗ 📄 iocs.csv                 >> Simulação de "banco de dados"
  ┃ ┣ 📁 fileManager                 
- ┃ ┃ ┣ 📄 fileManager.hpp             >> Classe de persistência de dados
+ ┃ ┃ ┣ 📄 fileManager.hpp          >> Classe de persistência de dados
  ┃ ┃ ┗ 📄 fileManager.cpp
  ┃ ┣ 📁 indicator                 
- ┃ ┃ ┣ 📄 indicator.hpp             >> Classe base abstrata
+ ┃ ┃ ┣ 📄 indicator.hpp            >> Classe base abstrata
  ┃ ┃ ┗ 📄 indicator.cpp              
  ┃ ┣ 📁 indicatorManager
- ┃ ┃ ┣ 📄 indicatorManager.hpp      >> Gerencia o CRUD de IOCs
+ ┃ ┃ ┣ 📄 indicatorManager.hpp     >> Gerencia o CRUD de IOCs
  ┃ ┃ ┗ 📄 indicatorManager.cpp
  ┃ ┣ 📁 maliciousHash
- ┃ ┃ ┣ 📄 maliciousHash.hpp         >> Classe derivada: Hash malicioso
+ ┃ ┃ ┣ 📄 maliciousHash.hpp        >> Classe derivada: Hash malicioso
  ┃ ┃ ┗ 📄 maliciousHash.cpp
  ┃ ┣ 📁 maliciousIP
- ┃ ┃ ┣ 📄 maliciousIP.hpp           >> Classe derivada: IP malicioso
+ ┃ ┃ ┣ 📄 maliciousIP.hpp          >> Classe derivada: IP malicioso
  ┃ ┃ ┗ 📄 maliciousIP.cpp
  ┃ ┣ 📁 maliciousURL
- ┃ ┃ ┣ 📄 maliciousURL.hpp          >> Classe derivada: URL maliciosa
+ ┃ ┃ ┣ 📄 maliciousURL.hpp         >> Classe derivada: URL maliciosa
  ┃ ┃ ┗ 📄 maliciousURL.cpp
  ┃ ┣ 📁 utils
- ┃ ┃ ┣ 📄 utils.hpp                 >> Funções auxiliares (ex: timestamp, menu)
+ ┃ ┃ ┣ 📄 utils.hpp                >> Funções auxiliares (ex: timestamp, menu)
  ┃ ┃ ┗ 📄 utils.cpp
- ┃ ┣ 📄 sentinel.exe                >> Executável (gerado)  
- ┃ ┗ 📄 main.cpp                    >> Ponto de entrada do programa
+ ┃ ┣ 📄 sentinel.exe               >> Executável do projeto (gerado)
+ ┃ ┣ 📄 sentinel_tests.exe         >> Executável dos testes unitários (gerado)   
+ ┃ ┗ 📄 main.cpp                   >> Ponto de entrada do programa
  ┣ 📁 public/                       
  ┃ ┣ 📄 roteiro-video.pdf           
  ┃ ┣ 📄 relatorio.pdf             
@@ -94,7 +96,7 @@ g++ -g -std=c++17 -o sentinel.exe main.cpp cli/cli.cpp utils/utils.cpp indicator
 
 #### Rodar Testes
 
-[Link](#) para readme de testes do projeto
+[Link](https://github.com/bomday/sentinel-ioc/blob/main/googletest/README.md) para readme de testes do projeto
 
 ## Depuração
 
