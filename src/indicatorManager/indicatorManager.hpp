@@ -62,6 +62,13 @@ class IndicatorManager {
         void saveIndicatorsToFile(const std::string& filename);
         void loadIndicatorsFromFile(const std::string& filename);
         void generateStatistics() const;
+        
+        // GUI helper methods
+        size_t getIndicatorCount() const { return indicators.size(); }
+        const Indicator* getIndicator(size_t index) const {
+            return (index < indicators.size()) ? indicators[index].get() : nullptr;
+        }
+        int getIOCsRegisteredLastMonth() const;
 };
 
 #endif

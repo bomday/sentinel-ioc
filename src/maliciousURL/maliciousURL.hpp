@@ -33,6 +33,7 @@ class MaliciousURL : public Indicator {
         void setProtocol(const std::string& protocolName);
 
         std::string toCSV() const override;
+        std::string getValue() const override { return getURL(); }
         // Convert the MaliciousURL indicator to a CSV format
 
         
