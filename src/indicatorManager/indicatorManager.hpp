@@ -4,6 +4,7 @@
 #include "../indicator/indicator.hpp"
 #include <vector>
 #include <memory>
+#include <map>
 
 // manages all the indicators
 class IndicatorManager {
@@ -57,6 +58,17 @@ class IndicatorManager {
         void searchByDate(const std::string& date) const;
         void searchByDescription(const std::string& description) const;
         
+        // Search operations that return results (for GUI)
+        std::vector<const Indicator*> findByValue(const std::string& value) const;
+        std::vector<const Indicator*> findByType(const std::string& type) const;
+        std::vector<const Indicator*> findBySeverity(int severity) const;
+        std::vector<const Indicator*> findByOrigin(const std::string& origin) const;
+        std::vector<const Indicator*> findByDate(const std::string& date) const;
+        std::vector<const Indicator*> findByDescription(const std::string& description) const;
+        std::vector<const Indicator*> searchWithFilters(const std::string& value, const std::string& type, 
+                                                        int severity, const std::string& dateFrom, 
+                                                        const std::string& dateTo) const;
+        
         // Utility methods
         void printIOC(const Indicator* ioc, int index) const;
         void saveIndicatorsToFile(const std::string& filename);
@@ -69,6 +81,12 @@ class IndicatorManager {
             return (index < indicators.size()) ? indicators[index].get() : nullptr;
         }
         int getIOCsRegisteredLastMonth() const;
+        
+        // Statistics helper methods for GUI
+        std::map<std::string, int> getTypeDistribution() const;
+        std::map<int, int> getSeverityDistribution() const;
+        int getIOCsRegisteredCurrentMonth() const;
+        int getCriticalThreatCount() const;
 };
 
 #endif

@@ -9,18 +9,20 @@
 #include <QPushButton>
 #include <QGroupBox>
 #include <QProgressBar>
-#include <QChart>
-#include <QChartView>
-#include <QPieSeries>
-#include <QBarSeries>
-#include <QBarSet>
-#include <QBarCategoryAxis>
-#include <QValueAxis>
-#include <QPieSlice>
+#include <QTextEdit>
+// Qt Charts not available - using placeholder widgets instead
+// #include <QChart>
+// #include <QChartView>
+// #include <QPieSeries>
+// #include <QBarSeries>
+// #include <QBarSet>
+// #include <QBarCategoryAxis>
+// #include <QValueAxis>
+// #include <QPieSlice>
 #include <QTimer>
 #include "../indicatorManager/indicatorManager.hpp"
 
-QT_CHARTS_USE_NAMESPACE
+// QT_CHARTS_USE_NAMESPACE // Commented out - Qt Charts not available
 
 class StatisticsDialog : public QDialog
 {
@@ -28,18 +30,18 @@ class StatisticsDialog : public QDialog
 
 public:
     explicit StatisticsDialog(IndicatorManager *manager, QWidget *parent = nullptr);
+    void refreshStatistics();  // Make this public so MainWindow can call it
 
 private slots:
-    void refreshStatistics();
-    void exportStatistics();
     void updateAnimations();
 
 private:
     void setupUI();
-    void applyMatrixTheme();
+    void applyTerminalTheme();
     void createStatisticsWidgets();
     void createCharts();
     void updateStatistics();
+    void updateDetailedStatistics();
     void animateCharts();
 
     IndicatorManager *manager;
@@ -52,10 +54,22 @@ private:
     QLabel *totalCountLabel;
     QLabel *currentMonthLabel;
     QLabel *lastMonthLabel;
-    QLabel *criticalCountLabel;
     QLabel *hashCountLabel;
     QLabel *ipCountLabel;
     QLabel *urlCountLabel;
+    QLabel *severity1Label;
+    QLabel *severity2Label;
+    QLabel *severity3Label;
+    QLabel *severity4Label;
+    QLabel *severity5Label;
+    QTextEdit *detailedTextLabel;
+    
+    // New dashboard elements
+    QLabel *threatLevelLabel;
+    QLabel *activityLabel;
+    QProgressBar *hashProgressBar;
+    QProgressBar *ipProgressBar;
+    QProgressBar *urlProgressBar;
     
     // Progress bars for visual effect
     QProgressBar *hashProgress;
@@ -63,13 +77,13 @@ private:
     QProgressBar *urlProgress;
     QProgressBar *severityProgress;
     
-    // Charts
-    QChartView *typeChartView;
-    QChartView *severityChartView;
-    QChart *typeChart;
-    QChart *severityChart;
-    QPieSeries *typeSeries;
-    QBarSeries *severitySeries;
+    // Charts (disabled - Qt Charts not available)
+    // QChartView *typeChartView;
+    // QChartView *severityChartView;
+    // QChart *typeChart;
+    // QChart *severityChart;
+    // QPieSeries *typeSeries;
+    // QBarSeries *severitySeries;
     
     // Animation timer
     QTimer *animationTimer;
@@ -77,8 +91,6 @@ private:
     
     // Buttons
     QPushButton *refreshButton;
-    QPushButton *exportButton;
-    QPushButton *closeButton;
     
     // Theme colors
     QString primaryColor;

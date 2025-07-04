@@ -3,8 +3,11 @@
 #include "ioctablewidget.h"
 #include "hackerterminal.h"
 #include "addiocdialog.h"
-// #include "searchdialog.h"
-// #include "statisticsdialog.h"
+#include "searchdialog.h"
+#include "statisticsdialog.h"
+#include "../maliciousHash/maliciousHash.hpp"
+#include "../maliciousIP/maliciousIP.hpp"
+#include "../maliciousURL/maliciousURL.hpp"
 
 #include <QApplication>
 #include <QScreen>
@@ -23,18 +26,18 @@ MainWindow::MainWindow(QWidget *parent)
     , manager(new IndicatorManager())
     , matrixEnabled(true)
     , addDialog(nullptr)
-    // , searchDialog(nullptr)
-    // , statsDialog(nullptr)
+    , searchDialog(nullptr)
+    , statsDialog(nullptr)
 {
-    // Initialize theme colors (Matrix/Hacker theme)
-    primaryColor = "#00FF41";      // Matrix green
-    secondaryColor = "#008F11";    // Darker green
-    accentColor = "#00FFFF";       // Cyan
-    backgroundColor = "#0D1117";   // Dark background
-    textColor = "#C9D1D9";         // Light text
+    // Initialize theme colors (Terminal theme)
+    primaryColor = "#00FF00";      // Terminal green
+    secondaryColor = "#004400";    // Dark green
+    accentColor = "#00FF41";       // Bright green
+    backgroundColor = "#000000";   // Black background
+    textColor = "#00FF00";         // Green text
     
     setupUI();
-    applyMatrixTheme();
+    applyTerminalTheme();
     loadIOCData();
     
     // Setup status timer
@@ -57,7 +60,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::setupUI()
 {
-    setWindowTitle("S E N T I N E L  I O C  [ M A T R I X  T E R M I N A L ]");
+    setWindowTitle("SENTINEL IOC TERMINAL");
     setMinimumSize(1200, 800);
     
     // Center window on screen
@@ -78,20 +81,20 @@ void MainWindow::setupMenuBar()
     
     // File Menu
     QMenu *fileMenu = menuBar->addMenu("▌ FILE");
-    fileMenu->addAction("◈ Load Data", this, &MainWindow::loadData, QKeySequence::Open);
-    fileMenu->addAction("◈ Save Data", this, &MainWindow::saveData, QKeySequence::Save);
+    fileMenu->addAction("◈ Load Data", QKeySequence::Open, this, &MainWindow::loadData);
+    fileMenu->addAction("◈ Save Data", QKeySequence::Save, this, &MainWindow::saveData);
     fileMenu->addAction("◈ Export Data", this, &MainWindow::exportData);
     fileMenu->addSeparator();
-    fileMenu->addAction("◈ Exit", this, &QWidget::close, QKeySequence::Quit);
+    fileMenu->addAction("◈ Exit", QKeySequence::Quit, this, &QWidget::close);
     
     // IOC Menu
     QMenu *iocMenu = menuBar->addMenu("▌ IOC");
-    iocMenu->addAction("◈ Add IOC", this, &MainWindow::addIOC, QKeySequence("Ctrl+N"));
-    iocMenu->addAction("◈ Edit IOC", this, &MainWindow::editIOC, QKeySequence("Ctrl+E"));
-    iocMenu->addAction("◈ Delete IOC", this, &MainWindow::deleteIOC, QKeySequence::Delete);
+    iocMenu->addAction("◈ Add IOC", QKeySequence("Ctrl+N"), this, &MainWindow::addIOC);
+    iocMenu->addAction("◈ Edit IOC", QKeySequence("Ctrl+E"), this, &MainWindow::editIOC);
+    iocMenu->addAction("◈ Delete IOC", QKeySequence::Delete, this, &MainWindow::deleteIOC);
     iocMenu->addSeparator();
-    iocMenu->addAction("◈ Search IOC", this, &MainWindow::searchIOC, QKeySequence::Find);
-    iocMenu->addAction("◈ Refresh", this, &MainWindow::refreshData, QKeySequence::Refresh);
+    iocMenu->addAction("◈ Search IOC", QKeySequence::Find, this, &MainWindow::searchIOC);
+    iocMenu->addAction("◈ Refresh", QKeySequence::Refresh, this, &MainWindow::refreshData);
     
     // Analysis Menu
     QMenu *analysisMenu = menuBar->addMenu("▌ ANALYSIS");
@@ -176,6 +179,14 @@ void MainWindow::createControlPanel()
     searchButton = new QPushButton("◈ SEARCH IOC");
     refreshButton = new QPushButton("◈ REFRESH DATA");
     statsButton = new QPushButton("◈ STATISTICS");
+    
+    // Add tooltips for better accessibility
+    addButton->setToolTip("Add a new Indicator of Compromise to the database");
+    editButton->setToolTip("Edit the selected IOC in the table");
+    deleteButton->setToolTip("Delete the selected IOC from the database");
+    searchButton->setToolTip("Open search dialog to find specific IOCs");
+    refreshButton->setToolTip("Reload IOC data from storage");
+    statsButton->setToolTip("View detailed statistics and analytics");
     
     // Connect buttons
     connect(addButton, &QPushButton::clicked, this, &MainWindow::addIOC);
@@ -262,106 +273,120 @@ void MainWindow::createMainContent()
     mainSplitter->addWidget(tabWidget);
 }
 
-void MainWindow::applyMatrixTheme()
+void MainWindow::applyTerminalTheme()
 {
-    // Main window style
+    // Main window style with terminal theme
     setStyleSheet(QString(
+        "* {"
+        "    font-family: 'Courier New', monospace;"
+        "}"
         "QMainWindow {"
-        "    background-color: %1;"
-        "    color: %2;"
+        "    background-color: #000000;"
+        "    color: #00FF00;"
         "}"
         "QMenuBar {"
-        "    background-color: %3;"
-        "    color: %4;"
-        "    border-bottom: 1px solid %4;"
+        "    background-color: #000000;"
+        "    color: #00FF00;"
+        "    border-bottom: 2px solid #00FF00;"
         "    font-weight: bold;"
+        "    font-family: 'Courier New', monospace;"
         "}"
         "QMenuBar::item {"
         "    padding: 8px 16px;"
         "    background-color: transparent;"
+        "    color: #00FF00;"
         "}"
         "QMenuBar::item:selected {"
-        "    background-color: %5;"
-        "    color: %1;"
+        "    background-color: #004400;"
+        "    color: #00FF00;"
+        "    border: 1px solid #00FF00;"
         "}"
         "QMenu {"
-        "    background-color: %3;"
-        "    color: %4;"
-        "    border: 1px solid %4;"
+        "    background-color: #000000;"
+        "    color: #00FF00;"
+        "    border: 2px solid #00FF00;"
+        "    font-family: 'Courier New', monospace;"
         "}"
         "QMenu::item {"
         "    padding: 8px 24px;"
+        "    color: #00FF00;"
         "}"
         "QMenu::item:selected {"
-        "    background-color: %5;"
-        "    color: %1;"
+        "    background-color: #004400;"
+        "    color: #00FF00;"
         "}"
         "QPushButton {"
-        "    background-color: %3;"
-        "    color: %4;"
-        "    border: 2px solid %4;"
-        "    border-radius: 6px;"
-        "    padding: 10px;"
+        "    background-color: #001100;"
+        "    color: #00FF00;"
+        "    border: 2px solid #00FF00;"
+        "    border-radius: 4px;"
+        "    padding: 8px 16px;"
         "    font-weight: bold;"
-        "    font-size: 11px;"
+        "    font-family: 'Courier New', monospace;"
         "}"
         "QPushButton:hover {"
-        "    background-color: %5;"
-        "    color: %1;"
-        "    border-color: %6;"
+        "    background-color: #004400;"
+        "    color: #00FF00;"
+        "    border: 3px solid #00FF41;"
         "}"
         "QPushButton:pressed {"
-        "    background-color: %4;"
-        "    color: %1;"
+        "    background-color: #006600;"
+        "    color: #000000;"
         "}"
         "QFrame {"
-        "    background-color: %3;"
-        "    border: 1px solid %4;"
-        "    border-radius: 6px;"
+        "    background-color: #000000;"
+        "    border: 1px solid #00FF00;"
+        "    border-radius: 4px;"
         "    padding: 5px;"
         "}"
         "QLabel {"
-        "    color: %4;"
+        "    color: #00FF00;"
         "    font-weight: bold;"
+        "    font-family: 'Courier New', monospace;"
         "}"
         "QTabWidget::pane {"
-        "    border: 2px solid %4;"
-        "    background-color: %3;"
+        "    border: 2px solid #00FF00;"
+        "    background-color: #000000;"
         "}"
         "QTabBar::tab {"
-        "    background-color: %3;"
-        "    color: %4;"
-        "    border: 1px solid %4;"
+        "    background-color: #001100;"
+        "    color: #00FF00;"
+        "    border: 1px solid #00FF00;"
         "    padding: 8px 16px;"
         "    margin-right: 2px;"
         "    font-weight: bold;"
+        "    font-family: 'Courier New', monospace;"
         "}"
         "QTabBar::tab:selected {"
-        "    background-color: %5;"
-        "    color: %1;"
+        "    background-color: #004400;"
+        "    color: #00FF00;"
+        "    border: 2px solid #00FF41;"
         "}"
         "QStatusBar {"
-        "    background-color: %3;"
-        "    color: %4;"
-        "    border-top: 1px solid %4;"
+        "    background-color: #000000;"
+        "    color: #00FF00;"
+        "    border-top: 2px solid #00FF00;"
+        "    font-family: 'Courier New', monospace;"
         "}"
         "QTextEdit {"
-        "    background-color: %1;"
-        "    color: %4;"
-        "    border: 1px solid %4;"
+        "    background-color: #000000;"
+        "    color: #00FF00;"
+        "    border: 2px solid #00FF00;"
         "    font-family: 'Courier New', monospace;"
         "    font-size: 10px;"
         "}"
         "QProgressBar {"
-        "    border: 1px solid %4;"
+        "    border: 2px solid #00FF00;"
         "    border-radius: 3px;"
-        "    background-color: %1;"
+        "    background-color: #000000;"
+        "    color: #00FF00;"
+        "    font-family: 'Courier New', monospace;"
         "}"
         "QProgressBar::chunk {"
-        "    background-color: %4;"
+        "    background-color: #00FF00;"
         "    border-radius: 2px;"
         "}"
-    ).arg(backgroundColor, textColor, secondaryColor, primaryColor, primaryColor, accentColor));
+    ));
 }
 
 void MainWindow::loadIOCData()
@@ -385,9 +410,13 @@ void MainWindow::updateIOCTable()
 
 void MainWindow::updateStatusInfo()
 {
-    // Update IOC count
-    // Note: You'll need to add a method to get the count from IndicatorManager
-    countLabel->setText("IOC COUNT: Loading...");
+    // Update IOC count using the manager
+    if (manager) {
+        size_t count = manager->getIndicatorCount();
+        countLabel->setText(QString("IOC COUNT: %1").arg(count));
+    } else {
+        countLabel->setText("IOC COUNT: N/A");
+    }
     timeLabel->setText(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss"));
 }
 
@@ -405,38 +434,204 @@ void MainWindow::addIOC()
 
 void MainWindow::editIOC()
 {
-    // Implementation for editing IOC
-    logTextEdit->append("[SYSTEM] Edit IOC functionality activated");
+    // Get current selection from IOC table
+    int selectedRow = iocTable->getSelectedRow();
+    if (selectedRow < 0) {
+        QMessageBox::warning(this, "Edit IOC", "Please select an IOC to edit.");
+        return;
+    }
+    
+    if (selectedRow >= static_cast<int>(manager->getIndicatorCount())) {
+        QMessageBox::warning(this, "Edit IOC", "Invalid selection.");
+        return;
+    }
+    
+    const Indicator* selectedIOC = manager->getIndicator(selectedRow);
+    if (!selectedIOC) {
+        QMessageBox::warning(this, "Edit IOC", "Failed to retrieve selected IOC.");
+        return;
+    }
+    
+    // Create and configure edit dialog (reuse AddIOCDialog)
+    if (!addDialog) {
+        addDialog = new AddIOCDialog(manager, this);
+        connect(addDialog, &AddIOCDialog::iocAdded, this, &MainWindow::onIOCAdded);
+    }
+    
+    // Store original values for logging
+    int originalSeverity = selectedIOC->getSeverity();
+    QString originalOrigin = QString::fromStdString(selectedIOC->getOrigin());
+    
+    // Pre-populate dialog with current values
+    addDialog->setEditMode(true, selectedIOC);
+    
+    if (addDialog->exec() == QDialog::Accepted) {
+        // Log the successful edit with detailed information
+        QString currentTime = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");
+        QString logMessage = QString("[IOC_EDIT] IOC ID:%1 modified at %2")
+                                .arg(selectedIOC->getIndicatorId())
+                                .arg(currentTime);
+        
+        // Add details about what was changed
+        logMessage += QString(" | Type: %1 | Original Severity: %2 | Original Origin: %3")
+                        .arg(QString::fromStdString(selectedIOC->getType()))
+                        .arg(originalSeverity)
+                        .arg(originalOrigin);
+        
+        logTextEdit->append(logMessage);
+        
+        // Refresh the IOC table to show changes
+        loadIOCData();
+        updateStatusInfo();
+        
+        logTextEdit->append("[SYSTEM] IOC table refreshed after edit operation");
+    } else {
+        logTextEdit->append("[SYSTEM] IOC edit operation cancelled by user");
+    }
 }
 
 void MainWindow::deleteIOC()
 {
-    // Implementation for deleting IOC
-    logTextEdit->append("[SYSTEM] Delete IOC functionality activated");
+    // Get current selection from IOC table
+    int selectedRow = iocTable->getSelectedRow();
+    if (selectedRow < 0) {
+        QMessageBox::warning(this, "Delete IOC", "Please select an IOC to delete.");
+        return;
+    }
+    
+    if (selectedRow >= static_cast<int>(manager->getIndicatorCount())) {
+        QMessageBox::warning(this, "Delete IOC", "Invalid selection.");
+        return;
+    }
+    
+    const Indicator* selectedIOC = manager->getIndicator(selectedRow);
+    if (!selectedIOC) {
+        QMessageBox::warning(this, "Delete IOC", "Failed to retrieve selected IOC.");
+        return;
+    }
+    
+    // Store IOC details for logging before deletion
+    int iocId = selectedIOC->getIndicatorId();
+    QString iocType = QString::fromStdString(selectedIOC->getType());
+    QString iocDescription = QString::fromStdString(selectedIOC->getDescription());
+    int iocSeverity = selectedIOC->getSeverity();
+    QString iocOrigin = QString::fromStdString(selectedIOC->getOrigin());
+    QString iocTimestamp = QString::fromStdString(selectedIOC->getTimestamp());
+    
+    // Get type-specific information for detailed logging
+    QString specificInfo;
+    if (iocType == "IP") {
+        if (auto* ipIOC = dynamic_cast<const MaliciousIP*>(selectedIOC)) {
+            specificInfo = QString("IP: %1, Country: %2, ISP: %3")
+                             .arg(QString::fromStdString(ipIOC->getIP()))
+                             .arg(QString::fromStdString(ipIOC->getCountry()))
+                             .arg(QString::fromStdString(ipIOC->getISP()));
+        }
+    } else if (iocType == "URL") {
+        if (auto* urlIOC = dynamic_cast<const MaliciousURL*>(selectedIOC)) {
+            specificInfo = QString("URL: %1, Protocol: %2")
+                             .arg(QString::fromStdString(urlIOC->getURL()))
+                             .arg(QString::fromStdString(urlIOC->getProtocol()));
+        }
+    } else if (iocType == "Hash") {
+        if (auto* hashIOC = dynamic_cast<const MaliciousHash*>(selectedIOC)) {
+            specificInfo = QString("Hash: %1, Algorithm: %2")
+                             .arg(QString::fromStdString(hashIOC->getHash()))
+                             .arg(QString::fromStdString(hashIOC->getAlgorithm()));
+        }
+    }
+    
+    // Confirmation dialog
+    QString confirmMessage = QString("Are you sure you want to delete this IOC?\n\n"
+                                   "ID: %1\n"
+                                   "Type: %2\n"
+                                   "Description: %3\n"
+                                   "Severity: %4\n"
+                                   "%5")
+                               .arg(iocId)
+                               .arg(iocType)
+                               .arg(iocDescription)
+                               .arg(iocSeverity)
+                               .arg(specificInfo);
+    
+    QMessageBox::StandardButton reply = QMessageBox::question(this, "Confirm Deletion", 
+                                                            confirmMessage,
+                                                            QMessageBox::Yes | QMessageBox::No);
+    
+    if (reply == QMessageBox::Yes) {
+        // Attempt to remove the IOC
+        if (manager->removeIndicatorById(iocId)) {
+            // Log successful deletion with comprehensive details
+            QString currentTime = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");
+            QString logMessage = QString("[IOC_REMOVE] IOC deleted at %1")
+                                   .arg(currentTime);
+            
+            logMessage += QString(" | ID: %1 | Type: %2 | Severity: %3 | Origin: %4 | Created: %5")
+                            .arg(iocId)
+                            .arg(iocType)
+                            .arg(iocSeverity)
+                            .arg(iocOrigin)
+                            .arg(iocTimestamp);
+            
+            if (!specificInfo.isEmpty()) {
+                logMessage += QString(" | Details: %1").arg(specificInfo);
+            }
+            
+            logMessage += QString(" | Description: %1").arg(iocDescription);
+            
+            logTextEdit->append(logMessage);
+            
+            // Refresh the IOC table
+            loadIOCData();
+            updateStatusInfo();
+            
+            logTextEdit->append("[SYSTEM] IOC table refreshed after deletion");
+            
+            QMessageBox::information(this, "Delete IOC", "IOC successfully deleted.");
+        } else {
+            QString errorMessage = QString("[ERROR] Failed to delete IOC ID:%1 - %2")
+                                     .arg(iocId)
+                                     .arg(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss"));
+            logTextEdit->append(errorMessage);
+            QMessageBox::critical(this, "Delete IOC", "Failed to delete the selected IOC.");
+        }
+    } else {
+        logTextEdit->append(QString("[SYSTEM] IOC deletion cancelled by user - ID:%1 at %2")
+                              .arg(iocId)
+                              .arg(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss")));
+    }
 }
 
 void MainWindow::searchIOC()
 {
-    // Temporary: Search dialog not implemented yet
-    QMessageBox::information(this, "Search", "Search functionality will be available soon!");
-    /*
     if (!searchDialog) {
         searchDialog = new SearchDialog(manager, this);
     }
-    searchDialog->exec();
-    */
+    
+    QString currentTime = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");
+    logTextEdit->append(QString("[SYSTEM] Search dialog opened at %1").arg(currentTime));
+    
+    if (searchDialog->exec() == QDialog::Accepted) {
+        logTextEdit->append("[SYSTEM] Search operation completed");
+    } else {
+        logTextEdit->append("[SYSTEM] Search operation cancelled by user");
+    }
 }
 
 void MainWindow::showStatistics()
 {
-    // Temporary: Statistics dialog not implemented yet  
-    QMessageBox::information(this, "Statistics", "Statistics functionality will be available soon!");
-    /*
     if (!statsDialog) {
         statsDialog = new StatisticsDialog(manager, this);
     }
+    // Update statistics with current data before showing
+    statsDialog->refreshStatistics();
+    
+    QString currentTime = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");
+    logTextEdit->append(QString("[SYSTEM] Statistics dialog opened at %1 - IOC count: %2")
+                          .arg(currentTime)
+                          .arg(manager->getIndicatorCount()));
+    
     statsDialog->exec();
-    */
 }
 
 void MainWindow::refreshData()
@@ -461,37 +656,161 @@ void MainWindow::loadData()
     QString fileName = QFileDialog::getOpenFileName(this, "Load IOC Data", "", "CSV Files (*.csv)");
     if (!fileName.isEmpty()) {
         // Load data from file
-        logTextEdit->append(QString("[SYSTEM] Loading data from: %1").arg(fileName));
+        logTextEdit->append(QString("[DATA_LOAD] Loading data from: %1 at %2")
+                              .arg(fileName)
+                              .arg(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss")));
+        
+        try {
+            manager->loadIndicatorsFromFile(fileName.toStdString());
+            loadIOCData();
+            updateStatusInfo();
+            logTextEdit->append(QString("[DATA_LOAD] ✓ Successfully loaded %1 IOCs from file")
+                                  .arg(manager->getIndicatorCount()));
+        } catch (const std::exception& e) {
+            logTextEdit->append(QString("[DATA_LOAD] ✗ Failed to load data: %1").arg(e.what()));
+            QMessageBox::critical(this, "Load Error", QString("Failed to load data: %1").arg(e.what()));
+        }
     }
 }
 
 void MainWindow::saveData()
 {
-    // Save current data
-    manager->saveIndicatorsToFile("data/ioc.csv");
-    logTextEdit->append("[SYSTEM] Database saved successfully");
+    QString currentTime = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");
+    logTextEdit->append(QString("[DATA_SAVE] Saving %1 IOCs to default location at %2")
+                          .arg(manager->getIndicatorCount())
+                          .arg(currentTime));
+    
+    try {
+        manager->saveIndicatorsToFile("data/ioc.csv");
+        logTextEdit->append("[DATA_SAVE] ✓ Database saved successfully to data/ioc.csv");
+    } catch (const std::exception& e) {
+        logTextEdit->append(QString("[DATA_SAVE] ✗ Failed to save database: %1").arg(e.what()));
+        QMessageBox::critical(this, "Save Error", QString("Failed to save database: %1").arg(e.what()));
+    }
 }
 
 void MainWindow::exportData()
 {
-    QString fileName = QFileDialog::getSaveFileName(this, "Export IOC Data", "", "CSV Files (*.csv)");
+    QString fileName = QFileDialog::getSaveFileName(this, "Export IOC Data", "ioc_export.csv", "CSV Files (*.csv)");
     if (!fileName.isEmpty()) {
-        // Export data to file
-        logTextEdit->append(QString("[SYSTEM] Data exported to: %1").arg(fileName));
+        QString currentTime = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");
+        logTextEdit->append(QString("[DATA_EXPORT] Exporting %1 IOCs to: %2 at %3")
+                              .arg(manager->getIndicatorCount())
+                              .arg(fileName)
+                              .arg(currentTime));
+        
+        try {
+            manager->saveIndicatorsToFile(fileName.toStdString());
+            logTextEdit->append("[DATA_EXPORT] ✓ IOC data successfully exported");
+            QMessageBox::information(this, "Export Complete", "IOC data has been successfully exported.");
+        } catch (const std::exception& e) {
+            logTextEdit->append(QString("[DATA_EXPORT] ✗ Failed to export data: %1").arg(e.what()));
+            QMessageBox::critical(this, "Export Error", QString("Failed to export data: %1").arg(e.what()));
+        }
+    } else {
+        logTextEdit->append("[SYSTEM] Export operation cancelled by user");
     }
 }
 
 void MainWindow::showAbout()
 {
-    QMessageBox::about(this, "About Sentinel IOC",
-        "◤ SENTINEL IOC MANAGEMENT TERMINAL ◥\\n\\n"
-        "Version: 1.0.0\\n"
-        "Matrix Protocol: ACTIVE\\n"
-        "Security Level: MAXIMUM\\n\\n"
-        "A cybersecurity IOC management system\\n"
-        "with Matrix-themed interface.\\n\\n"
-        "Developed for threat intelligence\\n"
-        "and security operations.");
+    QString secretMessage = 
+        "<pre style='color: #00FF00; font-family: Courier New, monospace; font-size: 11px; line-height: 1.2;'>"
+        "◤════════════════════════════════════════◥\n"
+        "║          CLASSIFIED TRANSMISSION          ║\n"
+        "◥════════════════════════════════════════◤\n\n"
+        "┌─ DECRYPTION SEQUENCE INITIATED ─┐\n"
+        "│ STATUS: [██████████] 100% COMPLETE │\n"
+        "└───────────────────────────────────┘\n\n"
+        "/* =============== SECRET CODE =============== */\n"
+        "// SENTINEL IOC MANAGEMENT SYSTEM v1.0.0\n"
+        "// CLASSIFIED PROJECT: MATRIX PROTOCOL\n"
+        "//\n"
+        "// DEVELOPER AUTHENTICATION:\n"
+        "// ┌─ SECURITY CLEARANCE: OMEGA ─┐\n"
+        "//\n"
+        "// [LEAD ARCHITECT]     : <span style='color: #FF0000; font-weight: bold;'>DAY</span>\n"
+        "// [SECURITY SPECIALIST]: <span style='color: #FF0000; font-weight: bold;'>BELENA</span>\n"
+        "// [CORE DEVELOPER]     : <span style='color: #FF0000; font-weight: bold;'>rafitels</span>\n"
+        "// [SYSTEM ANALYST]     : <span style='color: #FF0000; font-weight: bold;'>MARY</span>\n"
+        "//\n"
+        "// COMPILATION_DATE: 2025.07.04\n"
+        "// THREAT_LEVEL: CLASSIFIED\n"
+        "// MATRIX_STATUS: ACTIVE\n"
+        "//\n"
+        "// WARNING: UNAUTHORIZED ACCESS DETECTED\n"
+        "// INITIATING COUNTERMEASURES...\n"
+        "// [████████████████████████] SECURE\n"
+        "//\n"
+        "/* ======================================== */\n\n"
+        "◢ TRANSMISSION ENDS ◣\n"
+        "▓▓▓ CONNECTION TERMINATED ▓▓▓"
+        "</pre>";
+
+    // Create a custom dialog for the secret message
+    QDialog *aboutDialog = new QDialog(this);
+    aboutDialog->setWindowTitle("◤ CLASSIFIED ACCESS ◥");
+    aboutDialog->setMinimumSize(500, 400);
+    aboutDialog->setModal(true);
+    
+    QVBoxLayout *layout = new QVBoxLayout(aboutDialog);
+    
+    QTextEdit *textArea = new QTextEdit();
+    textArea->setHtml(secretMessage);  // Changed from setPlainText to setHtml
+    textArea->setReadOnly(true);
+    textArea->setStyleSheet(
+        "QTextEdit {"
+        "    background-color: #000000;"
+        "    color: #00FF00;"
+        "    font-family: 'Courier New', monospace;"
+        "    font-size: 11px;"
+        "    border: 2px solid #00FF00;"
+        "    padding: 10px;"
+        "    line-height: 1.2;"
+        "}"
+        "QScrollBar:vertical {"
+        "    background-color: #001100;"
+        "    border: 1px solid #00FF00;"
+        "    width: 12px;"
+        "}"
+        "QScrollBar::handle:vertical {"
+        "    background-color: #00FF00;"
+        "    border-radius: 3px;"
+        "}"
+    );
+    
+    QPushButton *closeButton = new QPushButton("◈ TERMINATE CONNECTION");
+    closeButton->setStyleSheet(
+        "QPushButton {"
+        "    background-color: #001100;"
+        "    color: #00FF00;"
+        "    border: 2px solid #00FF00;"
+        "    border-radius: 6px;"
+        "    padding: 8px;"
+        "    font-weight: bold;"
+        "    font-family: 'Courier New', monospace;"
+        "}"
+        "QPushButton:hover {"
+        "    background-color: #00FF00;"
+        "    color: #000000;"
+        "}"
+    );
+    
+    connect(closeButton, &QPushButton::clicked, aboutDialog, &QDialog::accept);
+    
+    layout->addWidget(textArea);
+    layout->addWidget(closeButton);
+    
+    // Apply dialog styling
+    aboutDialog->setStyleSheet(
+        "QDialog {"
+        "    background-color: #000000;"
+        "    border: 3px solid #00FF00;"
+        "}"
+    );
+    
+    aboutDialog->exec();
+    delete aboutDialog;
 }
 
 void MainWindow::toggleMatrixBackground()
@@ -514,4 +833,11 @@ void MainWindow::updateSystemStatus()
     };
     statusLabel->setText(statusMessages[statusCounter % statusMessages.size()]);
     statusCounter++;
+}
+
+void MainWindow::onIOCAdded(const QString &logMessage)
+{
+    logTextEdit->append(logMessage);
+    loadIOCData();  // Refresh the IOC table
+    updateStatusInfo();  // Update status information
 }

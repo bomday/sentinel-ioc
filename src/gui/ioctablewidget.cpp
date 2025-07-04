@@ -13,14 +13,14 @@ IOCTableWidget::IOCTableWidget(QWidget *parent)
     , blinkState(false)
 {
     // Initialize theme colors
-    primaryColor = "#00FF41";
-    secondaryColor = "#008F11";
-    accentColor = "#00FFFF";
-    backgroundColor = "#0D1117";
-    textColor = "#C9D1D9";
+    primaryColor = "#00FF00";
+    secondaryColor = "#004400";
+    accentColor = "#00FF41";
+    backgroundColor = "#000000";
+    textColor = "#00FF00";
     
     setupUI();
-    applyMatrixTheme();
+    applyTerminalTheme();
     
     // Setup blinking effect timer
     blinkTimer = new QTimer(this);
@@ -57,16 +57,16 @@ void IOCTableWidget::setupUI()
     severityCombo->addItem("5 - Emergency");
     severityCombo->setMaximumWidth(140);
     
-    filterButton = new QPushButton("◈ FILTER");
+    filterButton = new QPushButton("Filter");
     filterButton->setMaximumWidth(80);
-    clearButton = new QPushButton("◈ CLEAR");
+    clearButton = new QPushButton("Clear");
     clearButton->setMaximumWidth(80);
     
     connect(filterButton, &QPushButton::clicked, this, &IOCTableWidget::filterData);
     connect(clearButton, &QPushButton::clicked, this, &IOCTableWidget::clearFilter);
     connect(searchEdit, &QLineEdit::returnPressed, this, &IOCTableWidget::filterData);
     
-    filterLayout->addWidget(new QLabel("◤ SEARCH:"));
+    filterLayout->addWidget(new QLabel("Search:"));
     filterLayout->addWidget(searchEdit);
     filterLayout->addWidget(new QLabel("TYPE:"));
     filterLayout->addWidget(typeCombo);
@@ -82,7 +82,7 @@ void IOCTableWidget::setupUI()
     setupTable();
     
     // Status label
-    statusLabel = new QLabel("◤ IOC DATABASE STATUS: READY ◥");
+    statusLabel = new QLabel("IOC Database Status: Ready");
     statusLabel->setAlignment(Qt::AlignCenter);
     mainLayout->addWidget(statusLabel);
 }
@@ -90,26 +90,20 @@ void IOCTableWidget::setupUI()
 void IOCTableWidget::setupTable()
 {
     table = new QTableWidget();
-    
-    // Set column headers
-    QStringList headers = {
-        "ID", "SEVERITY", "TYPE", "DESCRIPTION", "ORIGIN", 
-        "TIMESTAMP", "HASH/IP/URL", "ALGORITHM/COUNTRY/PROTOCOL", "DETAILS"
-    };
-    table->setColumnCount(headers.size());
-    table->setHorizontalHeaderLabels(headers);
-    
-    // Configure table properties
+    table->setColumnCount(8);
+    table->setAlternatingRowColors(true);  // Enable alternating row colors for better readability
     table->setSelectionBehavior(QAbstractItemView::SelectRows);
     table->setSelectionMode(QAbstractItemView::SingleSelection);
-    table->setAlternatingRowColors(true);
     table->setSortingEnabled(true);
-    table->verticalHeader()->setVisible(false);
     
-    // Configure column widths
+    // Set headers
+    QStringList headers = {"ID", "Severity", "Type", "Description", "Origin", "Timestamp", "Hash/IP/URL", "Algorithm/Country/Protocol"};
+    table->setHorizontalHeaderLabels(headers);
+    
+    // Configure header and column sizing
     QHeaderView *header = table->horizontalHeader();
     header->setStretchLastSection(true);
-    header->resizeSection(0, 60);   // ID
+    header->resizeSection(0, 50);   // ID
     header->resizeSection(1, 80);   // Severity
     header->resizeSection(2, 60);   // Type
     header->resizeSection(3, 200);  // Description
@@ -123,7 +117,7 @@ void IOCTableWidget::setupTable()
     mainLayout->addWidget(table);
 }
 
-void IOCTableWidget::applyMatrixTheme()
+void IOCTableWidget::applyTerminalTheme()
 {
     setStyleSheet(QString(
         "QTableWidget {"
@@ -135,14 +129,20 @@ void IOCTableWidget::applyMatrixTheme()
         "    border: 2px solid %3;"
         "    font-family: 'Courier New', monospace;"
         "    font-size: 10px;"
+        "    alternate-background-color: rgba(0, 255, 0, 0.05);"
         "}"
         "QTableWidget::item {"
-        "    padding: 5px;"
+        "    padding: 8px 5px;"
         "    border-bottom: 1px solid %4;"
+        "    min-height: 20px;"
         "}"
         "QTableWidget::item:selected {"
         "    background-color: %3;"
         "    color: %1;"
+        "    font-weight: bold;"
+        "}"
+        "QTableWidget::item:hover {"
+        "    background-color: rgba(0, 255, 65, 0.1);"
         "}"
         "QHeaderView::section {"
         "    background-color: %4;"
@@ -151,6 +151,11 @@ void IOCTableWidget::applyMatrixTheme()
         "    padding: 8px;"
         "    font-weight: bold;"
         "    font-size: 11px;"
+        "    text-align: left;"
+        "}"
+        "QHeaderView::section:hover {"
+        "    background-color: %3;"
+        "    color: %1;"
         "}"
         "QLineEdit {"
         "    background-color: %4;"
@@ -162,6 +167,7 @@ void IOCTableWidget::applyMatrixTheme()
         "}"
         "QLineEdit:focus {"
         "    border-color: %5;"
+        "    background-color: rgba(0, 255, 255, 0.1);"
         "}"
         "QComboBox {"
         "    background-color: %4;"
@@ -179,6 +185,25 @@ void IOCTableWidget::applyMatrixTheme()
         "    border-left: 5px solid transparent;"
         "    border-right: 5px solid transparent;"
         "    border-top: 5px solid %2;"
+        "}"
+        "QPushButton {"
+        "    background-color: %4;"
+        "    color: %2;"
+        "    border: 2px solid %3;"
+        "    border-radius: 4px;"
+        "    padding: 8px 12px;"
+        "    font-weight: bold;"
+        "    font-family: 'Courier New', monospace;"
+        "    min-width: 60px;"
+        "}"
+        "QPushButton:hover {"
+        "    background-color: %3;"
+        "    color: %1;"
+        "    border-color: %5;"
+        "}"
+        "QPushButton:pressed {"
+        "    background-color: %5;"
+        "    color: %1;"
         "}"
         "QLabel {"
         "    color: %2;"
@@ -201,16 +226,18 @@ void IOCTableWidget::populateTable(IndicatorManager *manager)
     table->setRowCount(0);
     
     // Get indicators from manager
-    // Note: You'll need to add a method to IndicatorManager to get all indicators
-    // For now, we'll simulate with placeholder data
+    size_t indicatorCount = manager->getIndicatorCount();
+    table->setRowCount(static_cast<int>(indicatorCount));
     
-    // This would need to be implemented in IndicatorManager:
-    // const auto& indicators = manager->getAllIndicators();
+    // Populate table with actual IOC data
+    for (size_t i = 0; i < indicatorCount; ++i) {
+        const Indicator* ioc = manager->getIndicator(i);
+        if (ioc) {
+            addTableRow(static_cast<int>(i), ioc);
+        }
+    }
     
-    // Placeholder implementation
-    table->setRowCount(0); // Will be populated when IndicatorManager provides access to indicators
-    
-    statusLabel->setText(QString("◤ IOC DATABASE: %1 ENTRIES LOADED ◥").arg(table->rowCount()));
+    statusLabel->setText(QString("IOC Database: %1 entries loaded").arg(table->rowCount()));
 }
 
 void IOCTableWidget::addTableRow(int row, const Indicator *ioc)
@@ -267,12 +294,12 @@ void IOCTableWidget::addTableRow(int row, const Indicator *ioc)
 QString IOCTableWidget::getSeverityText(int severity)
 {
     switch (severity) {
-        case 1: return "◈ LOW";
-        case 2: return "◈ MEDIUM";
-        case 3: return "◈ HIGH";
-        case 4: return "◈ CRITICAL";
-        case 5: return "◈ EMERGENCY";
-        default: return "◈ UNKNOWN";
+        case 1: return "Low";
+        case 2: return "Medium";
+        case 3: return "High";
+        case 4: return "Critical";
+        case 5: return "Emergency";
+        default: return "Unknown";
     }
 }
 
@@ -337,7 +364,7 @@ void IOCTableWidget::filterData()
     for (int row = 0; row < table->rowCount(); ++row) {
         if (!table->isRowHidden(row)) visibleRows++;
     }
-    statusLabel->setText(QString("◤ FILTER: %1 OF %2 ENTRIES VISIBLE ◥").arg(visibleRows).arg(table->rowCount()));
+    statusLabel->setText(QString("Filter: %1 of %2 entries visible").arg(visibleRows).arg(table->rowCount()));
 }
 
 void IOCTableWidget::clearFilter()
@@ -350,7 +377,7 @@ void IOCTableWidget::clearFilter()
         table->setRowHidden(row, false);
     }
     
-    statusLabel->setText(QString("◤ IOC DATABASE: %1 ENTRIES LOADED ◥").arg(table->rowCount()));
+    statusLabel->setText(QString("IOC Database: %1 entries loaded").arg(table->rowCount()));
 }
 
 void IOCTableWidget::onCellDoubleClicked(int row, int column)
@@ -361,7 +388,7 @@ void IOCTableWidget::onCellDoubleClicked(int row, int column)
     if (idItem) {
         QString iocId = idItem->text();
         QMessageBox::information(this, "IOC Details", 
-            QString("◤ IOC DETAILS ◥\\n\\nID: %1\\n\\nDouble-click detected.\\nDetailed view would open here.").arg(iocId));
+            QString("IOC Details\\n\\nID: %1\\n\\nDouble-click detected.\\nDetailed view would open here.").arg(iocId));
     }
 }
 
@@ -396,4 +423,13 @@ void IOCTableWidget::updateBlinkingCells()
             }
         }
     }
+}
+
+int IOCTableWidget::getSelectedRow() const
+{
+    QList<QTableWidgetItem*> selectedItems = table->selectedItems();
+    if (selectedItems.isEmpty()) {
+        return -1;
+    }
+    return selectedItems.first()->row();
 }

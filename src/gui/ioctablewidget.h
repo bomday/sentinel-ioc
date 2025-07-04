@@ -20,6 +20,7 @@ class IOCTableWidget : public QWidget
 public:
     explicit IOCTableWidget(QWidget *parent = nullptr);
     void updateData(IndicatorManager *manager);
+    int getSelectedRow() const;
 
 private slots:
     void filterData();
@@ -30,7 +31,7 @@ private slots:
 private:
     void setupUI();
     void setupTable();
-    void applyMatrixTheme();
+    void applyTerminalTheme();
     void populateTable(IndicatorManager *manager);
     void addTableRow(int row, const Indicator *ioc);
     QString getSeverityText(int severity);
