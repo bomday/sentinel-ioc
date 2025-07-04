@@ -83,12 +83,6 @@ bool registerLastMonth(const std::string& timestamp) {
     return dataIOC >= limite; // Returns true if the IOC was registered within the last month
 }
 
-// Generate a unique ID for each indicator
-int generateUniqueId() {
-    static int currentId = 1;
-    return currentId++;
-}
-
 // Function for case-insensitive string comparison
 bool icontains(const std::string& str, const std::string& substr) {
     auto it = std::search(

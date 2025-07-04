@@ -10,7 +10,9 @@
 class IndicatorManager {
     private:
         std::vector<std::unique_ptr<Indicator>> indicators; 
-    
+        int nextIndicatorId = 1; 
+
+        void updateNextId(); // Updates the next available ID based on existing indicators
     public:
         // Virtual destructor
         virtual ~IndicatorManager() = default;
