@@ -11,6 +11,8 @@
 #include <QComboBox>
 #include <QPushButton>
 #include <QTimer>
+#include <QPaintEvent>
+#include <QPainter>
 #include "../indicatorManager/indicatorManager.hpp"
 
 class IOCTableWidget : public QWidget
@@ -25,8 +27,10 @@ public:
 private slots:
     void filterData();
     void clearFilter();
-    void onCellDoubleClicked(int row, int column);
     void updateBlinkingCells();
+
+protected:
+    void paintEvent(QPaintEvent *event) override;
 
 private:
     void setupUI();
@@ -36,6 +40,7 @@ private:
     void addTableRow(int row, const Indicator *ioc);
     QString getSeverityText(int severity);
     QColor getSeverityColor(int severity);
+    void updateRowNumbers();
 
     QVBoxLayout *mainLayout;
     QHBoxLayout *filterLayout;

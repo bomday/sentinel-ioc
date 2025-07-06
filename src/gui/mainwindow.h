@@ -18,14 +18,13 @@
 #include <QTimer>
 #include <QProgressBar>
 #include <QSystemTrayIcon>
+#include <QMessageBox>
+#include <QPropertyAnimation>
 
 #include "../indicatorManager/indicatorManager.hpp"
 
-class MatrixWidget;
 class IOCTableWidget;
-class HackerTerminal;
 class AddIOCDialog;
-class SearchDialog;
 class StatisticsDialog;
 
 class MainWindow : public QMainWindow
@@ -40,16 +39,14 @@ private slots:
     void addIOC();
     void editIOC();
     void deleteIOC();
-    void searchIOC();
     void showStatistics();
-    void refreshData();
     void loadData();
     void saveData();
     void exportData();
     void showAbout();
-    void toggleMatrixBackground();
     void updateSystemStatus();
     void onIOCAdded(const QString &logMessage);
+    void applyGraphicsEffects(); // Apply graphics effects after UI initialization
 
 private:
     void setupUI();
@@ -62,6 +59,15 @@ private:
     void loadIOCData();
     void updateIOCTable();
     void updateStatusInfo();
+    
+    // Visual effects
+    void addButtonGlowEffect(QPushButton* button);
+    
+    // Message box helpers
+    void showResizableInformation(const QString &title, const QString &text);
+    void showResizableWarning(const QString &title, const QString &text);
+    void showResizableCritical(const QString &title, const QString &text);
+    QMessageBox::StandardButton showResizableQuestion(const QString &title, const QString &text);
 
     // Core components
     IndicatorManager* manager;
@@ -71,25 +77,17 @@ private:
     QSplitter* mainSplitter;
     QTabWidget* tabWidget;
     
-    // Matrix theme components
-    MatrixWidget* matrixBackground;
-    bool matrixEnabled;
-    
     // IOC management
     IOCTableWidget* iocTable;
     QTextEdit* logTextEdit;
-    HackerTerminal* hackerTerminal;
     
     // Control panels
     QFrame* controlPanel;
-    QFrame* infoPanel;
     
     // Buttons
     QPushButton* addButton;
     QPushButton* editButton;
     QPushButton* deleteButton;
-    QPushButton* searchButton;
-    QPushButton* refreshButton;
     QPushButton* statsButton;
     
     // Status components
@@ -101,7 +99,6 @@ private:
     
     // Dialogs
     AddIOCDialog* addDialog;
-    SearchDialog* searchDialog;
     StatisticsDialog* statsDialog;
     
     // System tray

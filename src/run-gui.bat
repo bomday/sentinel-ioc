@@ -1,5 +1,5 @@
 @echo off
-REM Quick run script for Sentinel IOC GUI
+REM Quick launcher for Sentinel IOC GUI
 REM This script ensures Qt6 DLLs are found
 
 echo Starting Sentinel IOC GUI...
@@ -17,13 +17,20 @@ if exist "C:\Qt\6.9.1\mingw_64\bin" (
 )
 
 REM Check if executable exists
-if not exist "build\SentinelIOC-GUI.exe" (
+if not exist "SentinelIOC-GUI.exe" (
     echo GUI executable not found! Building first...
     call build.bat gui
-    exit /b %errorlevel%
+    if %errorlevel% neq 0 (
+        echo Build failed!
+        pause
+        exit /b %errorlevel%
+    )
 )
 
-REM Run the GUI
-cd build
+echo.
+echo ========================================
+echo SUCCESS! Starting Sentinel IOC GUI...
+echo ========================================
+
+REM Run the GUI from src directory
 SentinelIOC-GUI.exe
-cd ..

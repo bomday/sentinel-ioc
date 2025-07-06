@@ -1,9 +1,7 @@
 #include "mainwindow.h"
-#include "matrixwidget.h"
+#include "matrixtitle.h"
 #include "ioctablewidget.h"
-#include "hackerterminal.h"
 #include "addiocdialog.h"
-#include "searchdialog.h"
 #include "statisticsdialog.h"
 #include "../maliciousHash/maliciousHash.hpp"
 #include "../maliciousIP/maliciousIP.hpp"
@@ -20,13 +18,16 @@
 #include <QFont>
 #include <QFontDatabase>
 #include <QThread>
+#include <QGridLayout>
+#include <QSpacerItem>
+#include <QDir>
+#include <QTimer>
+#include <QPixmap>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , manager(new IndicatorManager())
-    , matrixEnabled(true)
     , addDialog(nullptr)
-    , searchDialog(nullptr)
     , statsDialog(nullptr)
 {
     // Initialize theme colors (Terminal theme)
@@ -40,15 +41,31 @@ MainWindow::MainWindow(QWidget *parent)
     applyTerminalTheme();
     loadIOCData();
     
+    // Apply graphics effects after UI is fully set up
+    QTimer::singleShot(100, this, &MainWindow::applyGraphicsEffects);
+    
     // Setup status timer
     statusTimer = new QTimer(this);
     connect(statusTimer, &QTimer::timeout, this, &MainWindow::updateSystemStatus);
     statusTimer->start(5000); // Update every 5 seconds
     
-    // Initialize system tray
+    // Initialize system tray with error handling
     trayIcon = new QSystemTrayIcon(this);
-    trayIcon->setIcon(QIcon(":/icons/sentinel.png"));
-    trayIcon->show();
+    
+    // Try to set an icon, handle gracefully if it doesn't exist
+    QIcon icon(":/icons/sentinel.png");
+    if (icon.isNull()) {
+        // Create a simple default icon if the resource doesn't exist
+        QPixmap pixmap(16, 16);
+        pixmap.fill(QColor(primaryColor));
+        icon = QIcon(pixmap);
+    }
+    trayIcon->setIcon(icon);
+    
+    // Only show system tray if it's available
+    if (QSystemTrayIcon::isSystemTrayAvailable()) {
+        trayIcon->show();
+    }
     
     updateStatusInfo();
 }
@@ -92,17 +109,10 @@ void MainWindow::setupMenuBar()
     iocMenu->addAction("◈ Add IOC", QKeySequence("Ctrl+N"), this, &MainWindow::addIOC);
     iocMenu->addAction("◈ Edit IOC", QKeySequence("Ctrl+E"), this, &MainWindow::editIOC);
     iocMenu->addAction("◈ Delete IOC", QKeySequence::Delete, this, &MainWindow::deleteIOC);
-    iocMenu->addSeparator();
-    iocMenu->addAction("◈ Search IOC", QKeySequence::Find, this, &MainWindow::searchIOC);
-    iocMenu->addAction("◈ Refresh", QKeySequence::Refresh, this, &MainWindow::refreshData);
     
     // Analysis Menu
     QMenu *analysisMenu = menuBar->addMenu("▌ ANALYSIS");
     analysisMenu->addAction("◈ Statistics", this, &MainWindow::showStatistics);
-    
-    // View Menu
-    QMenu *viewMenu = menuBar->addMenu("▌ VIEW");
-    viewMenu->addAction("◈ Toggle Matrix", this, &MainWindow::toggleMatrixBackground);
     
     // Help Menu
     QMenu *helpMenu = menuBar->addMenu("▌ HELP");
@@ -111,6 +121,12 @@ void MainWindow::setupMenuBar()
 
 void MainWindow::setupStatusBar()
 {
+    // Create a custom widget to hold all status elements without grey space
+    QWidget *statusWidget = new QWidget();
+    QHBoxLayout *statusLayout = new QHBoxLayout(statusWidget);
+    statusLayout->setContentsMargins(5, 2, 5, 2);
+    statusLayout->setSpacing(20);
+    
     statusLabel = new QLabel("SYSTEM STATUS: OPERATIONAL");
     countLabel = new QLabel("IOC COUNT: 0");
     timeLabel = new QLabel(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss"));
@@ -118,10 +134,17 @@ void MainWindow::setupStatusBar()
     progressBar->setVisible(false);
     progressBar->setMaximumWidth(200);
     
-    statusBar()->addWidget(statusLabel);
-    statusBar()->addPermanentWidget(countLabel);
-    statusBar()->addPermanentWidget(progressBar);
-    statusBar()->addPermanentWidget(timeLabel);
+    // Add widgets to the layout in order
+    statusLayout->addWidget(statusLabel);
+    statusLayout->addWidget(countLabel);
+    statusLayout->addWidget(progressBar);
+    statusLayout->addStretch(); // This will push the time to the right
+    statusLayout->addWidget(timeLabel);
+    
+    // Graphics effects will be applied later to prevent QPainter errors
+    
+    // Set the custom widget as the status bar's main widget
+    statusBar()->addWidget(statusWidget, 1);
 }
 
 void MainWindow::createCentralWidget()
@@ -134,16 +157,10 @@ void MainWindow::createCentralWidget()
     mainLayout->setContentsMargins(10, 10, 10, 10);
     mainLayout->setSpacing(10);
     
-    // Create header with title
-    QLabel *titleLabel = new QLabel("◤ SENTINEL IOC MANAGEMENT TERMINAL ◥");
-    titleLabel->setAlignment(Qt::AlignCenter);
-    titleLabel->setStyleSheet(QString(
-        "font-size: 24px; font-weight: bold; color: %1; "
-        "padding: 15px; background: qlineargradient(x1:0, y1:0, x2:1, y2:0, "
-        "stop:0 %2, stop:0.5 %3, stop:1 %2); "
-        "border: 2px solid %1; border-radius: 8px; margin-bottom: 10px;"
-    ).arg(primaryColor, backgroundColor, secondaryColor));
-    mainLayout->addWidget(titleLabel);
+    // Create header with matrix background title
+    MatrixTitle *titleWidget = new MatrixTitle("◤ SENTINEL IOC MANAGEMENT TERMINAL ◥", this);
+    
+    mainLayout->addWidget(titleWidget);
     
     // Create main splitter
     mainSplitter = new QSplitter(Qt::Horizontal);
@@ -165,78 +182,63 @@ void MainWindow::createControlPanel()
     controlPanel->setFrameStyle(QFrame::Box);
     controlPanel->setMaximumWidth(300);
     
+    // Graphics effect will be applied later to prevent QPainter errors
+    
     QVBoxLayout *controlLayout = new QVBoxLayout(controlPanel);
     
-    // Control panel title
-    QLabel *controlTitle = new QLabel("◤ CONTROL MATRIX ◥");
-    controlTitle->setAlignment(Qt::AlignCenter);
-    controlLayout->addWidget(controlTitle);
-    
-    // Action buttons
+    // Create action buttons
     addButton = new QPushButton("◈ ADD IOC");
     editButton = new QPushButton("◈ EDIT IOC");
     deleteButton = new QPushButton("◈ DELETE IOC");
-    searchButton = new QPushButton("◈ SEARCH IOC");
-    refreshButton = new QPushButton("◈ REFRESH DATA");
     statsButton = new QPushButton("◈ STATISTICS");
     
     // Add tooltips for better accessibility
     addButton->setToolTip("Add a new Indicator of Compromise to the database");
     editButton->setToolTip("Edit the selected IOC in the table");
     deleteButton->setToolTip("Delete the selected IOC from the database");
-    searchButton->setToolTip("Open search dialog to find specific IOCs");
-    refreshButton->setToolTip("Reload IOC data from storage");
     statsButton->setToolTip("View detailed statistics and analytics");
     
     // Connect buttons
     connect(addButton, &QPushButton::clicked, this, &MainWindow::addIOC);
     connect(editButton, &QPushButton::clicked, this, &MainWindow::editIOC);
     connect(deleteButton, &QPushButton::clicked, this, &MainWindow::deleteIOC);
-    connect(searchButton, &QPushButton::clicked, this, &MainWindow::searchIOC);
-    connect(refreshButton, &QPushButton::clicked, this, &MainWindow::refreshData);
     connect(statsButton, &QPushButton::clicked, this, &MainWindow::showStatistics);
     
+    // Graphics effects will be applied later to prevent QPainter errors
+    
+    // Control panel title - highlighted and distinct
+    QLabel *controlTitle = new QLabel("◤ TERMINAL MENU ◥");
+    controlTitle->setAlignment(Qt::AlignCenter);
+    controlTitle->setStyleSheet(
+        "font-size: 16px; "
+        "color: #00FF41; "
+        "font-weight: bold; "
+        "background-color: #004400; "
+        "border: 2px solid #00FF00; "
+        "padding: 8px; "
+        "margin: 5px;"
+    );
+    controlLayout->addWidget(controlTitle);
+    
+    // Add spacing after title
+    controlLayout->addSpacing(20);
+    
+    // IOC Management section - now contains all operations
+    QLabel *iocSection = new QLabel("◢ IOC MANAGEMENT ◣");
+    iocSection->setAlignment(Qt::AlignCenter);
+    iocSection->setStyleSheet("font-size: 12px; color: #00FF41; font-weight: bold;");
+    controlLayout->addWidget(iocSection);
+    
+    controlLayout->addSpacing(10);
     controlLayout->addWidget(addButton);
+    controlLayout->addSpacing(5);
     controlLayout->addWidget(editButton);
+    controlLayout->addSpacing(5);
     controlLayout->addWidget(deleteButton);
-    
-    // Add separator line
-    QFrame *separator1 = new QFrame();
-    separator1->setFrameShape(QFrame::HLine);
-    separator1->setFrameShadow(QFrame::Sunken);
-    controlLayout->addWidget(separator1);
-    
-    controlLayout->addWidget(searchButton);
-    controlLayout->addWidget(refreshButton);
-    
-    // Add separator line
-    QFrame *separator2 = new QFrame();
-    separator2->setFrameShape(QFrame::HLine);
-    separator2->setFrameShadow(QFrame::Sunken);
-    controlLayout->addWidget(separator2);
-    
+    controlLayout->addSpacing(5);
     controlLayout->addWidget(statsButton);
     
-    // Info panel
-    infoPanel = new QFrame();
-    infoPanel->setFrameStyle(QFrame::Box);
-    
-    QVBoxLayout *infoLayout = new QVBoxLayout(infoPanel);
-    QLabel *infoTitle = new QLabel("◤ SYSTEM INFO ◥");
-    infoTitle->setAlignment(Qt::AlignCenter);
-    infoLayout->addWidget(infoTitle);
-    
-    // Add system information labels
-    QLabel *systemInfo = new QLabel(
-        "STATUS: ACTIVE\\n"
-        "SECURITY: MAXIMUM\\n"
-        "ENCRYPTION: AES-256\\n"
-        "PROTOCOL: SECURE\\n"
-        "MATRIX: ENABLED"
-    );
-    infoLayout->addWidget(systemInfo);
-    
-    controlLayout->addWidget(infoPanel);
+    // Add flexible spacing to distribute buttons evenly
     controlLayout->addStretch();
     
     mainSplitter->addWidget(controlPanel);
@@ -251,24 +253,14 @@ void MainWindow::createMainContent()
     iocTable = new IOCTableWidget();
     tabWidget->addTab(iocTable, "◈ IOC DATABASE");
     
-    // Hacker Terminal Tab
-    hackerTerminal = new HackerTerminal();
-    hackerTerminal->setIOCManager(manager);  // Connect IOC data
-    tabWidget->addTab(hackerTerminal, "◈ SECURITY TERMINAL");
-    
     // Log Tab
     logTextEdit = new QTextEdit();
     logTextEdit->setReadOnly(true);
     logTextEdit->append("[SYSTEM] Sentinel IOC Terminal initialized...");
-    logTextEdit->append("[SYSTEM] Matrix protocol activated...");
     logTextEdit->append("[SYSTEM] Security level: MAXIMUM");
     tabWidget->addTab(logTextEdit, "◈ SYSTEM LOG");
     
-    // Matrix background tab
-    if (matrixEnabled) {
-        matrixBackground = new MatrixWidget();
-        tabWidget->addTab(matrixBackground, "◈ MATRIX");
-    }
+    // Graphics effect will be applied later to prevent QPainter errors
     
     mainSplitter->addWidget(tabWidget);
 }
@@ -386,6 +378,111 @@ void MainWindow::applyTerminalTheme()
         "    background-color: #00FF00;"
         "    border-radius: 2px;"
         "}"
+        // Enhanced Scrollbar Styling
+        "QScrollBar:vertical {"
+        "    background-color: #000000;"
+        "    border: 2px solid #00FF00;"
+        "    width: 16px;"
+        "    border-radius: 4px;"
+        "}"
+        "QScrollBar::handle:vertical {"
+        "    background-color: qlineargradient(x1:0, y1:0, x2:1, y2:0, "
+        "    stop:0 #004400, stop:0.5 #00FF00, stop:1 #004400);"
+        "    border: 1px solid #00FF00;"
+        "    border-radius: 6px;"
+        "    min-height: 20px;"
+        "}"
+        "QScrollBar::handle:vertical:hover {"
+        "    background-color: qlineargradient(x1:0, y1:0, x2:1, y2:0, "
+        "    stop:0 #006600, stop:0.5 #00FF41, stop:1 #006600);"
+        "    border: 2px solid #00FF41;"
+        "}"
+        "QScrollBar::handle:vertical:pressed {"
+        "    background-color: #00FF00;"
+        "    border: 2px solid #00FF41;"
+        "}"
+        "QScrollBar::add-line:vertical {"
+        "    background-color: #001100;"
+        "    border: 1px solid #00FF00;"
+        "    height: 16px;"
+        "    border-radius: 3px;"
+        "    subcontrol-position: bottom;"
+        "    subcontrol-origin: margin;"
+        "}"
+        "QScrollBar::sub-line:vertical {"
+        "    background-color: #001100;"
+        "    border: 1px solid #00FF00;"
+        "    height: 16px;"
+        "    border-radius: 3px;"
+        "    subcontrol-position: top;"
+        "    subcontrol-origin: margin;"
+        "}"
+        "QScrollBar::add-line:vertical:hover, QScrollBar::sub-line:vertical:hover {"
+        "    background-color: #004400;"
+        "    border: 2px solid #00FF41;"
+        "}"
+        "QScrollBar::add-line:vertical:pressed, QScrollBar::sub-line:vertical:pressed {"
+        "    background-color: #00FF00;"
+        "    color: #000000;"
+        "}"
+        "QScrollBar:horizontal {"
+        "    background-color: #000000;"
+        "    border: 2px solid #00FF00;"
+        "    height: 16px;"
+        "    border-radius: 4px;"
+        "}"
+        "QScrollBar::handle:horizontal {"
+        "    background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, "
+        "    stop:0 #004400, stop:0.5 #00FF00, stop:1 #004400);"
+        "    border: 1px solid #00FF00;"
+        "    border-radius: 6px;"
+        "    min-width: 20px;"
+        "}"
+        "QScrollBar::handle:horizontal:hover {"
+        "    background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, "
+        "    stop:0 #006600, stop:0.5 #00FF41, stop:1 #006600);"
+        "    border: 2px solid #00FF41;"
+        "}"
+        "QScrollBar::handle:horizontal:pressed {"
+        "    background-color: #00FF00;"
+        "    border: 2px solid #00FF41;"
+        "}"
+        "QScrollBar::add-line:horizontal {"
+        "    background-color: #001100;"
+        "    border: 1px solid #00FF00;"
+        "    width: 16px;"
+        "    border-radius: 3px;"
+        "    subcontrol-position: right;"
+        "    subcontrol-origin: margin;"
+        "}"
+        "QScrollBar::sub-line:horizontal {"
+        "    background-color: #001100;"
+        "    border: 1px solid #00FF00;"
+        "    width: 16px;"
+        "    border-radius: 3px;"
+        "    subcontrol-position: left;"
+        "    subcontrol-origin: margin;"
+        "}"
+        "QScrollBar::add-line:horizontal:hover, QScrollBar::sub-line:horizontal:hover {"
+        "    background-color: #004400;"
+        "    border: 2px solid #00FF41;"
+        "}"
+        "QScrollBar::add-line:horizontal:pressed, QScrollBar::sub-line:horizontal:pressed {"
+        "    background-color: #00FF00;"
+        "    color: #000000;"
+        "}"
+        "QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical {"
+        "    border: none;"
+        "    width: 8px;"
+        "    height: 8px;"
+        "    background-color: #00FF00;"
+        "}"
+        "QScrollBar::left-arrow:horizontal, QScrollBar::right-arrow:horizontal {"
+        "    border: none;"
+        "    width: 8px;"
+        "    height: 8px;"
+        "    background-color: #00FF00;"
+        "}"
     ));
 }
 
@@ -425,10 +522,27 @@ void MainWindow::addIOC()
 {
     if (!addDialog) {
         addDialog = new AddIOCDialog(manager, this);
+        connect(addDialog, &AddIOCDialog::iocAdded, this, &MainWindow::onIOCAdded);
     }
+    
+    // Ensure dialog is in add mode (not edit mode)
+    addDialog->setEditMode(false, nullptr);
+    
     if (addDialog->exec() == QDialog::Accepted) {
-        updateIOCTable();
-        logTextEdit->append("[SYSTEM] New IOC added to database");
+        // Save the changes to the CSV file
+        try {
+            // Create data directory if it doesn't exist
+            QDir dataDir("data");
+            if (!dataDir.exists()) {
+                dataDir.mkpath(".");
+            }
+            
+            manager->saveIndicatorsToFile("data/ioc.csv");
+            updateIOCTable();
+            logTextEdit->append("[SYSTEM] IOC database updated and saved");
+        } catch (const std::exception& e) {
+            logTextEdit->append(QString("[ERROR] Failed to save IOC database: %1").arg(e.what()));
+        }
     }
 }
 
@@ -480,11 +594,11 @@ void MainWindow::editIOC()
         
         logTextEdit->append(logMessage);
         
-        // Refresh the IOC table to show changes
+        // Update the IOC table to show changes
         loadIOCData();
         updateStatusInfo();
         
-        logTextEdit->append("[SYSTEM] IOC table refreshed after edit operation");
+        logTextEdit->append("[SYSTEM] IOC table updated after edit operation");
     } else {
         logTextEdit->append("[SYSTEM] IOC edit operation cancelled by user");
     }
@@ -554,46 +668,53 @@ void MainWindow::deleteIOC()
                                .arg(iocSeverity)
                                .arg(specificInfo);
     
-    QMessageBox::StandardButton reply = QMessageBox::question(this, "Confirm Deletion", 
-                                                            confirmMessage,
-                                                            QMessageBox::Yes | QMessageBox::No);
+    QMessageBox::StandardButton reply = showResizableQuestion("Confirm Deletion", confirmMessage);
     
     if (reply == QMessageBox::Yes) {
         // Attempt to remove the IOC
         if (manager->removeIndicatorById(iocId)) {
-            // Log successful deletion with comprehensive details
-            QString currentTime = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");
-            QString logMessage = QString("[IOC_REMOVE] IOC deleted at %1")
-                                   .arg(currentTime);
-            
-            logMessage += QString(" | ID: %1 | Type: %2 | Severity: %3 | Origin: %4 | Created: %5")
-                            .arg(iocId)
-                            .arg(iocType)
-                            .arg(iocSeverity)
-                            .arg(iocOrigin)
-                            .arg(iocTimestamp);
-            
-            if (!specificInfo.isEmpty()) {
-                logMessage += QString(" | Details: %1").arg(specificInfo);
+            // Save the changes to the CSV file
+            try {
+                manager->saveIndicatorsToFile("data/ioc.csv");
+                
+                // Log successful deletion with comprehensive details
+                QString currentTime = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");
+                QString logMessage = QString("[IOC_REMOVE] IOC deleted at %1")
+                                       .arg(currentTime);
+                
+                logMessage += QString(" | ID: %1 | Type: %2 | Severity: %3 | Origin: %4 | Created: %5")
+                                .arg(iocId)
+                                .arg(iocType)
+                                .arg(iocSeverity)
+                                .arg(iocOrigin)
+                                .arg(iocTimestamp);
+                
+                if (!specificInfo.isEmpty()) {
+                    logMessage += QString(" | Details: %1").arg(specificInfo);
+                }
+                
+                logMessage += QString(" | Description: %1").arg(iocDescription);
+                
+                logTextEdit->append(logMessage);
+                
+                // Update the IOC table directly without reloading from file
+                updateIOCTable();
+                
+                logTextEdit->append("[SYSTEM] IOC table updated after deletion");
+                
+                showResizableInformation("Delete IOC", "IOC successfully deleted.");
+            } catch (const std::exception& e) {
+                logTextEdit->append(QString("[ERROR] Failed to save after deletion: %1").arg(e.what()));
+                // Still update the table since the IOC was removed from memory
+                updateIOCTable();
+                showResizableWarning("Delete IOC", QString("IOC deleted but failed to save: %1").arg(e.what()));
             }
-            
-            logMessage += QString(" | Description: %1").arg(iocDescription);
-            
-            logTextEdit->append(logMessage);
-            
-            // Refresh the IOC table
-            loadIOCData();
-            updateStatusInfo();
-            
-            logTextEdit->append("[SYSTEM] IOC table refreshed after deletion");
-            
-            QMessageBox::information(this, "Delete IOC", "IOC successfully deleted.");
         } else {
             QString errorMessage = QString("[ERROR] Failed to delete IOC ID:%1 - %2")
                                      .arg(iocId)
                                      .arg(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss"));
             logTextEdit->append(errorMessage);
-            QMessageBox::critical(this, "Delete IOC", "Failed to delete the selected IOC.");
+            showResizableCritical("Delete IOC", "Failed to delete the selected IOC.");
         }
     } else {
         logTextEdit->append(QString("[SYSTEM] IOC deletion cancelled by user - ID:%1 at %2")
@@ -602,21 +723,7 @@ void MainWindow::deleteIOC()
     }
 }
 
-void MainWindow::searchIOC()
-{
-    if (!searchDialog) {
-        searchDialog = new SearchDialog(manager, this);
-    }
-    
-    QString currentTime = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");
-    logTextEdit->append(QString("[SYSTEM] Search dialog opened at %1").arg(currentTime));
-    
-    if (searchDialog->exec() == QDialog::Accepted) {
-        logTextEdit->append("[SYSTEM] Search operation completed");
-    } else {
-        logTextEdit->append("[SYSTEM] Search operation cancelled by user");
-    }
-}
+
 
 void MainWindow::showStatistics()
 {
@@ -632,23 +739,6 @@ void MainWindow::showStatistics()
                           .arg(manager->getIndicatorCount()));
     
     statsDialog->exec();
-}
-
-void MainWindow::refreshData()
-{
-    progressBar->setVisible(true);
-    progressBar->setValue(0);
-    
-    // Simulate loading progress
-    for (int i = 0; i <= 100; i += 20) {
-        progressBar->setValue(i);
-        QApplication::processEvents();
-        QThread::msleep(100);
-    }
-    
-    loadIOCData();
-    progressBar->setVisible(false);
-    logTextEdit->append("[SYSTEM] Database refreshed");
 }
 
 void MainWindow::loadData()
@@ -733,6 +823,7 @@ void MainWindow::showAbout()
         "// [SECURITY SPECIALIST]: <span style='color: #FF0000; font-weight: bold;'>BELENA</span>\n"
         "// [CORE DEVELOPER]     : <span style='color: #FF0000; font-weight: bold;'>rafitels</span>\n"
         "// [SYSTEM ANALYST]     : <span style='color: #FF0000; font-weight: bold;'>MARY</span>\n"
+        "// [DOCUMENTATION]      : <span style='color: #FF0000; font-weight: bold;'>WILLIAM</span>\n"
         "//\n"
         "// COMPILATION_DATE: 2025.07.04\n"
         "// THREAT_LEVEL: CLASSIFIED\n"
@@ -813,11 +904,7 @@ void MainWindow::showAbout()
     delete aboutDialog;
 }
 
-void MainWindow::toggleMatrixBackground()
-{
-    matrixEnabled = !matrixEnabled;
-    logTextEdit->append(QString("[SYSTEM] Matrix background: %1").arg(matrixEnabled ? "ENABLED" : "DISABLED"));
-}
+
 
 void MainWindow::updateSystemStatus()
 {
@@ -837,7 +924,191 @@ void MainWindow::updateSystemStatus()
 
 void MainWindow::onIOCAdded(const QString &logMessage)
 {
-    logTextEdit->append(logMessage);
-    loadIOCData();  // Refresh the IOC table
-    updateStatusInfo();  // Update status information
+    // Save the changes to the CSV file
+    try {
+        manager->saveIndicatorsToFile("data/ioc.csv");
+        logTextEdit->append(logMessage);
+        // Update the IOC table directly from memory for consistency with deletion
+        updateIOCTable();
+        logTextEdit->append("[SYSTEM] IOC table updated after addition");
+    } catch (const std::exception& e) {
+        logTextEdit->append(QString("[ERROR] Failed to save after addition: %1").arg(e.what()));
+        // Still update the table since the IOC was added to memory
+        updateIOCTable();
+        logTextEdit->append("[WARNING] IOC added to memory but save failed");
+    }
+}
+
+// Message box helper functions to ensure proper sizing
+void MainWindow::showResizableInformation(const QString &title, const QString &text)
+{
+    QMessageBox msgBox(this);
+    msgBox.setWindowTitle(title);
+    msgBox.setText(text);
+    msgBox.setIcon(QMessageBox::Information);
+    msgBox.setStandardButtons(QMessageBox::Ok);
+    
+    // Enable text selection and word wrapping
+    msgBox.setTextInteractionFlags(Qt::TextSelectableByMouse | Qt::TextSelectableByKeyboard);
+    
+    // Set minimum size to ensure content is visible
+    msgBox.setMinimumSize(400, 200);
+    
+    // Make the message box resizable
+    QSpacerItem* horizontalSpacer = new QSpacerItem(600, 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    QGridLayout* layout = qobject_cast<QGridLayout*>(msgBox.layout());
+    if (layout) {
+        layout->addItem(horizontalSpacer, layout->rowCount(), 0, 1, layout->columnCount());
+    }
+    
+    msgBox.exec();
+}
+
+void MainWindow::showResizableWarning(const QString &title, const QString &text)
+{
+    QMessageBox msgBox(this);
+    msgBox.setWindowTitle(title);
+    msgBox.setText(text);
+    msgBox.setIcon(QMessageBox::Warning);
+    msgBox.setStandardButtons(QMessageBox::Ok);
+    
+    // Enable text selection and word wrapping
+    msgBox.setTextInteractionFlags(Qt::TextSelectableByMouse | Qt::TextSelectableByKeyboard);
+    
+    // Set minimum size to ensure content is visible
+    msgBox.setMinimumSize(400, 200);
+    
+    // Make the message box resizable
+    QSpacerItem* horizontalSpacer = new QSpacerItem(600, 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    QGridLayout* layout = qobject_cast<QGridLayout*>(msgBox.layout());
+    if (layout) {
+        layout->addItem(horizontalSpacer, layout->rowCount(), 0, 1, layout->columnCount());
+    }
+    
+    msgBox.exec();
+}
+
+void MainWindow::showResizableCritical(const QString &title, const QString &text)
+{
+    QMessageBox msgBox(this);
+    msgBox.setWindowTitle(title);
+    msgBox.setText(text);
+    msgBox.setIcon(QMessageBox::Critical);
+    msgBox.setStandardButtons(QMessageBox::Ok);
+    
+    // Enable text selection and word wrapping
+    msgBox.setTextInteractionFlags(Qt::TextSelectableByMouse | Qt::TextSelectableByKeyboard);
+    
+    // Set minimum size to ensure content is visible
+    msgBox.setMinimumSize(400, 200);
+    
+    // Make the message box resizable
+    QSpacerItem* horizontalSpacer = new QSpacerItem(600, 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    QGridLayout* layout = qobject_cast<QGridLayout*>(msgBox.layout());
+    if (layout) {
+        layout->addItem(horizontalSpacer, layout->rowCount(), 0, 1, layout->columnCount());
+    }
+    
+    msgBox.exec();
+}
+
+QMessageBox::StandardButton MainWindow::showResizableQuestion(const QString &title, const QString &text)
+{
+    QMessageBox msgBox(this);
+    msgBox.setWindowTitle(title);
+    msgBox.setText(text);
+    msgBox.setIcon(QMessageBox::Question);
+    msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+    msgBox.setDefaultButton(QMessageBox::No);
+    
+    // Enable text selection and word wrapping
+    msgBox.setTextInteractionFlags(Qt::TextSelectableByMouse | Qt::TextSelectableByKeyboard);
+    
+    // Set minimum size to ensure content is visible
+    msgBox.setMinimumSize(400, 200);
+    
+    // Make the message box resizable
+    QSpacerItem* horizontalSpacer = new QSpacerItem(600, 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    QGridLayout* layout = qobject_cast<QGridLayout*>(msgBox.layout());
+    if (layout) {
+        layout->addItem(horizontalSpacer, layout->rowCount(), 0, 1, layout->columnCount());
+    }
+    
+    return static_cast<QMessageBox::StandardButton>(msgBox.exec());
+}
+
+void MainWindow::addButtonGlowEffect(QPushButton* button)
+{
+    if (!button) return;
+    
+    // Use stylesheet-based glow effect instead of QGraphicsDropShadowEffect
+    // to prevent QPainter errors
+    QString glowStyle = 
+        "QPushButton {"
+        "    background-color: #001100;"
+        "    color: #00FF00;"
+        "    border: 2px solid #00FF00;"
+        "    border-radius: 4px;"
+        "    padding: 8px 16px;"
+        "    font-weight: bold;"
+        "    font-family: 'Courier New', monospace;"
+        "}"
+        "QPushButton:hover {"
+        "    background-color: #004400;"
+        "    color: #00FF00;"
+        "    border: 3px solid #00FF41;"
+        "}"
+        "QPushButton:pressed {"
+        "    background-color: #006600;"
+        "    color: #000000;"
+        "}";
+    
+    button->setStyleSheet(glowStyle);
+}
+
+void MainWindow::applyGraphicsEffects()
+{
+    // Use safer styling methods instead of QGraphicsDropShadowEffect to prevent QPainter errors
+    
+    // Apply glow effect using stylesheets (without text-shadow which is not supported)
+    if (statusLabel) {
+        statusLabel->setStyleSheet(
+            "QLabel {"
+            "    color: #00FF00;"
+            "    font-weight: bold;"
+            "    font-family: 'Courier New', monospace;"
+            "}"
+        );
+    }
+    
+    if (countLabel) {
+        countLabel->setStyleSheet(
+            "QLabel {"
+            "    color: #00FF41;"
+            "    font-weight: bold;"
+            "    font-family: 'Courier New', monospace;"
+            "}"
+        );
+    }
+    
+    if (controlPanel) {
+        controlPanel->setStyleSheet(
+            "QFrame {"
+            "    background-color: #000000;"
+            "    border: 2px solid #00FF00;"
+            "    border-radius: 4px;"
+            "    padding: 5px;"
+            "}"
+        );
+    }
+    
+    if (tabWidget) {
+        // Tab widget already has styling in applyTerminalTheme()
+    }
+    
+    // Apply simple button styling instead of graphics effects
+    if (addButton) addButtonGlowEffect(addButton);
+    if (editButton) addButtonGlowEffect(editButton);
+    if (deleteButton) addButtonGlowEffect(deleteButton);
+    if (statsButton) addButtonGlowEffect(statsButton);
 }

@@ -1,6 +1,8 @@
 #include "searchdialog.h"
 #include <QMessageBox>
 #include <QDateTime>
+#include <QGridLayout>
+#include <QSpacerItem>
 #include "../maliciousIP/maliciousIP.hpp"
 #include "../maliciousURL/maliciousURL.hpp"
 #include "../maliciousHash/maliciousHash.hpp"
@@ -54,23 +56,16 @@ void SearchDialog::setupUI()
     severityCombo->setToolTip("Filter by threat severity level");
     criteriaLayout->addWidget(severityCombo, 2, 1);
     
-    // Type filter
-    criteriaLayout->addWidget(new QLabel("IOC Type:"), 3, 0);
-    iocTypeCombo = new QComboBox();
-    iocTypeCombo->addItems({"All Types", "Hash", "IP", "URL"});
-    iocTypeCombo->setToolTip("Filter by IOC type");
-    criteriaLayout->addWidget(iocTypeCombo, 3, 1);
-    
     // Date range
-    criteriaLayout->addWidget(new QLabel("Date From:"), 4, 0);
+    criteriaLayout->addWidget(new QLabel("Date From:"), 3, 0);
     dateFromEdit = new QDateEdit(QDate::currentDate().addDays(-30));
     dateFromEdit->setCalendarPopup(true);
-    criteriaLayout->addWidget(dateFromEdit, 4, 1);
+    criteriaLayout->addWidget(dateFromEdit, 3, 1);
     
-    criteriaLayout->addWidget(new QLabel("Date To:"), 5, 0);
+    criteriaLayout->addWidget(new QLabel("Date To:"), 4, 0);
     dateToEdit = new QDateEdit(QDate::currentDate());
     dateToEdit->setCalendarPopup(true);
-    criteriaLayout->addWidget(dateToEdit, 5, 1);
+    criteriaLayout->addWidget(dateToEdit, 4, 1);
     
     mainLayout->addWidget(criteriaGroup);
     
@@ -164,7 +159,7 @@ void SearchDialog::applyMatrixTheme()
 void SearchDialog::performSearch()
 {
     if (!manager) {
-        QMessageBox::warning(this, "Error", "No IOC manager available for search.");
+        showResizableWarning("Error", "No IOC manager available for search.");
         return;
     }
     
@@ -310,7 +305,7 @@ void SearchDialog::applyFilters()
     QVector<const Indicator*> filteredResults;
     
     QString searchText = searchEdit->text().toLower();
-    QString selectedType = iocTypeCombo->currentText();
+    QString selectedType = searchTypeCombo->currentText();
     int selectedSeverity = severityCombo->currentIndex();
     
     for (size_t i = 0; i < manager->getIndicatorCount(); ++i) {
@@ -404,4 +399,29 @@ void SearchDialog::onResultSelectionChanged()
             break;
         }
     }
+}
+
+// Message box helper function for SearchDialog
+void SearchDialog::showResizableWarning(const QString &title, const QString &text)
+{
+    QMessageBox msgBox(this);
+    msgBox.setWindowTitle(title);
+    msgBox.setText(text);
+    msgBox.setIcon(QMessageBox::Warning);
+    msgBox.setStandardButtons(QMessageBox::Ok);
+    
+    // Enable text selection and word wrapping
+    msgBox.setTextInteractionFlags(Qt::TextSelectableByMouse | Qt::TextSelectableByKeyboard);
+    
+    // Set minimum size to ensure content is visible
+    msgBox.setMinimumSize(400, 200);
+    
+    // Make the message box resizable
+    QSpacerItem* horizontalSpacer = new QSpacerItem(600, 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    QGridLayout* layout = qobject_cast<QGridLayout*>(msgBox.layout());
+    if (layout) {
+        layout->addItem(horizontalSpacer, layout->rowCount(), 0, 1, layout->columnCount());
+    }
+    
+    msgBox.exec();
 }

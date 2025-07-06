@@ -3,6 +3,8 @@
 #include <QMessageBox>
 #include <QRegularExpression>
 #include <QRegularExpressionValidator>
+#include <QGridLayout>
+#include <QSpacerItem>
 
 AddIOCDialog::AddIOCDialog(IndicatorManager *manager, QWidget *parent)
     : QDialog(parent)
@@ -376,12 +378,12 @@ bool AddIOCDialog::validateInput()
 {
     // Validate common fields
     if (descriptionEdit->text().trimmed().isEmpty()) {
-        QMessageBox::warning(this, "Validation Error", "Description cannot be empty!");
+        showResizableWarning("Validation Error", "Description cannot be empty!");
         return false;
     }
     
     if (originEdit->text().trimmed().isEmpty()) {
-        QMessageBox::warning(this, "Validation Error", "Origin cannot be empty!");
+        showResizableWarning("Validation Error", "Origin cannot be empty!");
         return false;
     }
     
@@ -390,7 +392,7 @@ bool AddIOCDialog::validateInput()
     
     if (type == "Hash") {
         if (hashEdit->text().trimmed().isEmpty()) {
-            QMessageBox::warning(this, "Validation Error", "Hash value cannot be empty!");
+            showResizableWarning("Validation Error", "Hash value cannot be empty!");
             return false;
         }
         // Validate hash length based on algorithm
@@ -398,37 +400,37 @@ bool AddIOCDialog::validateInput()
         QString hash = hashEdit->text().trimmed();
         
         if (algorithm == "MD5" && hash.length() != 32) {
-            QMessageBox::warning(this, "Validation Error", "MD5 hash must be 32 characters long!");
+            showResizableWarning("Validation Error", "MD5 hash must be 32 characters long!");
             return false;
         } else if (algorithm == "SHA1" && hash.length() != 40) {
-            QMessageBox::warning(this, "Validation Error", "SHA1 hash must be 40 characters long!");
+            showResizableWarning("Validation Error", "SHA1 hash must be 40 characters long!");
             return false;
         } else if (algorithm == "SHA256" && hash.length() != 64) {
-            QMessageBox::warning(this, "Validation Error", "SHA256 hash must be 64 characters long!");
+            showResizableWarning("Validation Error", "SHA256 hash must be 64 characters long!");
             return false;
         }
     } else if (type == "IP") {
         if (ipEdit->text().trimmed().isEmpty()) {
-            QMessageBox::warning(this, "Validation Error", "IP address cannot be empty!");
+            showResizableWarning("Validation Error", "IP address cannot be empty!");
             return false;
         }
         if (countryEdit->text().trimmed().isEmpty()) {
-            QMessageBox::warning(this, "Validation Error", "Country cannot be empty!");
+            showResizableWarning("Validation Error", "Country cannot be empty!");
             return false;
         }
         if (ispEdit->text().trimmed().isEmpty()) {
-            QMessageBox::warning(this, "Validation Error", "ISP cannot be empty!");
+            showResizableWarning("Validation Error", "ISP cannot be empty!");
             return false;
         }
     } else if (type == "URL") {
         if (urlEdit->text().trimmed().isEmpty()) {
-            QMessageBox::warning(this, "Validation Error", "URL cannot be empty!");
+            showResizableWarning("Validation Error", "URL cannot be empty!");
             return false;
         }
         // Basic URL validation
         QString url = urlEdit->text().trimmed();
         if (!url.startsWith("http://") && !url.startsWith("https://") && !url.startsWith("ftp://")) {
-            QMessageBox::warning(this, "Validation Error", "URL must start with http://, https://, or ftp://!");
+            showResizableWarning("Validation Error", "URL must start with http://, https://, or ftp://!");
             return false;
         }
     }
@@ -528,7 +530,7 @@ void AddIOCDialog::addIOC()
             
             if (success) {
                 emit iocAdded(logMessage);
-                QMessageBox::information(this, "Success", 
+                showResizableInformation("Success", 
                     QString("◤ IOC UPDATED IN MATRIX ◥\n\nID: %1\nType: %2\nSeverity: %3\n\nIOC has been successfully updated!")
                     .arg(editingIOCId).arg(QString::fromStdString(type)).arg(severityText));
                 accept();
@@ -537,19 +539,19 @@ void AddIOCDialog::addIOC()
                                   .arg(editingIOCId)
                                   .arg(QString::fromStdString(type));
                 emit iocAdded(errorMsg);
-                QMessageBox::critical(this, "Error", "Failed to update IOC. Please try again.");
+                showResizableCritical("Error", "Failed to update IOC. Please try again.");
             }
             
         } else {
             // Add new IOC
-            int id = generateUniqueId();
             std::string timestamp = getTimestamp();
+            int id = -1; // Will be set by the add function
             
             if (type == "Hash") {
                 QString hashValue = hashEdit->text().trimmed();
                 QString algorithm = algorithmCombo->currentText();
                 
-                manager->addMaliciousHash(id, severity, type, description, origin, timestamp,
+                id = manager->addMaliciousHash(severity, type, description, origin, timestamp,
                                         hashValue.toStdString(), algorithm.toStdString());
                 
                 logMessage = QString("[IOC-ADD] ✓ Hash IOC created | ID:%1 | Type:%2 | Severity:%3 | Algorithm:%4 | Hash:%5... | Origin:%6")
@@ -565,7 +567,7 @@ void AddIOCDialog::addIOC()
                 QString country = countryEdit->text().trimmed();
                 QString isp = ispEdit->text().trimmed();
                 
-                manager->addMaliciousIP(id, severity, type, description, origin, timestamp,
+                id = manager->addMaliciousIP(severity, type, description, origin, timestamp,
                                       ipAddress.toStdString(), country.toStdString(), isp.toStdString());
                 
                 logMessage = QString("[IOC-ADD] ✓ IP IOC created | ID:%1 | Type:%2 | Severity:%3 | IP:%4 | Country:%5 | ISP:%6 | Origin:%7")
@@ -581,8 +583,8 @@ void AddIOCDialog::addIOC()
                 QString url = urlEdit->text().trimmed();
                 QString protocol = protocolCombo->currentText();
                 
-                manager->addMaliciousURL(id, severity, type, description, origin, timestamp,
-                                       url.toStdString(), protocol.toStdString());
+                id = manager->addMaliciousURL(severity, type, description, origin, timestamp,
+                                            url.toStdString(), protocol.toStdString());
                 
                 logMessage = QString("[IOC-ADD] ✓ URL IOC created | ID:%1 | Type:%2 | Severity:%3 | Protocol:%4 | URL:%5 | Origin:%6")
                             .arg(id)
@@ -594,7 +596,7 @@ void AddIOCDialog::addIOC()
             }
             
             emit iocAdded(logMessage);
-            QMessageBox::information(this, "Success", 
+            showResizableInformation("Success", 
                 QString("◤ IOC ADDED TO MATRIX ◥\n\nID: %1\nType: %2\nSeverity: %3\n\nIOC has been successfully added to the database!")
                 .arg(id).arg(QString::fromStdString(type)).arg(severityText));
             accept();
@@ -696,4 +698,77 @@ void AddIOCDialog::setEditMode(bool editMode, const Indicator* ioc)
         addButton->setText("◤ ADD IOC ◥");
         resetForm();
     }
+}
+
+// Message box helper functions for AddIOCDialog
+void AddIOCDialog::showResizableInformation(const QString &title, const QString &text)
+{
+    QMessageBox msgBox(this);
+    msgBox.setWindowTitle(title);
+    msgBox.setText(text);
+    msgBox.setIcon(QMessageBox::Information);
+    msgBox.setStandardButtons(QMessageBox::Ok);
+    
+    // Enable text selection and word wrapping
+    msgBox.setTextInteractionFlags(Qt::TextSelectableByMouse | Qt::TextSelectableByKeyboard);
+    
+    // Set minimum size to ensure content is visible
+    msgBox.setMinimumSize(400, 200);
+    
+    // Make the message box resizable
+    QSpacerItem* horizontalSpacer = new QSpacerItem(600, 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    QGridLayout* layout = qobject_cast<QGridLayout*>(msgBox.layout());
+    if (layout) {
+        layout->addItem(horizontalSpacer, layout->rowCount(), 0, 1, layout->columnCount());
+    }
+    
+    msgBox.exec();
+}
+
+void AddIOCDialog::showResizableWarning(const QString &title, const QString &text)
+{
+    QMessageBox msgBox(this);
+    msgBox.setWindowTitle(title);
+    msgBox.setText(text);
+    msgBox.setIcon(QMessageBox::Warning);
+    msgBox.setStandardButtons(QMessageBox::Ok);
+    
+    // Enable text selection and word wrapping
+    msgBox.setTextInteractionFlags(Qt::TextSelectableByMouse | Qt::TextSelectableByKeyboard);
+    
+    // Set minimum size to ensure content is visible
+    msgBox.setMinimumSize(400, 200);
+    
+    // Make the message box resizable
+    QSpacerItem* horizontalSpacer = new QSpacerItem(600, 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    QGridLayout* layout = qobject_cast<QGridLayout*>(msgBox.layout());
+    if (layout) {
+        layout->addItem(horizontalSpacer, layout->rowCount(), 0, 1, layout->columnCount());
+    }
+    
+    msgBox.exec();
+}
+
+void AddIOCDialog::showResizableCritical(const QString &title, const QString &text)
+{
+    QMessageBox msgBox(this);
+    msgBox.setWindowTitle(title);
+    msgBox.setText(text);
+    msgBox.setIcon(QMessageBox::Critical);
+    msgBox.setStandardButtons(QMessageBox::Ok);
+    
+    // Enable text selection and word wrapping
+    msgBox.setTextInteractionFlags(Qt::TextSelectableByMouse | Qt::TextSelectableByKeyboard);
+    
+    // Set minimum size to ensure content is visible
+    msgBox.setMinimumSize(400, 200);
+    
+    // Make the message box resizable
+    QSpacerItem* horizontalSpacer = new QSpacerItem(600, 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    QGridLayout* layout = qobject_cast<QGridLayout*>(msgBox.layout());
+    if (layout) {
+        layout->addItem(horizontalSpacer, layout->rowCount(), 0, 1, layout->columnCount());
+    }
+    
+    msgBox.exec();
 }

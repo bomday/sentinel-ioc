@@ -19,13 +19,13 @@ class IndicatorManager {
         virtual ~IndicatorManager() = default;
         
         // Core CRUD operations (no UI logic)
-        void addMaliciousIP(int severity, const std::string& type, const std::string& description, 
+        int addMaliciousIP(int severity, const std::string& type, const std::string& description, 
                            const std::string& origin, const std::string& timestamp, const std::string& ip, 
                            const std::string& country, const std::string& isp);
-        void addMaliciousURL(int severity, const std::string& type, const std::string& description, 
+        int addMaliciousURL(int severity, const std::string& type, const std::string& description, 
                             const std::string& origin, const std::string& timestamp, const std::string& url, 
                             const std::string& protocol);
-        void addMaliciousHash(int severity, const std::string& type, const std::string& description, 
+        int addMaliciousHash(int severity, const std::string& type, const std::string& description, 
                              const std::string& origin, const std::string& timestamp, const std::string& hash, 
                              const std::string& algorithm);
         

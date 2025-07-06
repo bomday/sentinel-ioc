@@ -34,10 +34,16 @@ MatrixSplash::MatrixSplash(const QPixmap &pixmap, QWidget *parent)
     // Initialize matrix columns
     initializeColumns();
     
-    // Set up animation timer
+    // Set up animation timer but delay start
     animationTimer = new QTimer(this);
     connect(animationTimer, &QTimer::timeout, this, &MatrixSplash::updateAnimation);
-    animationTimer->start(100); // Update every 100ms for smooth animation
+    
+    // Delay timer start to ensure widget is fully initialized
+    QTimer::singleShot(200, this, [this]() {
+        if (animationTimer && isVisible()) {
+            animationTimer->start(100); // Update every 100ms for smooth animation
+        }
+    });
 }
 
 MatrixSplash::~MatrixSplash()
@@ -84,7 +90,21 @@ void MatrixSplash::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event)
     
+    // Enhanced safety checks to prevent painter errors
+    if (width() <= 0 || height() <= 0 || !isVisible()) {
+        return;
+    }
+    
     QPainter painter(this);
+    if (!painter.isActive()) {
+        return; // Painter failed to initialize
+    }
+    
+    // Additional check for paint device
+    if (!painter.device() || painter.device()->width() <= 0 || painter.device()->height() <= 0) {
+        return;
+    }
+    
     painter.setRenderHint(QPainter::Antialiasing);
     
     // Fill background

@@ -56,8 +56,8 @@ build_gui() {
     echo "========================================"
     echo "SUCCESS! Starting Sentinel IOC GUI..."
     echo "========================================"
-    ./SentinelIOC-GUI.exe
     cd ..
+    ./SentinelIOC-GUI.exe
 }
 
 build_cli() {
@@ -80,8 +80,8 @@ build_cli() {
     echo "========================================"
     echo "SUCCESS! Starting Sentinel IOC CLI..."
     echo "========================================"
-    ./SentinelIOC-CLI.exe
     cd ..
+    ./SentinelIOC-CLI.exe
 }
 
 clean_build() {
