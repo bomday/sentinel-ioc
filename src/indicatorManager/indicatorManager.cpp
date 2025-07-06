@@ -6,6 +6,8 @@
 #include <algorithm>
 #include <ctime>   
 #include <map>
+#include <stdexcept>
+#include <fstream>
  
 #include "indicatorManager.hpp"
 #include "indicator/indicator.hpp"
@@ -21,31 +23,34 @@ int IndicatorManager::getNextId() {
 }
 
 // Add operations
-void IndicatorManager::addMaliciousIP(int severity, const std::string& type, const std::string& description, 
+int IndicatorManager::addMaliciousIP(int severity, const std::string& type, const std::string& description, 
                                      const std::string& origin, const std::string& timestamp, const std::string& ip, 
                                      const std::string& country, const std::string& isp) {
     int newId = getNextId(); // Get the next available ID for the new indicator
     // Create a new MaliciousIP object
     auto newIndicator = std::make_unique<MaliciousIP>(newId, severity, type, description, origin, timestamp, ip, country, isp);
     indicators.push_back(std::move(newIndicator));
+    return newId;
 }
 
-void IndicatorManager::addMaliciousURL(int severity, const std::string& type, const std::string& description, 
+int IndicatorManager::addMaliciousURL(int severity, const std::string& type, const std::string& description, 
                                       const std::string& origin, const std::string& timestamp, const std::string& url, 
                                       const std::string& protocol) {
     int newId = getNextId(); // Get the next available ID for the new indicator
     // Create a new MaliciousURL object
     auto newIndicator = std::make_unique<MaliciousURL>(newId, severity, type, description, origin, timestamp, url, protocol);
     indicators.push_back(std::move(newIndicator));
+    return newId;
 }
 
-void IndicatorManager::addMaliciousHash(int severity, const std::string& type, const std::string& description, 
+int IndicatorManager::addMaliciousHash(int severity, const std::string& type, const std::string& description, 
                                        const std::string& origin, const std::string& timestamp, const std::string& hash, 
                                        const std::string& algorithm) {
     int newId = getNextId(); // Get the next available ID for the new indicator
     // Create a new MaliciousHash object
     auto newIndicator = std::make_unique<MaliciousHash>(newId, severity, type, description, origin, timestamp, hash, algorithm);
     indicators.push_back(std::move(newIndicator));
+    return newId;
 }
 
 // Helper function to print type-specific details for an indicator
@@ -421,17 +426,23 @@ void IndicatorManager::printIOC(const Indicator* ioc, int index) const {
 
 // Save and load indicators to/from a file
 void IndicatorManager::saveIndicatorsToFile(const std::string& filename) {
-    if (FileManager::saveData(filename, indicators)) {
-        std::cout << "\nData saved successfully to " << filename << std::endl;
-    } else {
-        std::cout << "\nError saving data to " << filename << std::endl;
+    if (!FileManager::saveData(filename, indicators)) {
+        throw std::runtime_error("Failed to save data to file: " + filename);
     }
 }
 
 // Load indicators from a file
 void IndicatorManager::loadIndicatorsFromFile(const std::string& filename) {
-    indicators = FileManager::loadData(filename);
-    std::cout << "\nLoaded " << indicators.size() << " IOCs from \"" << filename << "\".\n";
+    auto loadedIndicators = FileManager::loadData(filename);
+    if (loadedIndicators.empty()) {
+        // Check if file exists first
+        std::ifstream file(filename);
+        if (!file.good()) {
+            throw std::runtime_error("File not found or cannot be opened: " + filename);
+        }
+        // If file exists but no indicators loaded, it might be empty (which is okay)
+    }
+    indicators = std::move(loadedIndicators);
     updateNextId(); // Update the next available ID based on loaded indicators
 }
 

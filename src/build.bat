@@ -18,12 +18,12 @@ cmake .. -G "MinGW Makefiles"
 if errorlevel 1 goto :error
 mingw32-make
 if errorlevel 1 goto :error
+cd ..
 echo.
 echo ========================================
 echo SUCCESS! Starting Sentinel IOC GUI...
 echo ========================================
 SentinelIOC-GUI.exe
-cd ..
 exit /b 0
 
 :cli
@@ -34,12 +34,12 @@ cmake .. -G "MinGW Makefiles"
 if errorlevel 1 goto :error
 mingw32-make SentinelIOC-CLI
 if errorlevel 1 goto :error
+cd ..
 echo.
 echo ========================================
 echo SUCCESS! Starting Sentinel IOC CLI...
 echo ========================================
 SentinelIOC-CLI.exe
-cd ..
 exit /b 0
 
 :clean

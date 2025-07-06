@@ -43,14 +43,12 @@ MatrixWidget::MatrixWidget(QWidget *parent)
     columnWidth = fontMetrics->horizontalAdvance("M");
     charHeight = fontMetrics->height();
     
-    // Setup timers
+    // Setup timers but delay start
     timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &MatrixWidget::updateMatrix);
-    timer->start(matrixSpeed);
     
     glitchTimer = new QTimer(this);
     connect(glitchTimer, &QTimer::timeout, this, &MatrixWidget::updateGlitchEffects);
-    glitchTimer->start(50); // Faster updates for glitch effects
     
     scanlineTimer = new QTimer(this);
     connect(scanlineTimer, &QTimer::timeout, [this]() {
@@ -72,7 +70,6 @@ MatrixWidget::MatrixWidget(QWidget *parent)
         }
         update();
     });
-    scanlineTimer->start(100);
     
     // Set background
     setAutoFillBackground(true);
@@ -84,6 +81,19 @@ MatrixWidget::MatrixWidget(QWidget *parent)
     glitchAnimation = new QPropertyAnimation(this, "glitchIntensity");
     glitchAnimation->setDuration(500);
     glitchAnimation->setEasingCurve(QEasingCurve::InOutQuad);
+    
+    // Delay timer start to ensure widget is fully initialized
+    QTimer::singleShot(200, this, [this]() {
+        if (timer && isVisible()) {
+            timer->start(matrixSpeed);
+        }
+        if (glitchTimer && isVisible()) {
+            glitchTimer->start(50); // Faster updates for glitch effects
+        }
+        if (scanlineTimer && isVisible()) {
+            scanlineTimer->start(100);
+        }
+    });
     
     initializeColumns();
     initializeScanlines();
@@ -194,7 +204,26 @@ void MatrixWidget::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event)
     
+    // Enhanced safety checks to prevent painter errors
+    if (width() <= 0 || height() <= 0 || !isVisible()) {
+        return;
+    }
+    
+    // Check if widget is properly initialized
+    if (!fontMetrics) {
+        return;
+    }
+    
     QPainter painter(this);
+    if (!painter.isActive()) {
+        return; // Painter failed to initialize
+    }
+    
+    // Additional check for paint device
+    if (!painter.device() || painter.device()->width() <= 0 || painter.device()->height() <= 0) {
+        return;
+    }
+    
     painter.setRenderHint(QPainter::Antialiasing, false); // Pixel-perfect for retro feel
     painter.fillRect(rect(), backgroundColor);
     

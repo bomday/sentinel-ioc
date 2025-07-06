@@ -42,6 +42,9 @@ private:
     void createResultsArea();
     void updateResultsTable();
     void populateSearchResults(const std::vector<const Indicator*>& results);
+    
+    // Message box helper
+    void showResizableWarning(const QString &title, const QString &text);
 
     IndicatorManager *manager;
     
@@ -55,7 +58,6 @@ private:
     
     QLineEdit *searchEdit;
     QComboBox *searchTypeCombo;
-    QComboBox *iocTypeCombo;
     QComboBox *severityCombo;
     QDateEdit *dateFromEdit;
     QDateEdit *dateToEdit;

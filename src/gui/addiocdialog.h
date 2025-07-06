@@ -44,6 +44,11 @@ private:
     void createTypeSpecificWidgets();
     void showTypeSpecificFields(const QString &type);
     bool validateInput();
+    
+    // Message box helpers
+    void showResizableInformation(const QString &title, const QString &text);
+    void showResizableWarning(const QString &title, const QString &text);
+    void showResizableCritical(const QString &title, const QString &text);
 
     IndicatorManager *manager;
     

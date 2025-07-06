@@ -1,11 +1,15 @@
 indicatorId,severity,type,description,origin,timestamp,hash,algorithm,ip,country,isp,url,protocol
+101,3,Hash,Malware sample SHA256,ThreatFeedX,2025-06-01T10:15:00Z,e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855,SHA256,,,,,
+102,4,Hash,Ransomware file MD5,SOCAlert,2025-06-01T11:20:00Z,44d88612fea8a8f36de82e1278abb02f,MD5,,,,,
 103,2,Hash,Suspicious file hash,ExternalReport,2025-06-01T12:30:00Z,d41d8cd98f00b204e9800998ecf8427e,SHA1,,,,,
+104,3,Hash,Trojan dropper SHA256,ThreatIntelAPI,2025-06-01T13:45:00Z,5f4dcc3b5aa765d61d8327deb882cf99,SHA256,,,,,
 105,5,Hash,Exploit kit hash,InternalScan,2025-06-01T14:10:00Z,6a5ed36d3e0e4a2f8b3c4d8e9f2b0c1d,SHA256,,,,,
 107,2,Hash,Suspicious script hash,PhishTank,2025-06-01T16:15:00Z,4a8b6f3c9e2d7a1b0c4e8f6a2d3b1c5e,SHA1,,,,,
 109,4,Hash,Cryptojacker MD5,SOCAlert,2025-06-01T18:45:00Z,5e8d3c1b2a9f7e4d0c6a3b1e9f2c7d4a,MD5,,,,,
 110,5,Hash,Rootkit hash,ExternalReport,2025-06-01T19:00:00Z,8f9e4c3a2b1d7f6e0c5a4b3e2d1c9f7a,SHA256,,,,,
 111,3,Hash,Malware dropper SHA1,ThreatIntelAPI,2025-06-01T20:15:00Z,9a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d,SHA1,,,,,
 112,4,Hash,Spyware sample MD5,InternalScan,2025-06-01T21:30:00Z,3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f,MD5,,,,,
+113,2,Hash,Keylogger hash,UserReport,2025-06-01T22:45:00Z,2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a,SHA256,,,,,
 114,3,Hash,Worm SHA256,PhishTank,2025-06-01T23:00:00Z,1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b,SHA256,,,,,
 115,5,Hash,RAT sample MD5,ThreatFeedX,2025-06-02T00:15:00Z,0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c,MD5,,,,,
 117,3,Hash,Adware dropper SHA256,ExternalReport,2025-06-02T02:45:00Z,5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d,SHA256,,,,,
@@ -128,63 +132,12 @@ indicatorId,severity,type,description,origin,timestamp,hash,algorithm,ip,country
 1049,4,Hash,Financial malware sample,FinancialSec,2025-07-07T00:00:00Z,123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0,SHA256,,,,,
 1050,2,IP,Brute force attack origin,LoginProtect,2025-07-07T01:15:00Z,,,68.183.69.144,Germany,DigitalOcean,,
 1051,3,URL,Fake tech support page,TechSupportScam,2025-07-07T02:30:00Z,,,,,,http://urgent-pc-repair.fake-microsoft-support.net/scan,HTTP
-1052,4,Hash,Crypto miner payload,CryptoWatch,2025-07-07T03:45:00Z,fedcba9876543210fedcba9876543210fedcba9876543210fedcba9876543210,SHA256,,,,,
-1053,5,IP,APT infrastructure server,APTIntel,2025-07-07T04:00:00Z,,,95.179.158.23,Russia,Vultr,,
-1054,2,URL,Suspicious file download,FileGuard,2025-07-07T05:15:00Z,,,,,,https://download.temp-files.suspicious/document.zip,HTTPS
-1055,3,Hash,Trojan horse sample,TrojanDetect,2025-07-07T06:30:00Z,abcdef123456789abcdef123456789ab,MD5,,,,,
-1056,4,IP,Malware C&C server,MalwareIntel,2025-07-07T07:45:00Z,,,142.93.134.56,USA,DigitalOcean,,
-1057,1,URL,Ad tracker redirect,AdBlock,2025-07-07T08:00:00Z,,,,,,http://tracker.ads-network.suspicious/click,HTTP
-1058,5,Hash,Zero-day exploit code,ZeroDayWatch,2025-07-07T09:15:00Z,0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef,SHA256,,,,,
-1059,3,IP,Phishing campaign host,PhishNet,2025-07-07T10:30:00Z,,,167.99.181.77,Netherlands,DigitalOcean,,
-1060,2,URL,Fake login portal,LoginWatch,2025-07-07T11:45:00Z,,,,,,https://secure-account.fake-google.tk/signin,HTTPS
-1061,4,Hash,Ransomware variant,RansomTracker,2025-07-07T12:00:00Z,9876543210abcdef9876543210abcdef9876543210abcdef9876543210abcdef,SHA256,,,,,
-1062,5,IP,Nation-state backdoor,StateActorWatch,2025-07-07T13:15:00Z,,,188.166.78.145,Germany,DigitalOcean,,
-1063,1,URL,Potentially unwanted program,PUPWatch,2025-07-07T14:30:00Z,,,,,,http://free-download.software-site.tk/installer,HTTP
-1064,3,Hash,Spyware component,SpyDetect,2025-07-07T15:45:00Z,def012345678abcdef012345678abc,MD5,,,,,
-1065,4,IP,Botnet controller node,BotnetHunter,2025-07-07T16:00:00Z,,,134.209.85.92,USA,DigitalOcean,,
-1066,2,URL,Social media phishing,SocialWatch,2025-07-07T17:15:00Z,,,,,,https://facebook-security.fake-meta.net/verify,HTTPS
-1067,5,Hash,Critical system backdoor,SystemWatch,2025-07-07T18:30:00Z,456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef012345,SHA256,,,,,
-1068,3,IP,Exploit kit distribution,ExploitTracker,2025-07-07T19:45:00Z,,,159.65.143.201,Canada,DigitalOcean,,
-1069,1,URL,Tracking cookie setter,CookieWatch,2025-07-07T20:00:00Z,,,,,,http://analytics.data-harvest.net/pixel,HTTP
-1070,4,Hash,Banking trojan module,BankingWatch,2025-07-07T21:15:00Z,789abcdef0123456789abcdef0123456789abcdef0123456789abcdef01234567,SHA256,,,,,
-1071,5,IP,Advanced persistent threat,APTDetect,2025-07-07T22:30:00Z,,,46.101.230.145,Netherlands,DigitalOcean,,
-1072,2,URL,Fake cryptocurrency exchange,CryptoWatch,2025-07-07T23:45:00Z,,,,,,https://secure-crypto-exchange.fake-binance.tk/trade,HTTPS
-1073,3,Hash,Keylogger payload,KeyWatch,2025-07-08T00:00:00Z,bcd0123456789abcdef0123456789abcd,MD5,,,,,
-1074,4,IP,Malware dropsite server,DropWatch,2025-07-08T01:15:00Z,,,138.68.105.89,Germany,DigitalOcean,,
-1075,1,URL,Suspicious redirect chain,RedirectWatch,2025-07-08T02:30:00Z,,,,,,http://click.redirect-chain.suspicious/link,HTTP
-1076,5,Hash,State-sponsored rootkit,RootkitWatch,2025-07-08T03:45:00Z,cdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcd,SHA256,,,,,
-1077,3,IP,Cryptojacking infrastructure,CoinWatch,2025-07-08T04:00:00Z,,,64.225.78.134,USA,DigitalOcean,,
-1078,2,URL,Fake antivirus download,AVWatch,2025-07-08T05:15:00Z,,,,,,https://download.antivirus-pro.fake-kaspersky.net/setup,HTTPS
-1079,4,Hash,RAT communication module,RATWatch,2025-07-08T06:30:00Z,def0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcde,SHA256,,,,,
-1080,5,IP,Command injection server,InjectionWatch,2025-07-08T07:45:00Z,,,178.128.67.203,Singapore,DigitalOcean,,
-1081,1,URL,Low-risk ad network,AdNetWatch,2025-07-08T08:00:00Z,,,,,,http://ads.questionable-network.tk/serve,HTTP
-1082,3,Hash,Adware installer,AdwareWatch,2025-07-08T09:15:00Z,ef0123456789abcdef0123456789abcdef,MD5,,,,,
-1083,4,IP,Phishing kit hosting,PhishKitWatch,2025-07-08T10:30:00Z,,,165.22.89.156,Netherlands,DigitalOcean,,
-1084,2,URL,Fake software crack site,CrackWatch,2025-07-08T11:45:00Z,,,,,,https://crack.software-piracy.suspicious/download,HTTPS
-1085,5,Hash,Advanced malware framework,FrameworkWatch,2025-07-08T12:00:00Z,f0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0,SHA256,,,,,
-1086,3,IP,Exploit payload server,PayloadWatch,2025-07-08T13:15:00Z,,,206.189.145.78,Canada,DigitalOcean,,
-1087,1,URL,Suspicious URL shortener,ShortenWatch,2025-07-08T14:30:00Z,,,,,,http://bit.suspicious/short-link,HTTP
-1088,4,Hash,Financial fraud malware,FraudWatch,2025-07-08T15:45:00Z,0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef01,SHA256,,,,,
-1089,5,IP,Cyber espionage server,EspionageWatch,2025-07-08T16:00:00Z,,,157.230.89.234,Germany,DigitalOcean,,
-1090,2,URL,Fake government portal,GovWatch,2025-07-08T17:15:00Z,,,,,,https://tax-refund.fake-irs.gov.suspicious/claim,HTTPS
-1091,3,Hash,Browser hijacker,HijackWatch,2025-07-08T18:30:00Z,123456789abcdef0123456789abcdef01,MD5,,,,,
-1092,4,IP,Malware analysis evasion,EvasionWatch,2025-07-08T19:45:00Z,,,134.122.145.67,USA,DigitalOcean,,
-1093,1,URL,Tracking beacon,BeaconWatch,2025-07-08T20:00:00Z,,,,,,http://beacon.tracking-service.net/collect,HTTP
-1094,5,Hash,Critical infrastructure malware,InfraWatch,2025-07-08T21:15:00Z,23456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123,SHA256,,,,,
-1095,3,IP,DDoS botnet node,DDoSWatch,2025-07-08T22:30:00Z,,,178.62.145.89,UK,DigitalOcean,,
-1096,2,URL,Fake cloud storage,CloudWatch,2025-07-08T23:45:00Z,,,,,,https://secure-storage.fake-dropbox.tk/upload,HTTPS
-1097,4,Hash,Memory corruption exploit,MemWatch,2025-07-09T00:00:00Z,3456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef01234,SHA256,,,,,
-1098,5,IP,Nation-state C2 infrastructure,C2Watch,2025-07-09T01:15:00Z,,,68.183.145.201,Netherlands,DigitalOcean,,
-1099,1,URL,Potentially malicious redirect,MalRedirectWatch,2025-07-09T02:30:00Z,,,,,,http://redirect.suspicious-site.tk/go,HTTP
-1100,3,Hash,Trojan downloader,DownloadWatch,2025-07-09T03:45:00Z,456789abcdef0123456789abcdef012345,MD5,,,,,
-1101,4,IP,Exploit server farm,ExploitFarmWatch,2025-07-09T04:00:00Z,,,159.203.178.134,Canada,DigitalOcean,,
-1102,2,URL,Fake online shopping,ShopWatch,2025-07-09T05:15:00Z,,,,,,https://discount-electronics.fake-amazon.tk/buy,HTTPS
-1103,5,Hash,1111111111111111111111111111111,11111111111111111111111111111111111111111111111111111111,2025-07-09T06:30:00Z,56789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456,SHA512,,,,,
-1104,3,IP,Proxy tunnel server,ProxyWatch,2025-07-09T07:45:00Z,,,142.93.201.78,USA,DigitalOcean,,
-1105,1,URL,Suspicious analytics tracker,AnalyticsWatch,2025-07-09T08:00:00Z,,,,,,http://analytics.tracker.suspicious/collect,HTTP
-1106,4,Hash,Privilege escalation exploit,PrivEscWatch,2025-07-09T09:15:00Z,6789abcdef0123456789abcdef0123456789abcdef0123456789abcdef01234567,SHA256,,,,,
-1107,5,IP,Critical attack infrastructure,AttackWatch,2025-07-09T10:30:00Z,,,167.172.134.89,Germany,DigitalOcean,,
-1108,2,URL,Fake news site malware,NewsWatch,2025-07-09T11:45:00Z,,,,,,https://breaking-news.fake-cnn.tk/urgent,HTTPS
-1109,3,Hash,Data exfiltration tool,ExfilWatch,2025-07-09T12:00:00Z,789abcdef0123456789abcdef01234567,MD5,,,,,
-1110,4,IP,Watering hole server,WateringWatch,2025-07-09T13:15:00Z,,,188.166.201.145,Netherlands,DigitalOcean,,
-1111,1,URL,Ad fraud redirect,AdFraudWatch,2025-07-09T14:30:00Z,,,,,,http://click.ad-fraud.suspicious/redirect,HTTP
+1052,5,Hash,Zero-day vulnerability exploit,ZeroDayWatch,2025-07-07T03:45:00Z,fedcba9876543210fedcba9876543210fedcba9876543210fedcba9876543210,SHA256,,,,,
+1053,4,IP,Malicious mail server,EmailThreat,2025-07-07T04:00:00Z,,,165.227.88.15,USA,DigitalOcean,,
+1054,1,URL,Suspicious download mirror,DownloadWatch,2025-07-07T05:15:00Z,,,,,,https://mirror.alternative-download.sketchy-site.org/file,HTTPS
+1055,3,Hash,Worm propagation component,WormTracker,2025-07-07T06:30:00Z,987654321fedcba0987654321fedcba0,MD5,,,,,
+1056,5,IP,Critical threat actor C2,ThreatActor,2025-07-07T07:45:00Z,,,188.166.173.208,Netherlands,DigitalOcean,,
+1057,2,URL,Suspicious JavaScript delivery,JSGuard,2025-07-07T08:00:00Z,,,,,,http://cdn.malicious-scripts.net/payload.js,HTTP
+1058,3,Hash,WOW,sdfsdfdsfdsfsd,2025-07-05T20:02:54Z,asdsadadsadad0000000000000000000000,SHA512,,,,,
+1059,3,IP,000000000000000000000000000,000000000000000000,2025-07-05T22:02:41Z,,,000,0000,000000,,
+1060,3,IP,1111111111111111,11111111111111111,2025-07-05T22:03:11Z,,,111,11111111111,111111111111,,

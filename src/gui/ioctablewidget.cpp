@@ -6,6 +6,8 @@
 #include <QHeaderView>
 #include <QMessageBox>
 #include <QDateTime>
+#include <QTimer>
+#include <algorithm>
 
 IOCTableWidget::IOCTableWidget(QWidget *parent)
     : QWidget(parent)
@@ -112,7 +114,17 @@ void IOCTableWidget::setupTable()
     header->resizeSection(6, 200);  // Hash/IP/URL
     header->resizeSection(7, 120);  // Algorithm/Country/Protocol
     
-    connect(table, &QTableWidget::cellDoubleClicked, this, &IOCTableWidget::onCellDoubleClicked);
+    // Configure vertical header (row numbers) - make visible with proper styling
+    QHeaderView *verticalHeader = table->verticalHeader();
+    verticalHeader->setVisible(true); // Show vertical header for row numbers
+    verticalHeader->setFixedWidth(60); // Set width for row numbers
+    verticalHeader->setDefaultSectionSize(25);
+    verticalHeader->setMinimumSectionSize(25);
+    verticalHeader->setMaximumSectionSize(30);
+    
+    // Connect to sorting signal to update row numbers
+    QHeaderView *horizontalHeader = table->horizontalHeader();
+    connect(horizontalHeader, &QHeaderView::sectionClicked, this, &IOCTableWidget::updateRowNumbers);
     
     mainLayout->addWidget(table);
 }
@@ -156,6 +168,19 @@ void IOCTableWidget::applyTerminalTheme()
         "QHeaderView::section:hover {"
         "    background-color: %3;"
         "    color: %1;"
+        "}"
+        "QHeaderView::section:vertical {"
+        "    background-color: %4;"
+        "    color: %2;"
+        "    border: 1px solid %3;"
+        "    font-family: 'Courier New', monospace;"
+        "    font-size: 10px;"
+        "    font-weight: bold;"
+        "    text-align: center;"
+        "}"
+        "QTableCornerButton::section {"
+        "    background-color: %4;"
+        "    border: 1px solid %3;"
         "}"
         "QLineEdit {"
         "    background-color: %4;"
@@ -223,11 +248,17 @@ void IOCTableWidget::populateTable(IndicatorManager *manager)
 {
     if (!manager) return;
     
+    // Clear blinking rows vector to avoid issues with invalid row indices
+    blinkingRows.clear();
+    
     table->setRowCount(0);
     
     // Get indicators from manager
     size_t indicatorCount = manager->getIndicatorCount();
     table->setRowCount(static_cast<int>(indicatorCount));
+    
+    // Update row numbers in vertical header
+    updateRowNumbers();
     
     // Populate table with actual IOC data
     for (size_t i = 0; i < indicatorCount; ++i) {
@@ -237,6 +268,9 @@ void IOCTableWidget::populateTable(IndicatorManager *manager)
         }
     }
     
+    // Update row numbers after populating the table to ensure consistency
+    updateRowNumbers();
+    
     statusLabel->setText(QString("IOC Database: %1 entries loaded").arg(table->rowCount()));
 }
 
@@ -244,8 +278,8 @@ void IOCTableWidget::addTableRow(int row, const Indicator *ioc)
 {
     if (!ioc) return;
     
-    // ID
-    table->setItem(row, 0, new QTableWidgetItem(QString::number(ioc->getIndicatorId())));
+    // ID (sequential row number starting from 1)
+    table->setItem(row, 0, new QTableWidgetItem(QString::number(row + 1)));
     
     // Severity
     QTableWidgetItem *severityItem = new QTableWidgetItem(getSeverityText(ioc->getSeverity()));
@@ -364,7 +398,15 @@ void IOCTableWidget::filterData()
     for (int row = 0; row < table->rowCount(); ++row) {
         if (!table->isRowHidden(row)) visibleRows++;
     }
-    statusLabel->setText(QString("Filter: %1 of %2 entries visible").arg(visibleRows).arg(table->rowCount()));
+    
+    if (visibleRows == 0) {
+        statusLabel->setText("No entries match the current filter");
+    } else {
+        statusLabel->setText(QString("Filtered Results: %1 entries (rows 1-%1)").arg(visibleRows));
+    }
+    
+    // Update row numbers to show sequential numbering for visible rows
+    updateRowNumbers();
 }
 
 void IOCTableWidget::clearFilter()
@@ -378,23 +420,21 @@ void IOCTableWidget::clearFilter()
     }
     
     statusLabel->setText(QString("IOC Database: %1 entries loaded").arg(table->rowCount()));
-}
-
-void IOCTableWidget::onCellDoubleClicked(int row, int column)
-{
-    Q_UNUSED(column)
     
-    QTableWidgetItem *idItem = table->item(row, 0);
-    if (idItem) {
-        QString iocId = idItem->text();
-        QMessageBox::information(this, "IOC Details", 
-            QString("IOC Details\\n\\nID: %1\\n\\nDouble-click detected.\\nDetailed view would open here.").arg(iocId));
-    }
+    // Update row numbers after clearing filter
+    updateRowNumbers();
 }
 
 void IOCTableWidget::updateBlinkingCells()
 {
     blinkState = !blinkState;
+    
+    // Remove invalid row indices from blinkingRows to keep the vector clean
+    blinkingRows.erase(
+        std::remove_if(blinkingRows.begin(), blinkingRows.end(),
+                      [this](int row) { return row >= table->rowCount(); }),
+        blinkingRows.end()
+    );
     
     for (int row : blinkingRows) {
         if (row < table->rowCount()) {
@@ -432,4 +472,35 @@ int IOCTableWidget::getSelectedRow() const
         return -1;
     }
     return selectedItems.first()->row();
+}
+
+void IOCTableWidget::updateRowNumbers()
+{
+    int rowCount = table->rowCount();
+    QStringList verticalHeaders;
+    int visibleRowNumber = 1; // Counter for visible rows only
+    
+    // Update both vertical headers and ID column with dynamic numbering based on visible rows only
+    for (int i = 0; i < rowCount; ++i) {
+        if (!table->isRowHidden(i)) {
+            // Set vertical header for visible rows only (dynamic numbering)
+            verticalHeaders << QString::number(visibleRowNumber);
+            
+            // Update the ID column (column 0) to show sequential numbering for visible rows only
+            QTableWidgetItem *idItem = table->item(i, 0);
+            if (idItem) {
+                idItem->setText(QString::number(visibleRowNumber));
+            }
+            visibleRowNumber++;
+        } else {
+            // For hidden rows, set empty vertical header
+            verticalHeaders << "";
+        }
+    }
+    table->setVerticalHeaderLabels(verticalHeaders);
+}
+
+void IOCTableWidget::paintEvent(QPaintEvent *event)
+{
+    QWidget::paintEvent(event);
 }

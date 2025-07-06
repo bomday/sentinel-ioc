@@ -52,6 +52,9 @@ set(CORE_HEADERS
     utils/utils.hpp
 )
 
+# Set output directory to src root
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+
 # Always build CLI version
 add_executable(SentinelIOC-CLI
     ${CORE_SOURCES}
@@ -74,8 +77,8 @@ if(BUILD_GUI)
         ${CORE_SOURCES}
         gui/mainwindow.cpp
         gui/matrixwidget.cpp
+        gui/matrixtitle.cpp
         gui/ioctablewidget.cpp
-        gui/hackerterminal.cpp
         gui/addiocdialog.cpp
         gui/searchdialog.cpp
         gui/statisticsdialog.cpp
@@ -87,8 +90,8 @@ if(BUILD_GUI)
         ${CORE_HEADERS}
         gui/mainwindow.h
         gui/matrixwidget.h
+        gui/matrixtitle.h
         gui/ioctablewidget.h
-        gui/hackerterminal.h
         gui/addiocdialog.h
         gui/searchdialog.h
         gui/statisticsdialog.h
@@ -106,3 +109,11 @@ else()
     message(STATUS "GUI executable will NOT be built (Qt6 not found)")
     message(STATUS "Only CLI executable 'SentinelIOC-CLI' will be built")
 endif()
+
+# Copy data directory to build folder for compatibility
+add_custom_target(copy_data ALL
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    ${CMAKE_CURRENT_SOURCE_DIR}/data
+    ${CMAKE_CURRENT_BINARY_DIR}/data
+    COMMENT "Copying data directory to build folder"
+)
