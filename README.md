@@ -1,123 +1,128 @@
 # Sentinel IOC
 
-> Projeto de Análise de Indicadores de Comprometimento (IOCs) em C++ utilizando Programação Orientada a Objetos.
+> A C++ project for analyzing Indicators of Compromise (IOCs) using Object-Oriented Programming principles.
 
-## Descrição
+## 📌 Description
 
-Este projeto simula um analisador de IOCs (IP, URLs e Hashes maliciosos), permitindo o cadastro, consulta, edição e exclusão dessas informações. É uma introdução prática à Programação Orientada a Objetos em C++.
+Sentinel IOC simulates an IOC analyzer (malicious IPs, URLs, and hashes), enabling users to register, view, update, and delete this information. It's a practical introduction to Object-Oriented Programming (OOP) in C++.
 
-## Tecnologias Utilizadas
+## 🛠️ Technologies Used
 
-- Linguagem: C++
-- POO: Herança, Polimorfismo, Encapsulamento
-- Manipulação de arquivos (.txt)
-- Git + GitHub
-- GitHub Pages (documentação)
-- Ponteiros e Referências
+- **Language:** C++
+- **OOP Concepts:** Inheritance, Polymorphism, Encapsulation
+- **File Handling:** CSV (simulating database)
+- **Tools:** Git & GitHub
+- **Documentation:** GitHub Pages
+- **Other:** Pointers and References
 
-## Funcionalidades
+## ✅ Features
 
-- [X] Cadastro de IOCs (IP, URL, Hash)
-- [X] Consulta e listagem de IOCs
-- [X] Atualização e exclusão de IOCs
-- [X] Simulação de análise
-- [X] Interface em linha de comando
-- [ ] GUI com biblioteca gráfica (opcional)
+- [x] Register IOCs (IP, URL, Hash)
+- [x] List and search IOCs
+- [x] Update and delete IOCs
+- [x] Simulated threat analysis
+- [x] Command-line interface
+- [ ] Graphical User Interface (optional, under development)
 
-## Organização do Código
+## 🗂️ Project Structure
 
 ```
 📁 sentinel-ioc/
- ┣ 📁 googletest                   >> Testes unitários 
+ ┣ 📁 googletest                   >> Unit tests
  ┣ 📁 src/
  ┃ ┣ 📁 CLI                 
- ┃ ┃ ┣ 📄 cli.hpp                  >> Classe de interface em linha de comando
+ ┃ ┃ ┣ 📄 cli.hpp                  >> CLI interface class
  ┃ ┃ ┗ 📄 cli.cpp
  ┃ ┣ 📁 data/
- ┃ ┃ ┗ 📄 iocs.csv                 >> Simulação de "banco de dados"
+ ┃ ┃ ┗ 📄 iocs.csv                 >> Simulated database (CSV format)
  ┃ ┣ 📁 fileManager                 
- ┃ ┃ ┣ 📄 fileManager.hpp          >> Classe de persistência de dados
+ ┃ ┃ ┣ 📄 fileManager.hpp          >> File read/write manager
  ┃ ┃ ┗ 📄 fileManager.cpp
  ┃ ┣ 📁 indicator                 
- ┃ ┃ ┣ 📄 indicator.hpp            >> Classe base abstrata
+ ┃ ┃ ┣ 📄 indicator.hpp            >> Abstract base class for IOCs
  ┃ ┃ ┗ 📄 indicator.cpp              
  ┃ ┣ 📁 indicatorManager
- ┃ ┃ ┣ 📄 indicatorManager.hpp     >> Gerencia o CRUD de IOCs
+ ┃ ┃ ┣ 📄 indicatorManager.hpp     >> Manages IOC CRUD operations
  ┃ ┃ ┗ 📄 indicatorManager.cpp
  ┃ ┣ 📁 maliciousHash
- ┃ ┃ ┣ 📄 maliciousHash.hpp        >> Classe derivada: Hash malicioso
+ ┃ ┃ ┣ 📄 maliciousHash.hpp        >> Derived class for malicious hash
  ┃ ┃ ┗ 📄 maliciousHash.cpp
  ┃ ┣ 📁 maliciousIP
- ┃ ┃ ┣ 📄 maliciousIP.hpp          >> Classe derivada: IP malicioso
+ ┃ ┃ ┣ 📄 maliciousIP.hpp          >> Derived class for malicious IP
  ┃ ┃ ┗ 📄 maliciousIP.cpp
  ┃ ┣ 📁 maliciousURL
- ┃ ┃ ┣ 📄 maliciousURL.hpp         >> Classe derivada: URL maliciosa
+ ┃ ┃ ┣ 📄 maliciousURL.hpp         >> Derived class for malicious URL
  ┃ ┃ ┗ 📄 maliciousURL.cpp
  ┃ ┣ 📁 utils
- ┃ ┃ ┣ 📄 utils.hpp                >> Funções auxiliares (ex: timestamp, menu)
+ ┃ ┃ ┣ 📄 utils.hpp                >> Utility functions (e.g., menu, timestamps)
  ┃ ┃ ┗ 📄 utils.cpp
- ┃ ┣ 📄 sentinel.exe               >> Executável do projeto (gerado)
- ┃ ┣ 📄 sentinel_tests.exe         >> Executável dos testes unitários (gerado)   
- ┃ ┗ 📄 main.cpp                   >> Ponto de entrada do programa
- ┣ 📁 public/                       
- ┃ ┣ 📄 roteiro-video.pdf           
- ┃ ┣ 📄 relatorio.pdf             
+ ┃ ┣ 📄 sentinel.exe               >> Main executable
+ ┃ ┣ 📄 sentinel_tests.exe         >> Unit tests executable   
+ ┃ ┗ 📄 main.cpp                   >> Application entry point
+ ┣ 📁 public/
+ ┃ ┣ 📄 roteiro-video.pdf          >> Video script
+ ┃ ┗ 📄 relatorio.pdf              >> Project report
  ┣ 📄 .gitignore
- ┗ 📄 README.md
+ ┗ 📄 README_EN.md
 ```
 
-## Conceitos POO Utilizados
+## 🧠 OOP Concepts Demonstrated
 
-- Classes e Objetos: São os blocos de construção fundamentais. As classes (`Indicator`, `MaliciousIP`, `MaliciousURL`, `MaliciousHash`, `IndicatorManager`) definem a estrutura e o comportamento dos objetos, enquanto os objetos são instâncias concretas dessas classes;
-- Herança: Permite que classes (`MaliciousIP`, `MaliciousURL`, `MaliciousHash`) herdem características (atributos e métodos) da classe base (`Indicator`). Isso promove o reuso de código e estabelece uma relação de "é um" entre as classes derivadas e a base;
-- Polimorfismo: A capacidade de objetos de diferentes classes responderem de forma específica à mesma chamada de método. No exemplo, embora não haja métodos virtuais puros na classe base, o conceito de criar diferentes tipos de indicadores (`IP`, `URL`, `Hash`) e tratá-los de forma genérica através da classe `Indicator` demonstra o princípio do polimorfismo.
-- Encapsulamento (acesso com `private`, `protected`, `public`)
-- Abstração: A classe `Indicator` pode ser considerada uma classe abstrata (embora não use a palavra-chave virtual para métodos puros), pois define uma interface comum para diferentes tipos de indicadores, sem se preocupar com os detalhes específicos de cada um. As classes derivadas implementam os detalhes específicos.
+- **Classes & Objects:** Used to define and instantiate IOCs and their manager.
+- **Inheritance:** `MaliciousIP`, `MaliciousURL`, and `MaliciousHash` inherit from the base class `Indicator`.
+- **Polymorphism:** A single `Indicator*` pointer can refer to any derived IOC type.
+- **Encapsulation:** Controlled access via `private`, `protected`, and `public` members.
+- **Abstraction:** `Indicator` serves as an abstract interface to different indicator types.
 
-## Rodando o Programa 
+## ▶️ How to Run
 
-### Clone o projeto 
+### Clone the Repository
+
 ```bash
 git clone https://github.com/bomday/sentinel-ioc.git
 ```
 
-### Exigências
-1. Rodar dentro da pasta /src
-2. Ter uma versão g++ 7.0 ou superior no Windows
+### Requirements
 
-#### Compile o programa (se necessário)
+- g++ version 7.0 or later
+- Compile and run from the `/src` directory
+
+### Compile the Program
+
 ```bash
 g++ -g -std=c++17 -o sentinel.exe main.cpp cli/cli.cpp utils/utils.cpp indicator/indicator.cpp maliciousIP/maliciousIP.cpp maliciousURL/maliciousURL.cpp maliciousHash/maliciousHash.cpp indicatorManager/indicatorManager.cpp fileManager/fileManager.cpp -I. -Icli -Iutils -Iindicator -ImaliciousIP -ImaliciousURL -ImaliciousHash -IindicatorManager -IfileManager
 ```
-#### Execute o programa
+
+### Run the Program
+
 ```bash
 ./sentinel.exe
 ```
 
-#### Rodar Testes
+## 🧪 Running Unit Tests
 
-[Link](https://github.com/bomday/sentinel-ioc/blob/main/googletest/README.md) para readme de testes do projeto
+See the [Test README](https://github.com/bomday/sentinel-ioc/blob/main/googletest/README.md)
 
-## Depuração
+## 🐞 Debugging
 
-[Link](#) para readme de depuração do projeto
+*Coming soon:* [Debug README](#)
 
-#### Sugestão de launch.json
+Suggested configuration: `launch.json`
 
-## 📹 Vídeo
+## 🎥 Video Demo
 
-🔗 Em breve: [Link para o YouTube](#)
+🔗 Coming soon: [YouTube](#)
 
-## 📄 Documentação
+## 📘 Documentation
 
-🔗 Em breve: [GitHub Pages](#)
+🔗 Coming soon: [GitHub Pages](#)
 
-## 👥 Equipe
+## 👨‍💻 Team
 
-| Nome           | Curso              |
-|--------------|---------------------|
-| Beatriz Helena | Sistemas de Informação |
-| Dayane Lima | Sistemas de Informação |
-| Maria Antônia | Sistemas de Informação |
-| Rafael Theles | Sistemas de Informação |
-| Williams Andrade | Sistemas de Informação |
+| Name            | Program               |
+|-----------------|------------------------|
+| Beatriz Helena  | Information Systems    |
+| Dayane Lima     | Information Systems    |
+| Maria Antônia   | Information Systems    |
+| Rafael Theles   | Information Systems    |
+| Williams Andrade| Information Systems    |
