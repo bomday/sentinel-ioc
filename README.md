@@ -119,7 +119,7 @@ Suggested configuration: `launch.json`
 
 ## 👨‍💻 Team
 
-| Name            | Program               |
+| Name            | Course               |
 |-----------------|------------------------|
 | Beatriz Helena  | Information Systems    |
 | Dayane Lima     | Information Systems    |
