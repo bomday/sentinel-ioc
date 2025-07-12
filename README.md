@@ -62,7 +62,6 @@ Sentinel IOC simulates an IOC analyzer (malicious IPs, URLs, and hashes), enabli
  ┃ ┣ 📄 sentinel_tests.exe         >> Unit tests executable   
  ┃ ┗ 📄 main.cpp                   >> Application entry point
  ┣ 📁 public/
- ┃ ┣ 📄 roteiro-video.pdf          >> Video script
  ┃ ┗ 📄 relatorio.pdf              >> Project report
  ┗ 📄 README_EN.md
 ```
@@ -75,7 +74,7 @@ Sentinel IOC simulates an IOC analyzer (malicious IPs, URLs, and hashes), enabli
 - **Encapsulation:** Controlled access via `private`, `protected`, and `public` members.
 - **Abstraction:** `Indicator` serves as an abstract interface to different indicator types.
 
-## ▶How to Run
+## How to Run
 
 ### Clone the Repository
 
@@ -104,11 +103,11 @@ g++ -g -std=c++17 -o sentinel.exe main.cpp cli/cli.cpp utils/utils.cpp indicator
 
 See the [Test README](https://github.com/bomday/sentinel-ioc/blob/main/googletest/README.md)
 
-## 🎥 Video Demo
+## Video Demo
 
 🔗 Coming soon: [YouTube](#)
 
-## 👨‍💻 Team
+## Team
 
 | Name            | Course               |
 |-----------------|------------------------|
