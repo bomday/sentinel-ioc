@@ -1,12 +1,14 @@
 # Sentinel IOC
 
+🔗 [GitHub Pages](https://bomday.github.io/sentinel-ioc/)
+
 > A C++ project for analyzing Indicators of Compromise (IOCs) using Object-Oriented Programming principles.
 
-## 📌 Description
+## Description
 
 Sentinel IOC simulates an IOC analyzer (malicious IPs, URLs, and hashes), enabling users to register, view, update, and delete this information. It's a practical introduction to Object-Oriented Programming (OOP) in C++.
 
-## 🛠️ Technologies Used
+## Technologies Used
 
 - **Language:** C++
 - **OOP Concepts:** Inheritance, Polymorphism, Encapsulation
@@ -15,7 +17,7 @@ Sentinel IOC simulates an IOC analyzer (malicious IPs, URLs, and hashes), enabli
 - **Documentation:** GitHub Pages
 - **Other:** Pointers and References
 
-## ✅ Features
+## Features
 
 - [x] Register IOCs (IP, URL, Hash)
 - [x] List and search IOCs
@@ -24,7 +26,7 @@ Sentinel IOC simulates an IOC analyzer (malicious IPs, URLs, and hashes), enabli
 - [x] Command-line interface
 - [ ] Graphical User Interface (optional, under development)
 
-## 🗂️ Project Structure
+## Project Structure
 
 ```
 📁 sentinel-ioc/
@@ -62,11 +64,10 @@ Sentinel IOC simulates an IOC analyzer (malicious IPs, URLs, and hashes), enabli
  ┣ 📁 public/
  ┃ ┣ 📄 roteiro-video.pdf          >> Video script
  ┃ ┗ 📄 relatorio.pdf              >> Project report
- ┣ 📄 .gitignore
  ┗ 📄 README_EN.md
 ```
 
-## 🧠 OOP Concepts Demonstrated
+## OOP Concepts Demonstrated
 
 - **Classes & Objects:** Used to define and instantiate IOCs and their manager.
 - **Inheritance:** `MaliciousIP`, `MaliciousURL`, and `MaliciousHash` inherit from the base class `Indicator`.
@@ -74,7 +75,7 @@ Sentinel IOC simulates an IOC analyzer (malicious IPs, URLs, and hashes), enabli
 - **Encapsulation:** Controlled access via `private`, `protected`, and `public` members.
 - **Abstraction:** `Indicator` serves as an abstract interface to different indicator types.
 
-## ▶️ How to Run
+## ▶How to Run
 
 ### Clone the Repository
 
@@ -99,17 +100,13 @@ g++ -g -std=c++17 -o sentinel.exe main.cpp cli/cli.cpp utils/utils.cpp indicator
 ./sentinel.exe
 ```
 
-## 🧪 Running Unit Tests
+## Running Unit Tests
 
 See the [Test README](https://github.com/bomday/sentinel-ioc/blob/main/googletest/README.md)
 
 ## 🎥 Video Demo
 
 🔗 Coming soon: [YouTube](#)
-
-## 📘 Documentation
-
-🔗 [GitHub Pages](https://bomday.github.io/sentinel-ioc/)
 
 ## 👨‍💻 Team
 
