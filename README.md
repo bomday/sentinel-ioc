@@ -103,19 +103,13 @@ g++ -g -std=c++17 -o sentinel.exe main.cpp cli/cli.cpp utils/utils.cpp indicator
 
 See the [Test README](https://github.com/bomday/sentinel-ioc/blob/main/googletest/README.md)
 
-## 🐞 Debugging
-
-*Coming soon:* [Debug README](#)
-
-Suggested configuration: `launch.json`
-
 ## 🎥 Video Demo
 
 🔗 Coming soon: [YouTube](#)
 
 ## 📘 Documentation
 
-🔗 Coming soon: [GitHub Pages](#)
+🔗 [GitHub Pages](https://bomday.github.io/sentinel-ioc/)
 
 ## 👨‍💻 Team
 
