@@ -6,17 +6,20 @@
 #include "../maliciousURL/maliciousURL.hpp"
 #include "../maliciousHash/maliciousHash.hpp"
 
+// Save the indicators to a CSV file
 bool FileManager::saveData(const std::string& path, const std::vector<std::unique_ptr<Indicator>>& indicators) {
+    // Check if the path is valid
     std::ofstream file(path);
     if (!file.is_open()) {
         std::cerr << "[ERROR] Could not open file for writing: " << path << std::endl;
         return false;
     }
 
-    // CSV header
+    // Write the header to the CSV file
+    // The header includes all the fields that will be saved in the CSV
     file << "indicatorId,severity,type,description,origin,timestamp,"
          << "hash,algorithm,ip,country,isp,url,protocol\n";
-
+    // Iterate through the indicators and write each one to the file
     for (const auto& ioc : indicators) {
         file << ioc->toCSV() << '\n';
     }
@@ -25,14 +28,16 @@ bool FileManager::saveData(const std::string& path, const std::vector<std::uniqu
     return true;
 }
 
+// Load the indicators from a CSV file
 std::vector<std::unique_ptr<Indicator>> FileManager::loadData(const std::string& path) {
+    // Check if the path is valid and open the file
     std::vector<std::unique_ptr<Indicator>> indicators;
     std::ifstream file(path);
     if (!file.is_open()) {
         std::cerr << "[ERROR] Could not open file for reading: " << path << std::endl;
         return indicators;
     }
-
+    // Read the file line by line, skipping the header
     std::string line;
     bool isHeader = true;
 
@@ -62,11 +67,12 @@ std::vector<std::unique_ptr<Indicator>> FileManager::loadData(const std::string&
         }
 
         try {
+            // Ensure we have enough tokens to parse the IOC
             if (tokens.size() < 6) {
                 std::cerr << "[WARN] Incomplete line. Skipping: " << line << "\n";
                 continue;
             }
-
+            // Parse the tokens into the IOC fields
             int id = std::stoi(tokens[0]);
             int severity = std::stoi(tokens[1]);
             std::string type = tokens[2];
@@ -84,7 +90,7 @@ std::vector<std::unique_ptr<Indicator>> FileManager::loadData(const std::string&
                 std::cerr << "[WARN] Unknown IOC type: " << type << ". Skipping line: " << line << "\n";
                 continue;
             }
-
+            // Create the appropriate IOC based on the normalized type
             if (normalizedType == "Hash" && tokens.size() >= 8) {
                 std::string hash = tokens[6];
                 std::string algorithm = tokens[7];

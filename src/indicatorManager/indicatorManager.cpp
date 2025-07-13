@@ -50,6 +50,7 @@ void IndicatorManager::addMaliciousHash(int severity, const std::string& type, c
 
 // Helper function to print type-specific details for an indicator
 static void printSpecificIndicatorDetails(const Indicator* ioc) {
+    // Initialize empty strings for specific details
     std::string hash_val = "";
     std::string algorithm_val = "";
     std::string ip_val = "";
@@ -58,6 +59,7 @@ static void printSpecificIndicatorDetails(const Indicator* ioc) {
     std::string url_val = "";
     std::string protocol_val = "";
 
+    // Check the type of the IOC and extract specific details
     if (const MaliciousHash* mh = dynamic_cast<const MaliciousHash*>(ioc)) {
         hash_val = mh->getHash();
         algorithm_val = mh->getAlgorithm();
@@ -70,6 +72,7 @@ static void printSpecificIndicatorDetails(const Indicator* ioc) {
         protocol_val = murl->getProtocol();
     }
 
+    // Print the specific details in a formatted manner
     std::cout << std::setw(65) << hash_val
               << std::setw(10) << algorithm_val
               << std::setw(16) << ip_val
@@ -108,6 +111,7 @@ void IndicatorManager::listIndicators() const {
               << std::endl;
     std::cout << std::string(294, '-') << std::endl;
 
+    // Iterate through each indicator and print its details
     for (const auto& ioc : indicators) {
         std::cout << std::left
                   << std::setw(8)  << ioc->getIndicatorId()
@@ -126,6 +130,7 @@ void IndicatorManager::listIndicators() const {
     std::cout << "-------------------------------------------\n";
 }
 
+// Find an indicator by its ID
 Indicator* IndicatorManager::findIndicatorById(int id) const {
     auto it = std::find_if(indicators.begin(), indicators.end(),
                           [id](const std::unique_ptr<Indicator>& indicator) {
@@ -134,6 +139,7 @@ Indicator* IndicatorManager::findIndicatorById(int id) const {
     return (it != indicators.end()) ? it->get() : nullptr;
 }
 
+// Check if the indicator list is empty
 bool IndicatorManager::isEmpty() const {
     return indicators.empty();
 }
@@ -148,6 +154,7 @@ bool IndicatorManager::updateIndicatorSeverity(int id, int severity) {
     return false;
 }
 
+// Update the description of an indicator
 bool IndicatorManager::updateIndicatorDescription(int id, const std::string& description) {
     Indicator* indicator = findIndicatorById(id);
     if (indicator) {
@@ -157,6 +164,7 @@ bool IndicatorManager::updateIndicatorDescription(int id, const std::string& des
     return false;
 }
 
+// Update the origin of an indicator
 bool IndicatorManager::updateIndicatorOrigin(int id, const std::string& origin) {
     Indicator* indicator = findIndicatorById(id);
     if (indicator) {
@@ -166,6 +174,7 @@ bool IndicatorManager::updateIndicatorOrigin(int id, const std::string& origin) 
     return false;
 }
 
+// Update the timestamp of an indicator
 bool IndicatorManager::updateIndicatorTimestamp(int id, const std::string& timestamp) {
     Indicator* indicator = findIndicatorById(id);
     if (indicator) {
@@ -175,6 +184,7 @@ bool IndicatorManager::updateIndicatorTimestamp(int id, const std::string& times
     return false;
 }
 
+// Update the IP address of a MaliciousIP indicator
 bool IndicatorManager::updateMaliciousIPAddress(int id, const std::string& ip) {
     Indicator* indicator = findIndicatorById(id);
     if (MaliciousIP* maliciousIP = dynamic_cast<MaliciousIP*>(indicator)) {
@@ -184,6 +194,7 @@ bool IndicatorManager::updateMaliciousIPAddress(int id, const std::string& ip) {
     return false;
 }
 
+// Update the country of a MaliciousIP indicator
 bool IndicatorManager::updateMaliciousIPCountry(int id, const std::string& country) {
     Indicator* indicator = findIndicatorById(id);
     if (MaliciousIP* maliciousIP = dynamic_cast<MaliciousIP*>(indicator)) {
@@ -193,6 +204,7 @@ bool IndicatorManager::updateMaliciousIPCountry(int id, const std::string& count
     return false;
 }
 
+// Update the ISP of a MaliciousIP indicator
 bool IndicatorManager::updateMaliciousIPISP(int id, const std::string& isp) {
     Indicator* indicator = findIndicatorById(id);
     if (MaliciousIP* maliciousIP = dynamic_cast<MaliciousIP*>(indicator)) {
@@ -202,6 +214,7 @@ bool IndicatorManager::updateMaliciousIPISP(int id, const std::string& isp) {
     return false;
 }
 
+// Update the URL of a MaliciousURL indicator
 bool IndicatorManager::updateMaliciousURL(int id, const std::string& url) {
     Indicator* indicator = findIndicatorById(id);
     if (MaliciousURL* maliciousURL = dynamic_cast<MaliciousURL*>(indicator)) {
@@ -211,6 +224,7 @@ bool IndicatorManager::updateMaliciousURL(int id, const std::string& url) {
     return false;
 }
 
+// Update the protocol of a MaliciousURL indicator
 bool IndicatorManager::updateMaliciousURLProtocol(int id, const std::string& protocol) {
     Indicator* indicator = findIndicatorById(id);
     if (MaliciousURL* maliciousURL = dynamic_cast<MaliciousURL*>(indicator)) {
@@ -220,6 +234,7 @@ bool IndicatorManager::updateMaliciousURLProtocol(int id, const std::string& pro
     return false;
 }
 
+// Update the hash of a MaliciousHash indicator
 bool IndicatorManager::updateMaliciousHash(int id, const std::string& hash) {
     Indicator* indicator = findIndicatorById(id);
     if (MaliciousHash* maliciousHash = dynamic_cast<MaliciousHash*>(indicator)) {
@@ -229,6 +244,7 @@ bool IndicatorManager::updateMaliciousHash(int id, const std::string& hash) {
     return false;
 }
 
+// Update the algorithm of a MaliciousHash indicator
 bool IndicatorManager::updateMaliciousHashAlgorithm(int id, const std::string& algorithm) {
     Indicator* indicator = findIndicatorById(id);
     if (MaliciousHash* maliciousHash = dynamic_cast<MaliciousHash*>(indicator)) {
@@ -281,6 +297,7 @@ void IndicatorManager::searchByValue(const std::string& value) const {
     }
 }
 
+// Search operations by type
 void IndicatorManager::searchByType(const std::string& type) const {
     bool found = false;
     int resultCount = 0;
@@ -299,6 +316,7 @@ void IndicatorManager::searchByType(const std::string& type) const {
     }
 }
 
+// Search operations by severity
 void IndicatorManager::searchBySeverity(int severity) const {
     bool found = false;
     int resultCount = 0;
@@ -317,6 +335,7 @@ void IndicatorManager::searchBySeverity(int severity) const {
     }
 }
 
+// Search operations by origin
 void IndicatorManager::searchByOrigin(const std::string& origin) const {
     bool found = false;
     int resultCount = 0;
@@ -335,6 +354,7 @@ void IndicatorManager::searchByOrigin(const std::string& origin) const {
     }
 }
 
+// Search operations by date
 void IndicatorManager::searchByDate(const std::string& date) const {
     bool found = false;
     int resultCount = 0;
@@ -356,6 +376,7 @@ void IndicatorManager::searchByDate(const std::string& date) const {
     }
 }
 
+// Search operations by description
 void IndicatorManager::searchByDescription(const std::string& description) const {
     bool found = false;
     int resultCount = 0;
@@ -374,6 +395,7 @@ void IndicatorManager::searchByDescription(const std::string& description) const
     }
 }
 
+// Print details of an IOC
 void IndicatorManager::printIOC(const Indicator* ioc, int index) const {
     std::cout << "\nIOC #" << index << "\n";
     std::cout << "ID         : " << ioc->getIndicatorId() << "\n";
@@ -397,6 +419,7 @@ void IndicatorManager::printIOC(const Indicator* ioc, int index) const {
     }
 }
 
+// Save and load indicators to/from a file
 void IndicatorManager::saveIndicatorsToFile(const std::string& filename) {
     if (FileManager::saveData(filename, indicators)) {
         std::cout << "\nData saved successfully to " << filename << std::endl;
@@ -405,6 +428,7 @@ void IndicatorManager::saveIndicatorsToFile(const std::string& filename) {
     }
 }
 
+// Load indicators from a file
 void IndicatorManager::loadIndicatorsFromFile(const std::string& filename) {
     indicators = FileManager::loadData(filename);
     std::cout << "\nLoaded " << indicators.size() << " IOCs from \"" << filename << "\".\n";
@@ -421,12 +445,15 @@ void IndicatorManager::updateNextId() {
     }
 }
 
+// Generate statistics about the indicators
 void IndicatorManager::generateStatistics() const {
+    // Ensure there are indicators to analyze
     std::map<std::string, int> forType;
     std::map<int, int> forSeverity;
     int last30Days = 0;
     int thisMonth = 0;
 
+    // Iterate through the indicators to gather statistics
     for (const auto& ioc : indicators) {
         forType[ioc->getType()]++;
         forSeverity[ioc->getSeverity()]++;
@@ -439,7 +466,8 @@ void IndicatorManager::generateStatistics() const {
             thisMonth++;
         }
     }
-
+    
+    // Print the statistics
     std::cout << "\n=========== IOCs Statistics ===========\n\n";
     std::cout << "Total: " << indicators.size() << " IOCs\n\n";
 
