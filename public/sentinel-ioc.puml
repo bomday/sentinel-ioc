@@ -1,0 +1,164 @@
+@startuml
+
+class Indicator {
+  - indicatorId: int
+  - severity: int
+  - type: string
+  - description: string
+  - origin: string
+  - timestamp: string
+
+  + getIndicatorId(): int
+  + getSeverity(): int
+  + getType(): string
+  + getDescription(): string
+  + getOrigin(): string
+  + getTimestamp(): string
+
+  + setIndicatorId(id: int): void
+  + setSeverity(sev: int): void
+  + setType(type: string): void
+  + setDescription(desc: string): void
+  + setOrigin(origin: string): void
+  + setTimestamp(time: string): void
+}
+
+class MaliciousIP {
+  - ip: string
+  - country: string
+  - isp: string
+
+  + getIP(): string
+  + getCountry(): string
+  + getISP(): string
+  
+  + setIP(ipAddress: string): void
+  + setCountry(countryName: string): void
+  + setISP(ispName: string): void
+  
+  + toCSV(): string
+  + static createMaliciousIP(...): Indicator*
+}
+class MaliciousURL {
+  - url: string
+  - protocol: string
+
+  + getURL(): string
+  + getProtocol(): string
+  
+  + setURL(urlAddress: string): void
+  + setProtocol(protocolName: string): void
+  
+  + toCSV(): string
+  + static createMaliciousURL(...): Indicator*
+}
+class MaliciousHash {
+  - hash: string
+  - algorithm: string
+
+  + getHash(): string
+  + getAlgorithm(): string
+  
+  + setHash(hashValue: string): void
+  + setAlgorithm(algorithmName: string): void
+  
+  + toCSV(): string
+  + static createMaliciousHash(...): Indicator*
+}
+
+Indicator <|-- MaliciousIP
+Indicator <|-- MaliciousURL
+Indicator <|-- MaliciousHash
+
+class IndicatorManager {
+  - indicators: vector<unique_ptr<Indicator>>
+  - nextIndicatorId: int
+
+  ' Métodos privados
+  - updateNextId(): void
+  - getNextId(): int
+
+  ' Adição de IOCs
+  + addMaliciousIP(...): void
+  + addMaliciousURL(...): void
+  + addMaliciousHash(...): void
+
+  ' Leitura
+  + listIndicators(): void
+  + findIndicatorById(id: int): Indicator*
+  + isEmpty(): bool
+
+  ' Atualização
+  + updateIndicatorSeverity(id: int, severity: int): bool
+  + updateIndicatorDescription(id: int, description: string): bool
+  + updateIndicatorOrigin(id: int, origin: string): bool
+  + updateIndicatorTimestamp(id: int, timestamp: string): bool
+  + updateMaliciousIPAddress(id: int, ip: string): bool
+  + updateMaliciousIPCountry(id: int, country: string): bool
+  + updateMaliciousIPISP(id: int, isp: string): bool
+  + updateMaliciousURL(id: int, url: string): bool
+  + updateMaliciousURLProtocol(id: int, protocol: string): bool
+  + updateMaliciousHash(id: int, hash: string): bool
+  + updateMaliciousHashAlgorithm(id: int, algorithm: string): bool
+
+  ' Exclusão
+  + removeIndicatorById(id: int): bool
+
+  ' Busca
+  + searchByValue(value: string): void
+  + searchByType(type: string): void
+  + searchBySeverity(severity: int): void
+  + searchByOrigin(origin: string): void
+  + searchByDate(date: string): void
+  + searchByDescription(description: string): void
+
+  ' Utilidades
+  + printIOC(ioc: Indicator*, index: int): void
+  + saveIndicatorsToFile(filename: string): void
+  + loadIndicatorsFromFile(filename: string): void
+  + generateStatistics(): void
+}
+
+class FileManager {
+  + static saveData(...): bool
+  + static loadData(...): vector<unique_ptr<Indicator>>
+}
+
+class CLI {
+  - manager: IndicatorManager
+  - wasModified: bool
+
+  ' Métodos privados de interação com o usuário
+  - showMenu(): void
+  - handleAdd(): void
+  - handleList(): void
+  - handleSearch(): void
+  - handleEdit(): void
+  - handleDelete(): void
+  - handleStatistics(): void
+
+  ' Métodos auxiliares de entrada
+  - getValidIntInput(prompt: string, min: int = INT_MIN, max: int = INT_MAX): int
+  - getStringInput(prompt: string): string
+  - getConfirmation(prompt: string): bool
+
+  ' Auxiliares de exibição de menus
+  - displayEditMenu(type: string): void
+  - displaySearchMenu(): void
+
+  ' Método principal
+  + runMenu(): void
+}
+
+class Utils <<utility>> {
+  + getTimestamp(): string
+  + showMenu(): void
+  + listIndicators(): void
+  + stringToTimeT(timestamp: string): time_t
+  + icontains(str: string, substr: string): bool
+  + toLower(str: string): string
+  + registerLastMonth(timestamp: string): bool
+  + isCurrentMonth(timestamp: string): bool
+}
+
+@enduml
