@@ -64,8 +64,8 @@ Sentinel IOC simulates an IOC analyzer (malicious IPs, URLs, and hashes), enabli
  ┣ 📁 public/
  ┃ ┣ 📁 assets                     >> Project images
  ┃ ┣ 📄 sentinel-ioc.puml          >> UML diagram 
- ┃ ┗ 📄 report.md                  >> Project documentation
- ┃ ┗ 📄 report.pdf                 >> Project documentation
+ ┃ ┗ 📄 report.md                  >> Project report
+ ┃ ┗ 📄 report.pdf                 >> Project report
  ┗ 📄 README_EN.md
 ```
 
@@ -109,6 +109,10 @@ See the [Test README](https://github.com/bomday/sentinel-ioc/blob/main/googletes
 ## Video Demo
 
 🔗 Coming soon: [YouTube](#)
+
+## Project Report
+
+See the [Report README](https://github.com/bomday/sentinel-ioc/blob/main/public/report.md)
 
 ## Team
 
