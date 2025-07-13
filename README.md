@@ -112,7 +112,7 @@ See the [Test README](https://github.com/bomday/sentinel-ioc/blob/main/googletes
 
 ## Project Report
 
-See the [Report README](https://github.com/bomday/sentinel-ioc/blob/main/public/report.md)
+See the [Report](https://github.com/bomday/sentinel-ioc/blob/main/public/report.pdf)
 
 ## Team
 
