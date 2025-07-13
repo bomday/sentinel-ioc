@@ -2,7 +2,9 @@
 > Sentinel IOC: Analisador de Indicadores de Comprometimento
 >
 > Disciplina: EDOO 2025.1
+>
 > Docente: Francisco Paulo Magalhães Simões
+>
 > Discentes: Beatriz Helena da Silva Melo, Dayane Camile Bezerra de Lima, Maria Antonia Monteiro da Silva, Rafael Teles e Williams Andrade de Souza Filho
 
 ## 1. INTRODUÇÃO

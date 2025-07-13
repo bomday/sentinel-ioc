@@ -11,7 +11,7 @@ Sentinel IOC simulates an IOC analyzer (malicious IPs, URLs, and hashes), enabli
 ## Technologies Used
 
 - **Language:** C++
-- **OOP Concepts:** Inheritance, Polymorphism, Encapsulation
+- **OOP Concepts:** Inheritance, Polymorphism, Encapsulation & Abstraction
 - **File Handling:** CSV (simulating database)
 - **Tools:** Git & GitHub
 - **Documentation:** GitHub Pages
@@ -75,7 +75,7 @@ Sentinel IOC simulates an IOC analyzer (malicious IPs, URLs, and hashes), enabli
 - **Inheritance:** `MaliciousIP`, `MaliciousURL`, and `MaliciousHash` inherit from the base class `Indicator`.
 - **Polymorphism:** A single `Indicator*` pointer can refer to any derived IOC type.
 - **Encapsulation:** Controlled access via `private`, `protected`, and `public` members.
-- **Abstraction:** `Indicator` serves as an abstract interface to different indicator types.
+- **Abstraction:** The `Indicator` class acts as an abstract interface for different types of indicators. The `CLI` only interacts with the `IndicatorManager`'s public interface, without knowing the internal details of storing, searching or generating IDs.
 
 ## How to Run
 
