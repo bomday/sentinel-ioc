@@ -62,6 +62,8 @@ Sentinel IOC simulates an IOC analyzer (malicious IPs, URLs, and hashes), enabli
  ┃ ┣ 📄 sentinel_tests.exe         >> Unit tests executable   
  ┃ ┗ 📄 main.cpp                   >> Application entry point
  ┣ 📁 public/
+ ┃ ┣ 📁 assets                     >> Project images
+ ┃ ┣ 📄 sentinel-ioc.puml          >> UML diagram 
  ┃ ┗ 📄 relatorio.pdf              >> Project report
  ┗ 📄 README_EN.md
 ```
