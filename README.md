@@ -132,5 +132,5 @@ See the [Report](https://github.com/bomday/sentinel-ioc/blob/main/public/report.
 | Beatriz Helena  | Information Systems    |
 | Dayane Lima     | Information Systems    |
 | Maria Antônia   | Information Systems    |
-| Rafael Theles   | Information Systems    |
+| Rafael Teles   | Information Systems    |
 | Williams Andrade| Information Systems    |
