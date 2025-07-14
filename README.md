@@ -77,7 +77,7 @@ Sentinel IOC simulates an IOC analyzer (malicious IPs, URLs, and hashes), enabli
 - **Encapsulation:** Controlled access via `private`, `protected`, and `public` members.
 - **Abstraction:** The `Indicator` class acts as an abstract interface for different types of indicators. The `CLI` only interacts with the `IndicatorManager`'s public interface, without knowing the internal details of storing, searching or generating IDs.
 
-## How to Run
+## How to Run on CLI
 
 ### Clone the Repository
 
