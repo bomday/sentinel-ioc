@@ -106,11 +106,14 @@ g++ -g -std=c++17 -o sentinel.exe main.cpp cli/cli.cpp utils/utils.cpp indicator
 
 See the [Test README](https://github.com/bomday/sentinel-ioc/blob/main/googletest/README.md)
 
+## Running the Graphical User Interface (GUI)
+See the [gui README](https://github.com/bomday/sentinel-ioc/blob/main-GUI/src/gui/README.md)
+
 ## Video Demo
 
 🔗 Understand our structure: [YouTube](https://youtu.be/9lCIjkyFWyg)
 
-🔗 Watch our Demo: [YouTube](#)
+🔗 Watch our Demo: [YouTube](https://www.youtube.com/watch?v=5k7H-dmm7U4)
 
 ## Images
 
