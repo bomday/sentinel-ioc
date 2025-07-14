@@ -115,6 +115,8 @@ See the [GUI README](https://github.com/bomday/sentinel-ioc/blob/main-GUI/src/gu
 
 🔗 Watch our Demo: [YouTube](https://www.youtube.com/watch?v=5k7H-dmm7U4)
 
+> Interface finalized after first delivery
+
 ## Images
 
 ![Sentinel IOC Interface](/public/assets/Image1.jpg)
