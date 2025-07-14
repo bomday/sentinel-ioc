@@ -39,6 +39,7 @@ class Indicator {
         void setTimestamp(const std::string& ts);
 
         virtual std::string toCSV() const = 0; // Pure virtual function to convert the indicator to a CSV format
+        virtual std::string getValue() const = 0; // Pure virtual function to get the main value (hash, IP, URL)
 
 };
 

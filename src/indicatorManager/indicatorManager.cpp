@@ -6,6 +6,8 @@
 #include <algorithm>
 #include <ctime>   
 #include <map>
+#include <stdexcept>
+#include <fstream>
  
 #include "indicatorManager.hpp"
 #include "indicator/indicator.hpp"
@@ -21,31 +23,34 @@ int IndicatorManager::getNextId() {
 }
 
 // Add operations
-void IndicatorManager::addMaliciousIP(int severity, const std::string& type, const std::string& description, 
+int IndicatorManager::addMaliciousIP(int severity, const std::string& type, const std::string& description, 
                                      const std::string& origin, const std::string& timestamp, const std::string& ip, 
                                      const std::string& country, const std::string& isp) {
     int newId = getNextId(); // Get the next available ID for the new indicator
     // Create a new MaliciousIP object
     auto newIndicator = std::make_unique<MaliciousIP>(newId, severity, type, description, origin, timestamp, ip, country, isp);
     indicators.push_back(std::move(newIndicator));
+    return newId;
 }
 
-void IndicatorManager::addMaliciousURL(int severity, const std::string& type, const std::string& description, 
+int IndicatorManager::addMaliciousURL(int severity, const std::string& type, const std::string& description, 
                                       const std::string& origin, const std::string& timestamp, const std::string& url, 
                                       const std::string& protocol) {
     int newId = getNextId(); // Get the next available ID for the new indicator
     // Create a new MaliciousURL object
     auto newIndicator = std::make_unique<MaliciousURL>(newId, severity, type, description, origin, timestamp, url, protocol);
     indicators.push_back(std::move(newIndicator));
+    return newId;
 }
 
-void IndicatorManager::addMaliciousHash(int severity, const std::string& type, const std::string& description, 
+int IndicatorManager::addMaliciousHash(int severity, const std::string& type, const std::string& description, 
                                        const std::string& origin, const std::string& timestamp, const std::string& hash, 
                                        const std::string& algorithm) {
     int newId = getNextId(); // Get the next available ID for the new indicator
     // Create a new MaliciousHash object
     auto newIndicator = std::make_unique<MaliciousHash>(newId, severity, type, description, origin, timestamp, hash, algorithm);
     indicators.push_back(std::move(newIndicator));
+    return newId;
 }
 
 // Helper function to print type-specific details for an indicator
@@ -421,17 +426,23 @@ void IndicatorManager::printIOC(const Indicator* ioc, int index) const {
 
 // Save and load indicators to/from a file
 void IndicatorManager::saveIndicatorsToFile(const std::string& filename) {
-    if (FileManager::saveData(filename, indicators)) {
-        std::cout << "\nData saved successfully to " << filename << std::endl;
-    } else {
-        std::cout << "\nError saving data to " << filename << std::endl;
+    if (!FileManager::saveData(filename, indicators)) {
+        throw std::runtime_error("Failed to save data to file: " + filename);
     }
 }
 
 // Load indicators from a file
 void IndicatorManager::loadIndicatorsFromFile(const std::string& filename) {
-    indicators = FileManager::loadData(filename);
-    std::cout << "\nLoaded " << indicators.size() << " IOCs from \"" << filename << "\".\n";
+    auto loadedIndicators = FileManager::loadData(filename);
+    if (loadedIndicators.empty()) {
+        // Check if file exists first
+        std::ifstream file(filename);
+        if (!file.good()) {
+            throw std::runtime_error("File not found or cannot be opened: " + filename);
+        }
+        // If file exists but no indicators loaded, it might be empty (which is okay)
+    }
+    indicators = std::move(loadedIndicators);
     updateNextId(); // Update the next available ID based on loaded indicators
 }
 
@@ -485,4 +496,203 @@ void IndicatorManager::generateStatistics() const {
     std::cout << "IOCs registered in current month: " << thisMonth << "\n";
 
     std::cout << "\n===========================================\n";
+}
+
+int IndicatorManager::getIOCsRegisteredLastMonth() const {
+    int lastMonth = 0;
+    for (const auto& ioc : indicators) {
+        if (registerLastMonth(ioc->getTimestamp())) {
+            lastMonth++;
+        }
+    }
+    return lastMonth;
+}
+
+// Statistics helper methods for GUI
+std::map<std::string, int> IndicatorManager::getTypeDistribution() const {
+    std::map<std::string, int> typeDistribution;
+    for (const auto& ioc : indicators) {
+        typeDistribution[ioc->getType()]++;
+    }
+    return typeDistribution;
+}
+
+std::map<int, int> IndicatorManager::getSeverityDistribution() const {
+    std::map<int, int> severityDistribution;
+    for (const auto& ioc : indicators) {
+        severityDistribution[ioc->getSeverity()]++;
+    }
+    return severityDistribution;
+}
+
+int IndicatorManager::getIOCsRegisteredCurrentMonth() const {
+    int currentMonth = 0;
+    for (const auto& ioc : indicators) {
+        if (isCurrentMonth(ioc->getTimestamp())) {
+            currentMonth++;
+        }
+    }
+    return currentMonth;
+}
+
+int IndicatorManager::getCriticalThreatCount() const {
+    int criticalCount = 0;
+    for (const auto& ioc : indicators) {
+        if (ioc->getSeverity() >= 4) { // Severity 4 and 5 are critical
+            criticalCount++;
+        }
+    }
+    return criticalCount;
+}
+
+// Search methods that return results (for GUI)
+std::vector<const Indicator*> IndicatorManager::findByValue(const std::string& value) const {
+    std::vector<const Indicator*> results;
+    for (const auto& ioc : indicators) {
+        // Check if value matches any type-specific field
+        if (const MaliciousIP* ip = dynamic_cast<const MaliciousIP*>(ioc.get())) {
+            if (ip->getIP().find(value) != std::string::npos ||
+                ip->getCountry().find(value) != std::string::npos ||
+                ip->getISP().find(value) != std::string::npos) {
+                results.push_back(ioc.get());
+            }
+        } else if (const MaliciousURL* url = dynamic_cast<const MaliciousURL*>(ioc.get())) {
+            if (url->getURL().find(value) != std::string::npos ||
+                url->getProtocol().find(value) != std::string::npos) {
+                results.push_back(ioc.get());
+            }
+        } else if (const MaliciousHash* hash = dynamic_cast<const MaliciousHash*>(ioc.get())) {
+            if (hash->getHash().find(value) != std::string::npos ||
+                hash->getAlgorithm().find(value) != std::string::npos) {
+                results.push_back(ioc.get());
+            }
+        }
+        
+        // Also check common fields
+        if (ioc->getDescription().find(value) != std::string::npos ||
+            ioc->getOrigin().find(value) != std::string::npos) {
+            // Avoid duplicates
+            if (std::find(results.begin(), results.end(), ioc.get()) == results.end()) {
+                results.push_back(ioc.get());
+            }
+        }
+    }
+    return results;
+}
+
+std::vector<const Indicator*> IndicatorManager::findByType(const std::string& type) const {
+    std::vector<const Indicator*> results;
+    for (const auto& ioc : indicators) {
+        if (ioc->getType() == type) {
+            results.push_back(ioc.get());
+        }
+    }
+    return results;
+}
+
+std::vector<const Indicator*> IndicatorManager::findBySeverity(int severity) const {
+    std::vector<const Indicator*> results;
+    for (const auto& ioc : indicators) {
+        if (ioc->getSeverity() == severity) {
+            results.push_back(ioc.get());
+        }
+    }
+    return results;
+}
+
+std::vector<const Indicator*> IndicatorManager::findByOrigin(const std::string& origin) const {
+    std::vector<const Indicator*> results;
+    for (const auto& ioc : indicators) {
+        if (ioc->getOrigin().find(origin) != std::string::npos) {
+            results.push_back(ioc.get());
+        }
+    }
+    return results;
+}
+
+std::vector<const Indicator*> IndicatorManager::findByDate(const std::string& date) const {
+    std::vector<const Indicator*> results;
+    for (const auto& ioc : indicators) {
+        if (ioc->getTimestamp().find(date) != std::string::npos) {
+            results.push_back(ioc.get());
+        }
+    }
+    return results;
+}
+
+std::vector<const Indicator*> IndicatorManager::findByDescription(const std::string& description) const {
+    std::vector<const Indicator*> results;
+    for (const auto& ioc : indicators) {
+        if (ioc->getDescription().find(description) != std::string::npos) {
+            results.push_back(ioc.get());
+        }
+    }
+    return results;
+}
+
+std::vector<const Indicator*> IndicatorManager::searchWithFilters(const std::string& value, const std::string& type, 
+                                                                  int severity, const std::string& dateFrom, 
+                                                                  const std::string& dateTo) const {
+    std::vector<const Indicator*> results;
+    
+    for (const auto& ioc : indicators) {
+        bool matches = true;
+        
+        // Check value filter (if not empty)
+        if (!value.empty()) {
+            bool valueMatch = false;
+            
+            // Check type-specific fields
+            if (const MaliciousIP* ip = dynamic_cast<const MaliciousIP*>(ioc.get())) {
+                if (ip->getIP().find(value) != std::string::npos ||
+                    ip->getCountry().find(value) != std::string::npos ||
+                    ip->getISP().find(value) != std::string::npos) {
+                    valueMatch = true;
+                }
+            } else if (const MaliciousURL* url = dynamic_cast<const MaliciousURL*>(ioc.get())) {
+                if (url->getURL().find(value) != std::string::npos ||
+                    url->getProtocol().find(value) != std::string::npos) {
+                    valueMatch = true;
+                }
+            } else if (const MaliciousHash* hash = dynamic_cast<const MaliciousHash*>(ioc.get())) {
+                if (hash->getHash().find(value) != std::string::npos ||
+                    hash->getAlgorithm().find(value) != std::string::npos) {
+                    valueMatch = true;
+                }
+            }
+            
+            // Check common fields
+            if (!valueMatch && (ioc->getDescription().find(value) != std::string::npos ||
+                               ioc->getOrigin().find(value) != std::string::npos)) {
+                valueMatch = true;
+            }
+            
+            if (!valueMatch) {
+                matches = false;
+            }
+        }
+        
+        // Check type filter (if not "All Types")
+        if (matches && !type.empty() && type != "All Types") {
+            if (ioc->getType() != type) {
+                matches = false;
+            }
+        }
+        
+        // Check severity filter (if not 0 which means "Any")
+        if (matches && severity > 0) {
+            if (ioc->getSeverity() != severity) {
+                matches = false;
+            }
+        }
+        
+        // Date filtering would require more complex date parsing
+        // For now, we'll skip date filtering in the combined search
+        
+        if (matches) {
+            results.push_back(ioc.get());
+        }
+    }
+    
+    return results;
 }

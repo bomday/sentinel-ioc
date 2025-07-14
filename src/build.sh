@@ -1,91 +1,111 @@
 #!/bin/bash
 
-# Build and Run script for Sentinel IOC Management System
-# Usage: ./build.sh [build|run|all|clean]
-#   build - Only compile the project
-#   run   - Only run the program (requires existing executable)
-#   all   - Build and then run the program (default)
-#   clean - Remove executable and object files
+# Sentinel IOC Management System - Build & Run Script
+# Usage: ./build.sh [cli|gui|clean]
 
 show_help() {
-    echo "Sentinel IOC Management System - Build Script"
-    echo "Usage: $0 [build|run|all|clean|help]"
+    echo "Sentinel IOC Management System"
+    echo ""
+    echo "Usage: $0 [command]"
     echo ""
     echo "Commands:"
-    echo "  build - Compile the project only"
-    echo "  run   - Run the program (requires existing executable)"
-    echo "  all   - Build and run the program (default)"
-    echo "  clean - Remove executable and object files"
-    echo "  help  - Show this help message"
+    echo "  gui     Build and run GUI version (default)"
+    echo "  cli     Build and run CLI version"
+    echo "  clean   Clean build directory"
+    echo "  help    Show this help"
+    echo ""
+    echo "Requirements:"
+    echo "  - CMake, MinGW-w64"
+    echo "  - Qt6 (for GUI version)"
     echo ""
 }
 
-build_project() {
-    echo "Building Sentinel IOC Management System..."
+build_gui() {
+    echo "Building Sentinel IOC GUI..."
     
-    # Compile all source files with g++
-    g++ -std=c++17 -Wall -Wextra -g -I. -static -o sentinel-ioc.exe \
-        main.cpp \
-        fileManager/fileManager.cpp \
-        indicator/indicator.cpp \
-        indicatorManager/indicatorManager.cpp \
-        maliciousHash/maliciousHash.cpp \
-        maliciousIP/maliciousIP.cpp \
-        maliciousURL/maliciousURL.cpp \
-        utils/utils.cpp \
-        CLI/cli.cpp
-
-    if [ $? -eq 0 ]; then
-        echo "Build successful! Executable created: sentinel-ioc.exe"
-        echo "File size: $(ls -lh sentinel-ioc.exe | awk '{print $5}')"
-        return 0
+    # Add Qt6 to PATH if it exists (Windows paths in Git Bash)
+    if [ -d "/c/Qt/6.9.1/mingw_64/bin" ]; then
+        export PATH="/c/Qt/6.9.1/mingw_64/bin:$PATH"
+        echo "Found Qt6 at: /c/Qt/6.9.1/mingw_64/bin"
+    elif [ -d "/c/Qt/6.8.0/mingw_64/bin" ]; then
+        export PATH="/c/Qt/6.8.0/mingw_64/bin:$PATH"
+        echo "Found Qt6 at: /c/Qt/6.8.0/mingw_64/bin"
+    elif [ -d "/c/Qt/6.7.0/mingw_64/bin" ]; then
+        export PATH="/c/Qt/6.7.0/mingw_64/bin:$PATH"
+        echo "Found Qt6 at: /c/Qt/6.7.0/mingw_64/bin"
     else
-        echo "Build failed!"
-        return 1
-    fi
-}
-
-run_program() {
-    if [ ! -f "sentinel-ioc.exe" ]; then
-        echo "Executable 'sentinel-ioc.exe' not found!"
-        echo "Run '$0 build' or '$0 all' to compile first."
-        return 1
+        echo "Warning: Qt6 not found in common locations."
+        echo "Please add Qt6/bin to your PATH manually."
     fi
     
-    echo "Running Sentinel IOC Management System..."
-    echo "----------------------------------------"
-    ./sentinel-ioc.exe
+    mkdir -p build
+    cd build
+    cmake .. -G "MinGW Makefiles"
+    if [ $? -ne 0 ]; then
+        echo "Build failed! Check requirements."
+        cd ..
+        exit 1
+    fi
+    mingw32-make
+    if [ $? -ne 0 ]; then
+        echo "Build failed!"
+        cd ..
+        exit 1
+    fi
+    echo ""
+    echo "========================================"
+    echo "SUCCESS! Starting Sentinel IOC GUI..."
+    echo "========================================"
+    cd ..
+    ./SentinelIOC-GUI.exe
 }
 
-clean_project() {
-    echo "Cleaning up build files..."
-    rm -f sentinel-ioc.exe *.o
-    echo "Cleanup complete!"
+build_cli() {
+    echo "Building Sentinel IOC CLI..."
+    mkdir -p build
+    cd build
+    cmake .. -G "MinGW Makefiles"
+    if [ $? -ne 0 ]; then
+        echo "Build failed! Check requirements."
+        cd ..
+        exit 1
+    fi
+    mingw32-make SentinelIOC-CLI
+    if [ $? -ne 0 ]; then
+        echo "Build failed!"
+        cd ..
+        exit 1
+    fi
+    echo ""
+    echo "========================================"
+    echo "SUCCESS! Starting Sentinel IOC CLI..."
+    echo "========================================"
+    cd ..
+    ./SentinelIOC-CLI.exe
+}
+
+clean_build() {
+    echo "Cleaning build directory..."
+    rm -rf build
+    echo "Build directory cleaned."
 }
 
 # Main script logic
-case "${1:-all}" in
-    "build")
-        build_project
+case "${1:-gui}" in
+    "gui"|"")
+        build_gui
         ;;
-    "run")
-        run_program
-        ;;
-    "all")
-        if build_project; then
-            echo ""
-            run_program
-        fi
+    "cli")
+        build_cli
         ;;
     "clean")
-        clean_project
+        clean_build
         ;;
     "help"|"-h"|"--help")
         show_help
         ;;
     *)
-        echo "❌ Unknown command: $1"
-        echo ""
+        echo "Unknown command: $1"
         show_help
         exit 1
         ;;
