@@ -113,13 +113,13 @@ See the [Test README](https://github.com/bomday/sentinel-ioc/blob/main/googletes
 
 ## Images
 
-![Sentinel IOC Interface](public\assets\Image1.jpg)
+![Sentinel IOC Interface](/public/assets/Image1.jpg)
 
-![Sentinel IOC Interface](public\assets\Image2.jpg)
+![Sentinel IOC Interface](/public/assets/Image2.jpg)
 
-![Sentinel IOC Interface](public\assets\Image3.jpg)
+![Sentinel IOC Interface](/public/assets/Image3.jpg)
 
-![Sentinel IOC Interface](public\assets\Image4.jpg)
+![Sentinel IOC Interface](/public/assets/Image4.jpg)
 
 ## Project Report
 
