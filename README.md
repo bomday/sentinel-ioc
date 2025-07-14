@@ -111,9 +111,7 @@ See the [GUI README](https://github.com/bomday/sentinel-ioc/blob/main-GUI/src/gu
 
 ## Video Demo
 
-🔗 Understand our structure: [YouTube](https://youtu.be/9lCIjkyFWyg)
-
-🔗 Watch our Demo: [YouTube](https://www.youtube.com/watch?v=5k7H-dmm7U4)
+🔗 Understand our structure and watch our Demo: [YouTube](https://youtu.be/9q_zIqYScVA?si=bW_yOZP_eArtDgLj)
 
 > Interface finalized after first delivery
 
