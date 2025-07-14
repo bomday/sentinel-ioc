@@ -1,19 +1,15 @@
-# GUI Application Build Instructions
+# Run GUI
 
-### Prerequisites
-- **MinGW-w64** compiler with g++
-- **CMake** (version 3.16+)
-- **Qt6** (for GUI version only)
+## Pré-requisitos
 
-> ℹ️ **Important:** Make sure you are on the `main-GUI` branch to run the graphical version of the application.
->
-> ```bash
-> git checkout main-GUI
-> ```
+- **Compilador:** MinGW-w64 com `g++`
+- **CMake:** Versão 3.16 ou superior
+- **Qt6:** Necessário apenas para a versão com interface gráfica (GUI)
 
-### Running the Application
+## Como Executar a Aplicação
 
-**GUI Version (Recommended):**
+### **Execute o arquivo de build**
+
 ```bash
 # Windows
 build.bat
